@@ -1,0 +1,24 @@
+{
+  "name": "shepherd",
+  "version": "0.1.0",
+  "description": "Shepherd ========= The bootstrap and orchestrate tools for Blockchain, it is the Best practice of Ruff IoT Blockchain [Ruff IoT Blockchain white paper](https://github.com/RuffNotes/RuffChain/blob/master/WhitePaper.md)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ruffchain/Shepherd.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ruffchain/Shepherd/issues"
+  },
+  "homepage": "https://github.com/ruffchain/Shepherd#readme",
+  "devDependencies": {
+    "gulp": "^4.0.0",
+    "gulp-clean": "^0.4.0",
+    "gulp-shell": "^0.6.5"
+  }
+}
