@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2017",
+    "strict": true,
+    "inlineSourceMap": true,
+    "outDir": "dist/blockchain-sdk/ruffchain",
+    "types": ["node"]
+  },
+  "include": ["programs/node/**/*"]
+}
