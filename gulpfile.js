@@ -12,7 +12,10 @@ gulp.task('clean', () => {
     .pipe(clean())
 })
 
-gulp.task('build-common', shell.task('cd common;npm install;npm run build'))
+gulp.task('build-common', gulp.series(shell.task('cd common;npm run build'), () => {
+    return gulp.src('common/dist/blockchain-sdk')
+        .pipe(gulp.symlink('dist'))
+}));
 
 gulp.task('compile', function() {
   return tsProject
@@ -23,4 +26,7 @@ gulp.task('compile', function() {
     .pipe(gulp.dest('dist/blockchain-sdk/ruffchain'))
 })
 
-gulp.task('build', gulp.series(['clean', 'build-common', 'compile']))
+gulp.task('build', gulp.series(['clean', 'build-common', 'compile'], () => {
+    return gulp.src(["programs/node/chain/*.json"])
+        .pipe(gulp.dest("./dist/blockchain-sdk/ruffchain"));
+}));
