@@ -60,7 +60,7 @@ export function registerHandler(handler: ValueHandler) {
     });
 
     handler.addViewMethod('getBalance', async (context: DposViewContext, params: any): Promise<BigNumber> => {
-        console.log('========= in ruffchain ==============');
+        console.log('========= ruff getBalance ==============');
         return await context.getBalance(params.address);
     });
 
