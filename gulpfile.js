@@ -12,10 +12,7 @@ gulp.task('clean', () => {
     .pipe(clean())
 })
 
-gulp.task('build-common', gulp.series(shell.task('cd common;npm run build'), () => {
-    return gulp.src('common/dist/blockchain-sdk')
-        .pipe(gulp.symlink('dist'))
-}));
+gulp.task('build-common', gulp.series(shell.task('cd common;npm run build')));
 
 gulp.task('compile', function() {
   return tsProject
