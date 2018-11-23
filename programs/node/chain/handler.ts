@@ -58,20 +58,21 @@ export function registerHandler(handler: ValueHandler) {
         let balancekv = await context.storage.getReadableKeyValue(params.tokenid);
         return await getTokenBalance(balancekv.kv!, params.address);
     });
-    
+
     handler.addViewMethod('getBalance', async (context: DposViewContext, params: any): Promise<BigNumber> => {
+        console.log('========= in ruffchain ==============');
         return await context.getBalance(params.address);
     });
-    
+
     handler.addViewMethod('getVote', async (context: DposViewContext, params: any): Promise<any> => {
         let v: Map<string, BigNumber> = await context.getVote();
         return MapToObject(v);
     });
-    
+
     handler.addViewMethod('getStake', async (context: DposViewContext, params: any): Promise<BigNumber> => {
         return await context.getStake(params.address);
     });
-    
+
     handler.addViewMethod('getCandidates', async (context: DposViewContext, params: any): Promise<string[]> => {
         return await context.getCandidates();
     });
@@ -79,22 +80,22 @@ export function registerHandler(handler: ValueHandler) {
     handler.addViewMethod('getMiners', async (context: DposViewContext, params: any): Promise<string[]> => {
         return await context.getMiners();
     });
-    
+
     handler.addTX('transferTo', async (context: DposTransactionContext, params: any): Promise<ErrorCode> => {
         context.cost(context.fee);
         return await context.transferTo(params.to, context.value);
     });
-    
+
     handler.addTX('vote', async (context: DposTransactionContext, params: any): Promise<ErrorCode> => {
         context.cost(context.fee);
         return await context.vote(context.caller, params);
     });
-    
+
     handler.addTX('mortgage', async (context: DposTransactionContext, params: any): Promise<ErrorCode> => {
         context.cost(context.fee);
         return await context.mortgage(context.caller, new BigNumber(params));
     });
-    
+
     handler.addTX('unmortgage', async (context: DposTransactionContext, params: any): Promise<ErrorCode> => {
         context.cost(context.fee);
         let err = await context.transferTo(context.caller, new BigNumber(params));
@@ -103,7 +104,7 @@ export function registerHandler(handler: ValueHandler) {
         }
         return await context.unmortgage(context.caller, new BigNumber(params));
     });
-    
+
     handler.addTX('register', async (context: DposTransactionContext, params: any): Promise<ErrorCode> => {
         context.cost(context.fee);
         return await context.register(context.caller);
@@ -155,7 +156,7 @@ export function registerHandler(handler: ValueHandler) {
     });
 
     // 在块后事件中处理拍卖结果
-    handler.addPostBlockListener(async (height: number): Promise < boolean > => true, 
+    handler.addPostBlockListener(async (height: number): Promise < boolean > => true,
     async (context: DposEventContext): Promise<ErrorCode> => {
         context.logger.info(`on BlockHeight ${context.height}`);
         let bidKV = (await context.storage.getReadWritableKeyValue('bid')).kv!;
@@ -171,7 +172,7 @@ export function registerHandler(handler: ValueHandler) {
                     // 存储本次拍卖的结果
                     info.owner = lastBid.caller;
                     info.value = lastBid.value;
-                } 
+                }
                 await bidInfoKV.hdel('biding', name);
                 await bidInfoKV.hset('finish', name, info);
                 // 清理掉不需要的数据
