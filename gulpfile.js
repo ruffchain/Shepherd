@@ -6,7 +6,7 @@ const tsProject = ts.createProject('tsconfig.json')
 
 gulp.task('clean', () => {
   return gulp
-    .src(['dist', 'data'], { read: false, allowEmpty: true })
+    .src(['dist', 'data', 'build'], { read: false, allowEmpty: true })
     .pipe(clean())
 })
 
@@ -21,7 +21,9 @@ gulp.task('install-ruffvm-bindings', () => {
     return gulp.src(['ruffvm/build/Release/**']).pipe(gulp.dest('./build'));
 });
 
-gulp.task('build-ruffvm', gulp.series([shell.task('cd ruffvm'), 'install-ruffvm-index', 'install-ruffvm-bindings']));
+gulp.task('install-ruffvm', gulp.series([shell.task('cd ruffvm;npm install'),
+                                       'install-ruffvm-index',
+                                       'install-ruffvm-bindings']));
 
 gulp.task('compile', function() {
   return tsProject
@@ -30,7 +32,7 @@ gulp.task('compile', function() {
     .pipe(gulp.dest('dist/blockchain-sdk/ruffchain'))
 })
 
-gulp.task('build', gulp.series(['clean', 'build-common', 'build-ruffvm','compile'], () => {
+gulp.task('build', gulp.series(['clean', 'build-common', 'install-ruffvm','compile'], () => {
     return gulp.src(['programs/node/chain/*.json'])
         .pipe(gulp.dest('./dist/blockchain-sdk/ruffchain'));
 }));
