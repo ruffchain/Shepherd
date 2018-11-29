@@ -1,8 +1,8 @@
 {
-    "handler":"./handler.js",
+    "handler": "./handler.js",
     "type": {
-        "consensus":"dpos",
-        "features":[]
+        "consensus": "dpos",
+        "features": []
     },
     "global": {
         "minCreateor": 2,
