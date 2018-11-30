@@ -2,6 +2,12 @@ const gulp = require('gulp')
 const shell = require('gulp-shell')
 const clean = require('gulp-clean')
 const ts = require('gulp-typescript')
+
+// Added by Yang Jun 2018-11-29
+const rename = require('gulp-rename');
+const flatten = require('gulp-flatten');
+///
+
 const tsProject = ts.createProject('tsconfig.json')
 
 gulp.task('clean', () => {
@@ -28,7 +34,8 @@ gulp.task('install-ruffvm', gulp.series([shell.task('cd ruffvm;npm install'),
 gulp.task('compile', function() {
   return tsProject
     .src()
-    .pipe(tsProject())
+	.pipe(tsProject())
+	.pipe(flatten())
     .pipe(gulp.dest('dist/blockchain-sdk/ruffchain'))
 })
 
