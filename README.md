@@ -27,3 +27,21 @@ gulp build
 ```
 ./programs/wallet/wallet.sh
 ```
+
+## Run user Demo DApp (e.g bigNumber)
+
+build DApp
+```
+cd ruffvm/DemoApp/bigNumber/
+npm install
+npm run build
+```
+
+load DApp from wallet
+> The DApp will run in isolate and security context i.e. RuffVM
+
+```
+./programs/wallet/wallet.sh
+>chain.setCode(10, 'ruffvm/DemoApp/bigNumber/dist/index.js')
+>chain.runMethod('1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79', 10, 10, 'helloInVm', 'hi')
+```
