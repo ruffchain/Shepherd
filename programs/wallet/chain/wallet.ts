@@ -228,6 +228,42 @@ function main() {
             }
             console.log(`${ret.value!}`);
         },
+        getCode: async (_address: string) => {
+            if (!_address) {
+                _address = address;
+            }
+            let ret = await chainClient.view({
+                method: 'getCode',
+                params: {address: _address}
+            });
+            if (ret.err) {
+                console.error(`get code failed for ${ret.err};`);
+                return ;
+            }
+            console.log(`${_address}\`s Code: ${ret.value!}`);
+        },
+        setCode: async (fee:string, codePath:string) => {
+            let tx = new ValueTransaction();
+            const code = require('fs').readFileSync(codePath, 'utf-8');
+            let userCode = Buffer.from(code);
+            tx.method = 'setCode';
+            tx.fee = new BigNumber(fee);
+            tx.input = {userCode};
+            let {err, nonce} = await chainClient.getNonce({address});
+            if (err) {
+                console.error(`runMethod getNonce failed for ${err}`);
+                return ;
+            }
+            tx.nonce = nonce! + 1;
+            tx.sign(secret);
+            let sendRet = await chainClient.sendTransaction({tx});
+            if (sendRet.err) {
+                console.error(`transferTo failed for ${sendRet.err}`);
+                return ;
+            }
+            console.log(`send transferTo tx: ${tx.hash}`);
+            watchingTx.push(tx.hash);
+        },
     };
     function runCmd(_cmd: string) {
         let chain = runEnv;

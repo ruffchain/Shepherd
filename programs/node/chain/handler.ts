@@ -5,6 +5,7 @@ export function registerHandler(handler: ValueHandler) {
     handler.genesisListener = async (context: DposTransactionContext) => {
         await context.storage.createKeyValue('bid');
         await context.storage.createKeyValue('bidInfo');
+        await context.storage.createKeyValue('userCode');
         return ErrorCode.RESULT_OK;
     };
 
@@ -12,6 +13,40 @@ export function registerHandler(handler: ValueHandler) {
         let retInfo = await balanceKv.get(address);
         return retInfo.err === ErrorCode.RESULT_OK ? retInfo.value : new BigNumber(0);
     }
+
+    async function getAddressCode(codeKv: IReadableKeyValue, address: string): Promise<Buffer|undefined> {
+        let retInfo = await codeKv.get(address);
+        return retInfo.err == ErrorCode.RESULT_OK ? retInfo.value.code : undefined;
+    }
+
+    handler.addTX('setCode', async (context: DposTransactionContext, params: any): Promise<ErrorCode> => {
+        console.log('in set code')
+        if (!params.userCode) {
+            return ErrorCode.RESULT_INVALID_PARAM;
+        }
+
+        let kvRet = await context.storage.getReadWritableKeyValue('userCode');
+        if (kvRet.err) {
+            return kvRet.err;
+        }
+
+        kvRet = await kvRet.kv!.set(context.caller, {code: params.userCode});
+        if (kvRet.err) {
+            return kvRet.err;
+        }
+
+        return ErrorCode.RESULT_OK;
+    });
+
+    handler.addViewMethod('getCode', async (context: DposViewContext, params: any): Promise<Buffer|undefined> => {
+        let kvRet = await context.storage.getReadableKeyValue('userCode');
+
+        if (kvRet.err) {
+            return undefined;
+        }
+
+        return await getAddressCode(kvRet.kv!, params.address);
+    });
 
     handler.addTX('createToken', async (context: DposTransactionContext, params: any): Promise<ErrorCode> => {
         context.cost(context.fee);
