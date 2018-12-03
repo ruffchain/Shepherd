@@ -1,6 +1,6 @@
 import {ErrorCode, BigNumber, DposViewContext, DposTransactionContext, DposEventContext, ValueHandler, IReadableKeyValue, MapToObject} from '../../../common/dist/blockchain-sdk/src/client/index';
 import {isNullOrUndefined} from 'util';
-
+const ruffvm = require('./ruffvm');
 export function registerHandler(handler: ValueHandler) {
     handler.genesisListener = async (context: DposTransactionContext) => {
         await context.storage.createKeyValue('bid');
@@ -46,6 +46,35 @@ export function registerHandler(handler: ValueHandler) {
         }
 
         return await getAddressCode(kvRet.kv!, params.address);
+    });
+
+    handler.addTX('runMethod', async (context: DposTransactionContext, params: any): Promise<ErrorCode> => {
+        let kvRet = await context.storage.getReadableKeyValue('userCode');
+
+        if (kvRet.err) {
+            return kvRet.err;
+        }
+        let code = await getAddressCode(kvRet.kv!, params.to);
+
+        if (!code) {
+            return ErrorCode.RESULT_NOT_FOUND;
+        }
+        const sandbox = {
+            helloInHost: function(resolve: any, param: any) {
+                const number = new BigNumber(param);
+                const expect = new BigNumber(123.4567);
+                console.log('in helloInHost');
+                return true
+            }
+        };
+        let action = `${params.action}("${params.params}");`
+        console.log("##### action is", action);
+        const res = await ruffvm.createScript(code)
+                            .setUserCode(action)
+                            .setSandbox(sandbox)
+                            .setOption({ cpuCount:64, memSizeKB:200 })
+                            .runAsync();
+        return ErrorCode.RESULT_OK;
     });
 
     handler.addTX('createToken', async (context: DposTransactionContext, params: any): Promise<ErrorCode> => {

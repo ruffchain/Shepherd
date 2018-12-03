@@ -264,6 +264,27 @@ function main() {
             console.log(`send transferTo tx: ${tx.hash}`);
             watchingTx.push(tx.hash);
         },
+        runMethod: async (to:string, amount: string, fee: string, action: string, params: string) => {
+            let tx = new ValueTransaction();
+            tx.method = 'runMethod';
+            tx.fee = new BigNumber(fee);
+            tx.value = new BigNumber(amount);
+            tx.input = {action, to, params};
+            let {err, nonce} = await chainClient.getNonce({address});
+            if (err) {
+                console.error(`runMethod getNonce failed for ${err}`);
+                return ;
+            }
+            tx.nonce = nonce! + 1;
+            tx.sign(secret);
+            let sendRet = await chainClient.sendTransaction({tx});
+            if (sendRet.err) {
+                console.error(`transferTo failed for ${sendRet.err}`);
+                return ;
+            }
+            console.log(`send transferTo tx: ${tx.hash}`);
+            watchingTx.push(tx.hash);
+        },
     };
     function runCmd(_cmd: string) {
         let chain = runEnv;
