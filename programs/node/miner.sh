@@ -1,4 +1,4 @@
-node common/dist/blockchain-sdk/src/tool/host.js miner \
+node node_modules/blockchain-sdk/dist/blockchain-sdk/src/tool/host.js miner \
 --genesis "./data/dpos/genesis" \
 --dataDir "./data/dpos/miner1" \
 --loggerConsole --loggerLevel debug \

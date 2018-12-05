@@ -1,6 +1,6 @@
 import * as readline from 'readline';
 import * as process from 'process';
-import { ChainClient, BigNumber, addressFromSecretKey, ValueTransaction, parseCommand, initUnhandledRejection, initLogger, MapFromObject } from '../../../common/dist/blockchain-sdk/src/client/index.js';
+import { ChainClient, BigNumber, addressFromSecretKey, ValueTransaction, parseCommand, initUnhandledRejection, initLogger, MapFromObject } from 'blockchain-sdk/dist/blockchain-sdk/src/client/index';
 
 initUnhandledRejection(initLogger({ loggerOptions: { console: true } }));
 

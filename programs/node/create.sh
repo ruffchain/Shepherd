@@ -1,4 +1,4 @@
-node common/dist/blockchain-sdk/src/tool/host.js create \
+node node_modules/blockchain-sdk/dist/blockchain-sdk/src/tool/host.js create \
 --package "dist/blockchain-sdk/ruffchain" --externalHandler \
 --dataDir "./data/dpos/genesis" \
 --loggerConsole --loggerLevel debug \

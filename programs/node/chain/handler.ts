@@ -1,6 +1,7 @@
-import {ErrorCode, BigNumber, DposViewContext, DposTransactionContext, DposEventContext, ValueHandler, IReadableKeyValue, MapToObject} from '../../../common/dist/blockchain-sdk/src/client/index';
+import {ErrorCode, BigNumber, DposViewContext, DposTransactionContext, DposEventContext, ValueHandler, IReadableKeyValue, MapToObject} from 'blockchain-sdk/dist/blockchain-sdk/src/client/index';
 import {isNullOrUndefined} from 'util';
-const ruffvm = require('./ruffvm');
+const ruffvm = require('ruff-vm');
+
 export function registerHandler(handler: ValueHandler) {
     handler.genesisListener = async (context: DposTransactionContext) => {
         await context.storage.createKeyValue('bid');

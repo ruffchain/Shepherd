@@ -4,8 +4,9 @@
   "description": "Shepherd ========= The bootstrap and orchestrate tools for Blockchain, it is the Best practice of Ruff IoT Blockchain [Ruff IoT Blockchain white paper](https://github.com/RuffNotes/RuffChain/blob/master/WhitePaper.md)",
   "main": "index.js",
   "scripts": {
-    "preinstall": "cd common && npm install",
-    "build": "gulp build"
+    "build": "gulp build",
+    "postinstall": "npm run build-chain-sdk",
+    "build-chain-sdk": "cd node_modules/blockchain-sdk && npm install && npm run build"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,10 @@
     "url": "https://github.com/ruffchain/Shepherd/issues"
   },
   "homepage": "https://github.com/ruffchain/Shepherd#readme",
+  "dependencies": {
+    "blockchain-sdk": "github:ruffchain/chainsdk",
+    "ruff-vm": "github:ruffchain/RuffVM"
+  },
   "devDependencies": {
     "@types/node": "^10.12.9",
     "gulp": "^4.0.0",

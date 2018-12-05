@@ -5,6 +5,8 @@ data/
 dist/
 
 
+dist
+data
 # Log files
 npm-debug.log*
 yarn-debug.log*
