@@ -61,21 +61,39 @@ export function registerHandler(handler: ValueHandler) {
             return ErrorCode.RESULT_NOT_FOUND;
         }
         const sandbox = {
-            helloInHost: function(resolve: any, param: any) {
-                const number = new BigNumber(param);
-                const expect = new BigNumber(123.4567);
-                console.log('in helloInHost');
-                return true
+            bcTransfer: async (resolve: any, to: string, amount: string): Promise<any> => {
+                console.log('in bcTransfer to:', to, ' amount:', amount);
+                return context
+                    .transferTo(to, new BigNumber(amount))
+                    .then(ret => {
+                        if (ret === ErrorCode.RESULT_OK) {
+                            resolve(true);
+                        } else {
+                            console.log('ret is', ret);
+                            resolve(false);
+                        }
+                    }).catch(err => {
+                        console.log('err when transfer', err);
+                        resolve(false);
+                    });
             }
         };
-        let action = `${params.action}("${params.params}");`
-        console.log("##### action is", action);
-        const res = await ruffvm.createScript(code)
-                            .setUserCode(action)
-                            .setSandbox(sandbox)
-                            .setOption({ cpuCount:64, memSizeKB:200 })
-                            .runAsync();
-        return ErrorCode.RESULT_OK;
+        let actionCode = `
+            var contract = new Contract("${context.caller}");
+            contract.${params.action}("${params.params}");
+        `;
+
+        try {
+            await ruffvm.createScript(code)
+                                .setUserCode(actionCode)
+                                .setSandbox(sandbox)
+                                .setOption({ cpuCount:64, memSizeKB:200 })
+                                .runAsync();
+            return ErrorCode.RESULT_OK;
+        } catch (err) {
+            console.log('err is', err);
+            return ErrorCode.RESULT_FAILED;
+        }
     });
 
     handler.addTX('createToken', async (context: DposTransactionContext, params: any): Promise<ErrorCode> => {
