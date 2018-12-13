@@ -27,11 +27,11 @@ npm run build
 ./programs/wallet/wallet.sh
 ```
 
-## Run user Demo DApp (e.g bigNumber)
+## Run user Demo DApp (e.g splitTransfer)
 
 build DApp
 ```
-cd node_modules/ruff-vm/DemoApp/bigNumber/
+programs/contract/splitTransfer
 npm install
 npm run build
 ```
@@ -41,6 +41,8 @@ load DApp from wallet
 
 ```
 ./programs/wallet/wallet.sh
->chain.setCode(10, 'node_modules/ruff-vm/DemoApp/bigNumber/dist/index.js')
->chain.runMethod('1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79', 10, 10, 'helloInVm', 'hi')
+// load contract code
+chain.setCode(10, 'programs/contract/splitTransfer/dist/index.js')
+// trigger contract method
+chain.runMethod('1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79', 10, 10, 'doTransfer', '10')
 ```
