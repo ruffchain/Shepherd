@@ -79,7 +79,7 @@ export function registerHandler(handler: ValueHandler) {
             }
         };
         let actionCode = `
-            var contract = new Contract("${context.caller}");
+            var contract = new Contract("${params.to}","${context.caller}");
             contract.${params.action}("${params.params}");
         `;
 

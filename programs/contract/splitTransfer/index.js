@@ -6,6 +6,7 @@ function doTransfer(amount) {
     const accountB = '1LuwjNj8wkqo237N7Gh8nZSSvUa6TZ5ds4';
 
     assert.equal(this.getReceiver(), '1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79', 'invalid receiver');
+    assert.equal(this.getCaller(), '1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79', 'invalid caller');
 
     var amountValue = new BigNumber(amount);
     let toAValue = amountValue.div(2).toString();
@@ -16,15 +17,21 @@ function doTransfer(amount) {
     return true;
 }
 
-function Contract(receiver) {
+function Contract(receiver, caller) {
     var that = this;
 
     that._receiver = receiver;
+    that._caller = caller;
 }
 
 Contract.prototype.getReceiver = function() {
     return this._receiver;
 }
 
+Contract.prototype.getCaller = function() {
+    return this._caller;
+}
+
 Contract.prototype.doTransfer = doTransfer;
+
 global.Contract = Contract;
