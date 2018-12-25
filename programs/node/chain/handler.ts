@@ -61,7 +61,7 @@ export function registerHandler(handler: ValueHandler) {
             return ErrorCode.RESULT_NOT_FOUND;
         }
         const sandbox = {
-            bcTransfer: async (resolve: any, to: string, amount: string): Promise<any> => {
+            bcTransfer: (resolve: any, to: string, amount: string): Promise<any> => {
                 console.log('in bcTransfer to:', to, ' amount:', amount);
                 return context
                     .transferTo(to, new BigNumber(amount))
@@ -76,7 +76,45 @@ export function registerHandler(handler: ValueHandler) {
                         console.log('err when transfer', err);
                         resolve(false);
                     });
-            }
+            },
+            bcDBCreate: (resolve: any, name: string): Promise<any> => {
+                var dbName = `${context.caller}-${name}`;
+                return context
+                        .storage
+                        .createKeyValue(dbName)
+                        .then(kvRet => {
+                            if (kvRet.err) {
+                                resolve(false);
+                            } else {
+                                resolve(true);
+                            }
+                        }).catch(err => {
+                            console.log('error when DB create', err);
+                            resolve(false);
+                        });
+            },
+            bcDBSet: (resolve: any, name: string, key: string, value: string): Promise<any> => {
+                var dbName = `${context.caller}-${name}`;
+                return context
+                        .storage
+                        .getReadWritableKeyValue(dbName)
+                        .then(kvRet => {
+                            if (kvRet.err) {
+                                resolve(false);
+                            } else {
+                                kvRet.kv!.set(key, value).then(ret => {
+                                    if (ret.err) {
+                                        resolve(false);
+                                    } else {
+                                        resolve(true);
+                                    }
+                                });
+                            }
+                        }).catch(err => {
+                            console.log('error when DB Set', err);
+                            resolve(false);
+                        });
+            },
         };
         let actionCode = `
             var contract = new Contract("${params.to}","${context.caller}");
