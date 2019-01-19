@@ -10,8 +10,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "rfccli",
     "build": "",
-    "preinstall": "tsc -p ./ && chmod +x ./dist/cli.js ./dist/test.js",
+    "preinstall": "",
     "install": "echo \"install ... \"",
+    "postinstall": "tsc -p ./ && chmod +x dist/cli.js",
     "prepublish": ""
   },
   "repository": {
