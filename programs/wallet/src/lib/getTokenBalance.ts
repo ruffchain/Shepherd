@@ -18,7 +18,7 @@ export async function getTokenBalance(ctx: IfContext, args: string[]): Promise<I
 
         let params =
         {
-            method: 'getBalance',
+            method: 'getTokenBalance',
             params: {
                 address: args[1],
                 tokenid: args[0]
