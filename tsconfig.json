@@ -7,5 +7,5 @@
     "outDir": "dist/blockchain-sdk/ruffchain",
     "types": ["node"]
   },
-  "include": ["programs/node/**/*", "programs/wallet/**/*"]
+  "include": ["programs/node/**/*"]
 }
