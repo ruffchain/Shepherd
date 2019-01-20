@@ -5,7 +5,7 @@ import * as assert from 'assert';
 import * as sqlite from 'sqlite';
 import * as sqlite3 from 'sqlite3';
 
-const { TransactionDatabase } = require('sqlite3-transactions');
+// const { TransactionDatabase } = require('sqlite3-transactions');
 declare module 'sqlite' {
     interface Database {
         driver: sqlite3.Database;
@@ -440,7 +440,7 @@ class SqliteStorageTransaction implements StorageTransaction {
     protected m_transcation: any;
 
     constructor(db: sqlite.Database) {
-        this.m_transcationDB = new TransactionDatabase(db.driver);
+//        this.m_transcationDB = new TransactionDatabase(db.driver);
     }
 
     public beginTransaction(): Promise<ErrorCode> {
