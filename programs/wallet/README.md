@@ -22,34 +22,47 @@ npm install
 
 ## How to use?
 
-**Example**
-```
+### Commands
+* getBalance [account address]
+  get account balance (default account: self i.e. specific with --secret)
 
+* getMiners
+  list miners
+
+* getPeers
+  list peers for nodes
+
+* getNonce <account address>
+
+  get nonce for <account address>
+
+* transferTo <account address> <amount> <fee>
+  transfer `amount` sys token to specific `account address` with gas fee `fee`
+
+### Example
+
+```
+// start cli
 ./dist/cli.js --secret 64d8284297f40dc7475b4e53eb72bc052b41bef62fecbd3d12c5e99b623cfc11 --host 40.73.100.56 --port 18089
 
-
+// get balance for default account
 getBalance
+// transfer 200 sys token to 16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg with fee 1 sys token
 transferTo  16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg 2000 1
 transferTo  12nD5LgUnLZDbyncFnoFB43YxhSFsERcgQ 20 1
 transferTo  13dhmGDEuaoV7QvwbTm4gC6fx7CCRM7VkY  1000 1
 transferTo  1NsES7YKm8ZbRE4K5LaPGKeSELVtAwzoTw  2000 1
 
+//issue token with token name 'token2'
 createtoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 100 1
+
+//get token2 balance for account
 gettokenbalance token2 1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79
 transfertokento token2 1LuwjNj8wkqo237N7Gh8nZSSvUa6TZ5ds4 10 1
 gettokenbalance token2  1LuwjNj8wkqo237N7Gh8nZSSvUa6TZ5ds4
 getbalance 1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79
 
-
 ```
-
-### Commands
-* getBalance [account address]  
-get account balance (default account: self i.e. specific with --secret)
-
-* transferTo <account address> <amount> <fee>
-transfer `amount` sys token to specific `account address` with gas fee `fee`
-
 ## Test
 
 
