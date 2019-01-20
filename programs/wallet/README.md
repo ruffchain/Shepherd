@@ -48,16 +48,11 @@ getbalance 1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79
 get account balance (default account: self i.e. specific with --secret)
 
 * transferTo <account address> <amount> <fee>
-
-  transfer `amount` sys token to specific `account address` with gas fee `fee`
+transfer `amount` sys token to specific `account address` with gas fee `fee`
 
 ## Test
 
-## known bugs
 
-1. [DEP0025] DeprecationWarning: sys is deprecated. Use util instead.
-
-/node_modules/sqlite3-transactions/sqlite3-transactions.js:1:73 需要将sys改成util
 
 
 
