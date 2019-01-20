@@ -291,7 +291,7 @@ const showPrompt = () => {
 let printHelpHeader = () => {
     console.log('');
     console.log('NAME:');
-    console.log('\trfccli - the RuffChain command line intrface');
+    console.log('\trfccli - the command line intrface for Shepherd');
     console.log('');
     console.log('\tCopyright 2019');
     console.log('');
@@ -362,11 +362,11 @@ let printHelp = (args: string[]) => {
 };
 /**
  * Expected args
- * 
+ *
  * rpchost
  * rpcpost
  * secret
- * 
+ *
  */
 const initArgs = () => {
 

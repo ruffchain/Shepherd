@@ -31,7 +31,6 @@ export function prnGetMiners(obj: IfResult) {
     let objJson: any;
     try {
         objJson = JSON.parse(obj.resp);
-        //console.log('Ruff: ', objJson.value.replace(/n/g, ''))
         if (objJson.err === 0) {
             objJson.value.forEach((element: string) => {
                 console.log(element.slice(1));

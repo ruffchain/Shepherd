@@ -41,7 +41,6 @@ export function prnGetTokenBalance(obj: IfResult) {
     let objJson: any;
     try {
         objJson = JSON.parse(obj.resp);
-        // console.log('Ruff: ', objJson.value.replace(/n/g, ''))
     } catch (e) {
         console.log(e);
     }

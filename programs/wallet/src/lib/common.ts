@@ -25,19 +25,7 @@ export async function waitSeconds(seconds: number) {
     });
 }
 
-// export function checkArgsNum(resolve: any, args: string[], numExpected: number): boolean {
-//     if (args.length < numExpected) {
-//         console.log('args NOK');
-//         resolve({
-//             ret: ErrorCode.RESULT_WRONG_ARG,
-//             resp: "Wrong args"
-//         });
-//         return false;
-//     } else {
-//         console.log('args OK')
-//         return true;
-//     }
-// }
+export const sysTokenSym = 'sys';
 
 export async function checkReceipt(ctx: IfContext, txhash: string): Promise<{ resp: string | null, ret: number }> {
     return new Promise<{ resp: string | null, ret: number }>(async (resolve, reject) => {

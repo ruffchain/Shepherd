@@ -25,7 +25,6 @@ export function prnGetPeers(obj: IfResult) {
     let objJson: any;
     try {
         objJson = JSON.parse(obj.resp);
-        //console.log('Ruff: ', objJson.value.replace(/n/g, ''))
         objJson.forEach((element: string) => {
             console.log(element.replace(/<=/g, ''));
         });

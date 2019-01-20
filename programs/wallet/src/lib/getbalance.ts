@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core";
-import { IfResult, IfContext } from './common';
+import { IfResult, IfContext, sysTokenSym } from './common';
 
 const FUNC_NAME = 'view';
 
@@ -37,7 +37,7 @@ export function prnGetBalance(obj: IfResult) {
     let objJson: any;
     try {
         objJson = JSON.parse(obj.resp);
-        console.log('Ruff: ', objJson.value.replace(/n/g, ''))
+        console.log(`${sysTokenSym}:`, objJson.value.replace(/n/g, ''))
     } catch (e) {
         console.log(e);
     }

@@ -31,10 +31,6 @@ export function prnGetVote(obj: IfResult) {
     let objJson: any;
     try {
         objJson = JSON.parse(obj.resp);
-        //console.log('Ruff: ', objJson.value.replace(/n/g, ''))
-        // objJson.forEach((element: string) => {
-        //     console.log(element.replace(/<=/g, ''));
-        // });
         let vote: Map<string, BigNumber> = MapFromObject(objJson.value!);
         console.log(colors.green('Votes:'));
         for (let [k, v] of vote) {
