@@ -43,7 +43,7 @@ npm install
 
   `preaccount address and balance list` it will cost `amount` sys token and `fee`
 
-  
+  e.g.
 
 ```bash
 createToken test [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 100 1
