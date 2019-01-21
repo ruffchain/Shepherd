@@ -39,9 +39,9 @@ npm install
   transfer `amount` sys token to specific `account address` with gas fee `fee`
 
 * createToken <token symbol> <preaccount address and balance list> <amount>  <fee>   
-  issue token with symbol name <token symbol> with prebalances list in 
+  issue token with symbol name `token symbol` with prebalances list in 
 
-  <preaccount address and balance list> it will cost <amount> sys token and <fee>
+  `preaccount address and balance list` it will cost `amount` sys token and `fee`
 
   
 
@@ -53,7 +53,7 @@ createToken test [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000
 
 * getTokenBalance <token symbol> <account address>
 
-  get <token symbol> balance for <account address>
+  get `token symbol` balance for `account address`
 
 ### Example
 
