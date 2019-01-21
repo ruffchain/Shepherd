@@ -8,8 +8,9 @@
 - 1.0.9 upload ， modfity README
 
 ## dependency
+- node.js  (version == 8.11)
 - ES2017
-- tsc, typescript compiler
+- tsc, typescript compiler (version == 3.1.0)
 - winston v2.4.2 , 去掉兼容性，想办法，新版本是v3.1.0
 
 ## install
@@ -54,6 +55,10 @@ createToken test [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000
 * getTokenBalance <token symbol> <account address>
 
   get `token symbol` balance for `account address`
+
+* transferTokenTo <token symbol> <account address> <amount> <fee>
+
+  transfer token `token symbol` with  `amount` to `account address` cost gas fee `fee`
 
 ### Example
 
