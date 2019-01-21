@@ -23,21 +23,33 @@ npm install
 ## How to use?
 
 ### Commands
-* getBalance [account address]
+* getBalance [account address]  
   get account balance (default account: self i.e. specific with --secret)
 
-* getMiners
+* getMiners  
   list miners
 
-* getPeers
+* getPeers  
   list peers for nodes
 
-* getNonce <account address>
-
+* getNonce <account address>  
   get nonce for <account address>
 
-* transferTo <account address> <amount> <fee>
+* transferTo <account address> <amount> <fee>  
   transfer `amount` sys token to specific `account address` with gas fee `fee`
+
+* createToken <token symbol> <pre account address and balance list> <amount>  <fee>   
+issue token with symbol name <token symbol> with prebalances list in <pre account address and balance list>, it will cost <amount> sys token and <fee>
+
+```bash
+createtoken test [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 100 1
+```
+
+> issue `test` token with pre balnce `10000` for account address `1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79` cost `100` for sys token and `1` as gas fee 
+
+* getTokenBalance <token symbol> <account address>
+
+  get <token symbol> balance for <account address>
 
 ### Example
 
@@ -54,13 +66,13 @@ transferTo  13dhmGDEuaoV7QvwbTm4gC6fx7CCRM7VkY  1000 1
 transferTo  1NsES7YKm8ZbRE4K5LaPGKeSELVtAwzoTw  2000 1
 
 //issue token with token name 'token2'
-createtoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 100 1
+createToken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 100 1
 
 //get token2 balance for account
-gettokenbalance token2 1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79
-transfertokento token2 1LuwjNj8wkqo237N7Gh8nZSSvUa6TZ5ds4 10 1
-gettokenbalance token2  1LuwjNj8wkqo237N7Gh8nZSSvUa6TZ5ds4
-getbalance 1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79
+getTokenBalance token2 1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79
+transferTokenTo token2 1LuwjNj8wkqo237N7Gh8nZSSvUa6TZ5ds4 10 1
+getTokenBalance token2  1LuwjNj8wkqo237N7Gh8nZSSvUa6TZ5ds4
+getBalance 1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79
 
 ```
 ## Test
