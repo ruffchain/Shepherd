@@ -1,12 +1,10 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt } from './common';
+import { IfResult, IfContext, checkReceipt, check_fee, check_amount } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
 const FUNC_NAME = 'createToken';
-
-// tokenid: string, preBalances: { address: string, amount: string }[], cost: string, fee: string
 
 export async function mortgage(ctx: IfContext, args: string[]): Promise<IfResult> {
     return new Promise<IfResult>(async (resolve) => {
@@ -20,6 +18,22 @@ export async function mortgage(ctx: IfContext, args: string[]): Promise<IfResult
             return;
         }
         let amount = args[0];
+
+        if (!check_amount(args[0])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong amount"
+            });
+            return;
+        }
+
+        if (!check_fee(args[1])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong fee input"
+            });
+            return;
+        }
         let fee = args[1];
 
         let tx = new ValueTransaction();

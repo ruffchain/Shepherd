@@ -39,6 +39,6 @@
     "sqlite3": "^4.0.4",
     "winston": "^2.4.4",
     "xmlhttprequest": "^1.8.0",
-    "typescript":"^2.8.1"
+    "typescript": "^2.8.1"
   }
 }

@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt } from './common';
+import { IfResult, IfContext, checkReceipt, TOKEN_MIN_LENGTH, TOKEN_MAX_LENGTH, check_fee, check_tokenid } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
@@ -17,7 +17,43 @@ export async function createToken(ctx: IfContext, args: string[]): Promise<IfRes
             });
             return;
         }
+
+        // check token id
+        if (!check_tokenid(args[0])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong token id length [3-12]"
+            });
+            return;
+        }
+        // check preBalance
+        // if (typeof args[1]) {
+        //     resolve({
+        //         ret: ErrorCode.RESULT_WRONG_ARG,
+        //         resp: "Wrong token id length [3-12]"
+        //     });
+        //     return;
+        // }
+
+        if (args[2] === undefined) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong cost"
+            });
+            return;
+        }
+
+        if (!check_fee(args[3])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong fee"
+            });
+            return;
+        }
+
+
         let tokenid = args[0];
+
         console.log(args[1]);
         console.log(typeof args[1]);
         try {
@@ -25,6 +61,11 @@ export async function createToken(ctx: IfContext, args: string[]): Promise<IfRes
             console.log(objPrebalances);
         } catch (e) {
             console.log(e);
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong preBanlances"
+            });
+            return;
         }
 
         let preBalances = JSON.parse(args[1]);

@@ -65,6 +65,7 @@ createToken test [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000
 ```
 // start cli
 ./dist/cli.js --secret 64d8284297f40dc7475b4e53eb72bc052b41bef62fecbd3d12c5e99b623cfc11 --host 40.73.100.56 --port 18089
+./dist/cli.js --secret c07ad83d2c5627acece18312362271e22d7aeffb6e2a6e0ffe1107371514fdc2 --host 40.73.100.56 --port 18089
 
 // get balance for default account
 getBalance
@@ -82,6 +83,9 @@ getTokenBalance token2 1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79
 transferTokenTo token2 1LuwjNj8wkqo237N7Gh8nZSSvUa6TZ5ds4 10 1
 getTokenBalance token2  1LuwjNj8wkqo237N7Gh8nZSSvUa6TZ5ds4
 getBalance 1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79
+getBalance 12nD5LgUnLZDbyncFnoFB43YxhSFsERcgQ
+transferTo 
+
 
 ```
 ## Test

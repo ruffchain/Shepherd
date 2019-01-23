@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core";
-import { IfResult, IfContext, sysTokenSym } from './common';
+import { IfResult, IfContext, sysTokenSym, check_address } from './common';
 
 const FUNC_NAME = 'view';
 
@@ -14,6 +14,13 @@ export async function getBalance(ctx: IfContext, args: string[]): Promise<IfResu
                 params: { address: ctx.sysinfo.address }
             };
         } else {
+            if (!check_address(args[0])) {
+                resolve({
+                    ret: ErrorCode.RESULT_WRONG_ARG,
+                    resp: "Wrong address"
+                });
+                return;
+            }
             params =
                 {
                     method: 'getBalance',

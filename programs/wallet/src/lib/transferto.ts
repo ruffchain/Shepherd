@@ -1,12 +1,10 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt } from './common';
+import { IfResult, IfContext, checkReceipt, check_address, check_amount, check_fee } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
-const FUNC_NAME = 'createToken';
-
-// tokenid: string, preBalances: { address: string, amount: string }[], cost: string, fee: string
+//const FUNC_NAME = 'createToken';
 
 export async function transferTo(ctx: IfContext, args: string[]): Promise<IfResult> {
     return new Promise<IfResult>(async (resolve) => {
@@ -19,9 +17,34 @@ export async function transferTo(ctx: IfContext, args: string[]): Promise<IfResu
             });
             return;
         }
+
+        if (!check_address(args[0])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong address"
+            });
+            return;
+        }
+
+        if (!check_amount(args[1])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong amount"
+            });
+            return;
+        }
+
+        if (!check_fee(args[2])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong fee"
+            });
+            return;
+        }
+
         let address = args[0];
-        let amount = args[1];
-        let fee = args[2];
+        let amount = parseInt(args[1]);
+        let fee = parseInt(args[2]);
 
         let tx = new ValueTransaction();
         tx.method = 'transferTo';

@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core";
-import { IfResult, IfContext } from './common';
+import { IfResult, IfContext, check_tokenid } from './common';
 
 const FUNC_NAME = 'view';
 
@@ -12,6 +12,14 @@ export async function getTokenBalance(ctx: IfContext, args: string[]): Promise<I
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong args"
+            });
+            return;
+        }
+
+        if (!check_tokenid(args[0])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong tokenid , length [3-12]"
             });
             return;
         }

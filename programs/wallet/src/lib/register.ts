@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt } from './common';
+import { IfResult, IfContext, checkReceipt, check_fee } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
@@ -20,6 +20,14 @@ export async function register(ctx: IfContext, args: string[]): Promise<IfResult
             return;
         }
         let fee = args[0];
+
+        if (!check_fee(args[0])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong fee"
+            });
+            return;
+        }
 
         let tx = new ValueTransaction();
         tx.method = 'register';

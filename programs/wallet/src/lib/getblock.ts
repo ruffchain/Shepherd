@@ -17,6 +17,7 @@ export async function getBlock(ctx: IfContext, args: string[]): Promise<IfResult
             return;
         }
 
+
         let params =
         {
             which: (args[0] === 'latest') ? args[0] : ((args[0].length < 64) ? parseInt(args[0]) : args[0]),

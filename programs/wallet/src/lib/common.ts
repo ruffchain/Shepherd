@@ -1,9 +1,49 @@
 import { RPCClient } from '../client/client/rfc_client';
-import { resolve } from 'path';
 import { ErrorCode } from '../core';
+const BigNumber = require('bignumber.js');
 
 const MAX_CONFIRM_TIMES = 3;
 const BLOCK_INTERVAL = 10;
+
+export const TOKEN_MAX_LENGTH = 12;
+export const TOKEN_MIN_LENGTH = 3;
+export const FEE_MAX = 2;
+export const FEE_MIN = 0.1;
+
+/**
+ * 
+ * @param amount: amount of token
+ * 
+ * - it should be a BigNumber
+ */
+export function check_amount(amount: string): boolean {
+
+    let bn = new BigNumber(amount);
+
+    if (bn.isNaN() === true) {
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+export function check_tokenid(token: string): boolean {
+    return token.length >= TOKEN_MIN_LENGTH && token.length <= TOKEN_MAX_LENGTH;
+}
+export function check_fee(fee: string): boolean {
+    let bn = new BigNumber(fee);
+
+    if (bn.isNaN() === true) {
+        return false;
+    }
+
+    let num = JSON.parse(fee);
+    return num >= FEE_MIN && num <= FEE_MAX;
+}
+
+export function check_address(addr: string): boolean {
+    return addr.length >= 34;
+}
 
 export interface IfResult { resp: string | null, ret: number };
 

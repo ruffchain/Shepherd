@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt } from './common';
+import { IfResult, IfContext, checkReceipt, check_tokenid, check_address, check_amount, check_fee } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
@@ -16,6 +16,35 @@ export async function transferTokenTo(ctx: IfContext, args: string[]): Promise<I
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong args"
+            });
+            return;
+        }
+
+        if (!check_tokenid(args[0])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong tokenid"
+            });
+            return;
+        }
+        if (!check_address(args[1])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong address"
+            });
+            return;
+        }
+        if (!check_amount(args[2])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong amount"
+            });
+            return;
+        }
+        if (!check_fee(args[3])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong fee"
             });
             return;
         }
