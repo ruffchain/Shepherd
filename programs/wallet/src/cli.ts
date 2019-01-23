@@ -419,13 +419,16 @@ let handleResult = (f: (result: IfResult) => void, arg: IfResult) => {
     }
 }
 let handleCmd = async (cmd: string) => {
-    let words = cmd.split(' ');
+    let words = cmd.replace(/\s+/g, ' ').split(' ');
+    // Remove continuous space , or other blank character
+    // 
 
     if (words.length < 1) {
         return;
     }
 
     const cmd1 = words[0].toLowerCase();
+
     const args: string[] = words.splice(1, words.length - 1);
 
     let ctx = {

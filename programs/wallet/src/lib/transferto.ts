@@ -43,8 +43,8 @@ export async function transferTo(ctx: IfContext, args: string[]): Promise<IfResu
         }
 
         let address = args[0];
-        let amount = parseInt(args[1]);
-        let fee = parseInt(args[2]);
+        let amount = args[1];
+        let fee = args[2];
 
         let tx = new ValueTransaction();
         tx.method = 'transferTo';

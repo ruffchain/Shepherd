@@ -42,7 +42,8 @@ export function check_fee(fee: string): boolean {
 }
 
 export function check_address(addr: string): boolean {
-    return addr.length >= 34;
+    console.log("len:", addr.length)
+    return addr.length >= 32;
 }
 
 export interface IfResult { resp: string | null, ret: number };

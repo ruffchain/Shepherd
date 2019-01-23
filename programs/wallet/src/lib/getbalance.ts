@@ -1,6 +1,7 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core";
 import { IfResult, IfContext, sysTokenSym, check_address } from './common';
+import * as colors from 'colors';
 
 const FUNC_NAME = 'view';
 
@@ -44,7 +45,7 @@ export function prnGetBalance(obj: IfResult) {
     let objJson: any;
     try {
         objJson = JSON.parse(obj.resp);
-        console.log(`${sysTokenSym}:`, objJson.value.replace(/n/g, ''))
+        console.log(colors.green(`${sysTokenSym}`), ":", objJson.value.replace(/n/g, ''))
     } catch (e) {
         console.log(e);
     }

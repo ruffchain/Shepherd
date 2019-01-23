@@ -70,7 +70,7 @@ createToken test [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000
 // get balance for default account
 getBalance
 // transfer 200 sys token to 16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg with fee 1 sys token
-transferTo  16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg 2000 1
+transferTo          16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg  1000   0.1
 transferTo  12nD5LgUnLZDbyncFnoFB43YxhSFsERcgQ 20 1
 transferTo  13dhmGDEuaoV7QvwbTm4gC6fx7CCRM7VkY  1000 1
 transferTo  1NsES7YKm8ZbRE4K5LaPGKeSELVtAwzoTw  2000 1
