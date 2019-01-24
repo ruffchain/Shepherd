@@ -1,1 +1,2 @@
-./dist/cli.js
+#!/bin/bash
+./dist/cli.js $@
