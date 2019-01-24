@@ -33,8 +33,11 @@ import { getVote, prnGetVote } from './lib/getvote';
 
 const { randomBytes } = require('crypto');
 const secp256k1 = require('secp256k1');
+const fs = require('fs');
 
-const VERSION = '0.1';
+import { parseTesterJson } from './lib/parsetesterjson';
+
+const VERSION = '1.1.0';
 const PROMPT = '> ';
 
 let SYSINFO: any = {};
@@ -72,6 +75,10 @@ let keyin = readline.createInterface(process.stdin, process.stdout);
 let checkArgs = (SYSINFO: any) => {
     if (SYSINFO.secret === "") {
         console.log(colors.red("No secret\n"));
+
+        console.log('\tPlease create your own secret with command:\n')
+        console.log('\t$rfccli createkey\n')
+
         process.exit(1);
     }
     if (SYSINFO.host === "") {
@@ -248,6 +255,12 @@ const CMDS: ifCMD[] = [
             + '\n\nExample:\n$ getVote'
     },
     {
+        name: 'sendToTesters',
+        content: 'Send token according to prebalance json file',
+        example: '\n'
+            + '\n\nExample:\n$ sendToTesters'
+    },
+    {
         name: 'test',
         content: 'just for test, will be deleted later',
         example: ''
@@ -303,6 +316,8 @@ let printHelpHeader = () => {
     console.log('VERSION:')
     console.log('\t', VERSION);
     console.log('');
+    // console.log('To create a secret key pair: $rfccli createkey');
+    console.log('')
 };
 
 let printContent = (words: string[], offset: number, cols: number) => {
@@ -360,6 +375,23 @@ let printHelp = (args: string[]) => {
         printHelpList();
     }
 };
+let createKey = function () {
+    let privateKey;
+
+    do {
+        privateKey = randomBytes(32);
+    } while (!secp256k1.privateKeyVerify(privateKey));
+
+    const pkey = secp256k1.publicKeyCreate(privateKey, true);
+
+    let address = addressFromSecretKey(privateKey);
+
+    console.log('');
+    console.log(colors.green('address   : '), address);
+    console.log(colors.green('public key: '), pkey.toString('hex'));
+    console.log(colors.green('secret key: '), privateKey.toString('hex'));
+    console.log('');
+}
 /**
  * Expected args
  *
@@ -369,6 +401,16 @@ let printHelp = (args: string[]) => {
  *
  */
 const initArgs = () => {
+
+    // console.log(process.argv);
+    // console.log(process.argv.length);
+
+    // console.log('****************');
+
+    if (process.argv.length === 3 && process.argv[2].toLowerCase() === 'createkey') {
+        createKey();
+        process.exit(0);
+    }
 
     printHelpHeader();
 
@@ -426,6 +468,8 @@ let handleCmd = async (cmd: string) => {
     if (words.length < 1) {
         return;
     }
+
+
 
     const cmd1 = words[0].toLowerCase();
 
@@ -527,19 +571,38 @@ let handleCmd = async (cmd: string) => {
             console.log(SYSINFO.address);
             break;
         case 'createkey':
-            let privateKey;
+            // let privateKey;
 
-            do {
-                privateKey = randomBytes(32);
-            } while (!secp256k1.privateKeyVerify(privateKey));
+            createKey();
 
-            const pkey = secp256k1.publicKeyCreate(privateKey, true);
+            // do {
+            //     privateKey = randomBytes(32);
+            // } while (!secp256k1.privateKeyVerify(privateKey));
 
-            let address = addressFromSecretKey(privateKey);
+            // const pkey = secp256k1.publicKeyCreate(privateKey, true);
 
-            console.log(colors.green('address   : '), address);
-            console.log(colors.green('public key: '), pkey.toString('hex'));
-            console.log(colors.green('secret key: '), privateKey.toString('hex'));
+            // let address = addressFromSecretKey(privateKey);
+
+            // console.log(colors.green('address   : '), address);
+            // console.log(colors.green('public key: '), pkey.toString('hex'));
+            // console.log(colors.green('secret key: '), privateKey.toString('hex'));
+            break;
+        case 'sendtotesters':
+            let text = fs.readFileSync('./data/tester.json');
+
+            if (!text) {
+                console.log("Can not fetch tester.json");
+            } else {
+                let obj;
+                // console.log(text.toString());
+                try {
+                    obj = JSON.parse(text);
+                } catch (e) {
+                    console.log(e);
+                }
+                await parseTesterJson(ctx, obj);
+            }
+
             break;
         case 'help':
             printHelp(args);

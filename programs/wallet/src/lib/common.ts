@@ -1,5 +1,5 @@
 import { RPCClient } from '../client/client/rfc_client';
-import { ErrorCode } from '../core';
+import { ErrorCode } from '../core/error_code';
 const BigNumber = require('bignumber.js');
 
 const MAX_CONFIRM_TIMES = 3;
@@ -42,8 +42,8 @@ export function check_fee(fee: string): boolean {
 }
 
 export function check_address(addr: string): boolean {
-    console.log("len:", addr.length)
-    return addr.length >= 32;
+    //console.log("len:", addr.length)
+    return addr.length >= 30;
 }
 
 export interface IfResult { resp: string | null, ret: number };
@@ -93,7 +93,7 @@ export async function checkReceipt(ctx: IfContext, txhash: string): Promise<{ re
             }
 
             if (counter >= 2) {
-                console.log('confirmed');
+                console.log('Confirmed');
                 resolve({
                     ret: ErrorCode.RESULT_OK,
                     resp: 'TX confirmed'
