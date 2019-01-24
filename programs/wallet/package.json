@@ -12,7 +12,7 @@
     "build": "",
     "preinstall": "",
     "install": "echo \"install ... \"",
-    "postinstall": "tsc -p ./ && chmod +x dist/cli.js && ln -s ./dist/cli.js rfccli",
+    "postinstall": "tsc -p ./ && chmod +x dist/cli.js",
     "prepublish": ""
   },
   "repository": {
