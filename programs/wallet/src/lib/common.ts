@@ -74,7 +74,7 @@ export async function checkReceipt(ctx: IfContext, txhash: string): Promise<{ re
 
         for (let i = 0; i < MAX_CONFIRM_TIMES; i++) {
             console.log('Wait to confirm');
-            await waitSeconds(1 * BLOCK_INTERVAL);
+            await waitSeconds(1.1 * BLOCK_INTERVAL);
 
             let result = await ctx.client.callAsync('getTransactionReceipt', { tx: txhash });
 
@@ -92,7 +92,7 @@ export async function checkReceipt(ctx: IfContext, txhash: string): Promise<{ re
                 console.log('.');
             }
 
-            if (counter >= 2) {
+            if (counter >= 1) {
                 console.log('Confirmed');
                 resolve({
                     ret: ErrorCode.RESULT_OK,
