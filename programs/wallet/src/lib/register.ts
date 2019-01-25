@@ -46,7 +46,10 @@ export async function register(ctx: IfContext, args: string[]): Promise<IfResult
         }
 
         tx.nonce = nonce! + 1;
-        console.log('nonce is:', tx.nonce);
+        if (ctx.sysinfo.verbose) {
+            console.log('nonce is:', tx.nonce);
+        }
+
         tx.sign(ctx.sysinfo.secret);
 
         let sendRet = await ctx.client.sendTransaction({ tx });
@@ -60,12 +63,14 @@ export async function register(ctx: IfContext, args: string[]): Promise<IfResult
         }
         console.log(`Send ${tx.method} tx: ${tx.hash}`);
 
+
+
         // 需要查找receipt若干次，直到收到回执若干次，才确认发送成功, 否则是失败
         let receiptResult = await checkReceipt(ctx, tx.hash);
 
         resolve(receiptResult); // {resp, ret}
     });
 }
-export function prnRegister(obj: IfResult) {
+export function prnRegister(ctx: IfContext, obj: IfResult) {
     console.log(obj.resp);
 }

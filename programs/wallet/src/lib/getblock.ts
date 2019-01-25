@@ -29,6 +29,6 @@ export async function getBlock(ctx: IfContext, args: string[]): Promise<IfResult
         resolve(cr);
     });
 }
-export function prnGetBlock(obj: IfResult) {
+export function prnGetBlock(ctx: IfContext, obj: IfResult) {
     console.log(obj.resp);
 }

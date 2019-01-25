@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt, TOKEN_MIN_LENGTH, TOKEN_MAX_LENGTH, check_fee, check_tokenid } from './common';
+import { IfResult, IfContext, checkReceipt, check_fee, check_tokenid } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
@@ -26,14 +26,6 @@ export async function createToken(ctx: IfContext, args: string[]): Promise<IfRes
             });
             return;
         }
-        // check preBalance
-        // if (typeof args[1]) {
-        //     resolve({
-        //         ret: ErrorCode.RESULT_WRONG_ARG,
-        //         resp: "Wrong token id length [3-12]"
-        //     });
-        //     return;
-        // }
 
         if (args[2] === undefined) {
             resolve({
@@ -54,8 +46,12 @@ export async function createToken(ctx: IfContext, args: string[]): Promise<IfRes
 
         let tokenid = args[0];
 
-        console.log(args[1]);
-        console.log(typeof args[1]);
+        if (ctx.sysinfo.verbose) {
+            console.log(args[1]);
+            console.log(typeof args[1]);
+        }
+
+
         try {
             let objPrebalances = JSON.parse(args[1]);
             console.log(objPrebalances);
@@ -72,9 +68,18 @@ export async function createToken(ctx: IfContext, args: string[]): Promise<IfRes
         let cost = args[2];
         let fee = args[3];
 
+        if (parseInt(cost) < 100) {
+            console.log('createToken cost exact 100 sys, please change it for now');
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong cost"
+            });
+            return;
+        }
+
         let tx = new ValueTransaction();
         tx.method = 'createToken';
-        tx.value = new BigNumber(cost);
+        tx.value = new BigNumber(100);
         tx.fee = new BigNumber(fee);
         tx.input = { tokenid, preBalances };
 
@@ -100,7 +105,9 @@ export async function createToken(ctx: IfContext, args: string[]): Promise<IfRes
             });
             return;
         }
+
         console.log(`send transferTo tx: ${tx.hash}`);
+
 
         // 需要查找receipt若干次，直到收到回执若干次，才确认发送成功, 否则是失败
         let receiptResult = await checkReceipt(ctx, tx.hash);
@@ -108,6 +115,6 @@ export async function createToken(ctx: IfContext, args: string[]): Promise<IfRes
         resolve(receiptResult); // {resp, ret}
     });
 }
-export function prnCreateToken(obj: IfResult) {
+export function prnCreateToken(ctx: IfContext, obj: IfResult) {
     console.log(obj.resp);
 }

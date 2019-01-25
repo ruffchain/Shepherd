@@ -16,12 +16,18 @@ export async function getVote(ctx: IfContext, args: string[]): Promise<IfResult>
         }
         // check args
         let cr = await ctx.client.callAsync(FUNC_NAME, params);
-        console.log(cr);
+        if (ctx.sysinfo.verbose) {
+            console.log(cr);
+        }
+
         resolve(cr);
     });
 }
-export function prnGetVote(obj: IfResult) {
-    console.log(obj);
+export function prnGetVote(ctx: IfContext, obj: IfResult) {
+    if (ctx.sysinfo.verbose) {
+        console.log(obj);
+    }
+
     console.log('');
 
     if (!obj.resp) {

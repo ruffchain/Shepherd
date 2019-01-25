@@ -74,7 +74,10 @@ export async function transferTokenTo(ctx: IfContext, args: string[]): Promise<I
         }
 
         tx.nonce = nonce! + 1;
-        console.log('nonce is:', tx.nonce);
+        if (ctx.sysinfo.verbose) {
+            console.log('nonce is:', tx.nonce);
+        }
+
         tx.sign(ctx.sysinfo.secret);
 
         let sendRet = await ctx.client.sendTransaction({ tx });
@@ -94,6 +97,6 @@ export async function transferTokenTo(ctx: IfContext, args: string[]): Promise<I
         resolve(receiptResult); // {resp, ret}
     });
 }
-export function prnTransferTokenTo(obj: IfResult) {
+export function prnTransferTokenTo( ctx:IfContext, obj: IfResult) {
     console.log(obj.resp);
 }

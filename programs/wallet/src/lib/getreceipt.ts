@@ -25,8 +25,11 @@ export async function getReceipt(ctx: IfContext, args: string[]): Promise<IfResu
         resolve(cr);
     });
 }
-export function prnGetReceipt(obj: IfResult) {
+export function prnGetReceipt(ctx: IfContext, obj: IfResult) {
+
     console.log(obj);
+
+
 
     // print receipt in good format
 

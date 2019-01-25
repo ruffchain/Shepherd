@@ -48,7 +48,10 @@ export async function vote(ctx: IfContext, args: string[]): Promise<IfResult> {
         }
 
         tx.nonce = nonce! + 1;
-        console.log('nonce is:', tx.nonce);
+        if (ctx.sysinfo.verbose) {
+            console.log('nonce is:', tx.nonce);
+        }
+
         tx.sign(ctx.sysinfo.secret);
 
         let sendRet = await ctx.client.sendTransaction({ tx });
@@ -68,6 +71,6 @@ export async function vote(ctx: IfContext, args: string[]): Promise<IfResult> {
         resolve(receiptResult); // {resp, ret}
     });
 }
-export function prnVote(obj: IfResult) {
+export function prnVote(ctx: IfContext, obj: IfResult) {
     console.log(obj.resp);
 }

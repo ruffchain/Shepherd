@@ -6,6 +6,8 @@
 - 1.0.7 Add createToken, getMiners ...
 - 1.0.8 Add vote, mortgage, unmortgage ...
 - 1.0.9 upload ， modfity README
+- 1.1.3 Add --verbose, limit cost = 100
+- 
 
 ## dependency
 - node.js  (version == 8.11)
@@ -64,6 +66,8 @@ createToken test [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000
 
 ```
 // start cli
+./dist/cli.js --secret xxxxxxxxxxxxxxxx --host 40.73.4.194 --port 18089
+
 ./dist/cli.js --secret xxxxxxxxxxxxxxxx --host 139.219.184.44 --port 18089
 
 // get balance for default account

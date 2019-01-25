@@ -34,12 +34,18 @@ export async function getTokenBalance(ctx: IfContext, args: string[]): Promise<I
         }
 
         let cr = await ctx.client.callAsync(FUNC_NAME, params);
-        console.log(cr);
+        if (ctx.sysinfo.verbose) {
+            console.log(cr);
+        }
+
         resolve(cr);
     });
 }
-export function prnGetTokenBalance(obj: IfResult) {
-    console.log(obj);
+export function prnGetTokenBalance(ctx: IfContext, obj: IfResult) {
+    if (ctx.sysinfo.verbose) {
+        console.log(obj);
+    }
+
     console.log('');
 
     if (!obj.resp) {
@@ -49,6 +55,12 @@ export function prnGetTokenBalance(obj: IfResult) {
     let objJson: any;
     try {
         objJson = JSON.parse(obj.resp);
+        if (objJson.err === 0) {
+            console.log('Balance: ', objJson.value.replace(/n/g, ''));
+        } else {
+            console.log('Error:', objJson.err);
+        }
+
     } catch (e) {
         console.log(e);
     }

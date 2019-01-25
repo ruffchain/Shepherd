@@ -30,12 +30,19 @@ export async function getBalance(ctx: IfContext, args: string[]): Promise<IfResu
         }
 
         let cr = await ctx.client.callAsync(FUNC_NAME, params);
-        console.log(cr);
+
+        if (ctx.sysinfo.verbose) {
+            console.log(cr);
+        }
+
         resolve(cr);
     });
 }
-export function prnGetBalance(obj: IfResult) {
-    console.log(obj);
+export function prnGetBalance(ctx: IfContext, obj: IfResult) {
+    if (ctx.sysinfo.verbose) {
+        console.log(obj);
+    }
+
     console.log('');
 
     if (!obj.resp) {

@@ -55,7 +55,10 @@ export async function mortgage(ctx: IfContext, args: string[]): Promise<IfResult
         }
 
         tx.nonce = nonce! + 1;
-        console.log('nonce is:', tx.nonce);
+        if (ctx.sysinfo.verbose) {
+            console.log('nonce is:', tx.nonce);
+        }
+
         tx.sign(ctx.sysinfo.secret);
 
         let sendRet = await ctx.client.sendTransaction({ tx });
@@ -67,7 +70,9 @@ export async function mortgage(ctx: IfContext, args: string[]): Promise<IfResult
             });
             return;
         }
+
         console.log(`Send ${tx.method} tx: ${tx.hash}`);
+
 
         // 需要查找receipt若干次，直到收到回执若干次，才确认发送成功, 否则是失败
         let receiptResult = await checkReceipt(ctx, tx.hash);
@@ -75,6 +80,6 @@ export async function mortgage(ctx: IfContext, args: string[]): Promise<IfResult
         resolve(receiptResult); // {resp, ret}
     });
 }
-export function prnMortgage(obj: IfResult) {
+export function prnMortgage(ctx: IfContext, obj: IfResult) {
     console.log(obj.resp);
 }

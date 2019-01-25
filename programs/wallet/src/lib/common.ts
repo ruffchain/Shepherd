@@ -53,6 +53,7 @@ export interface IfSysinfo {
     address: string;
     port: string;
     host: string;
+    verbose: boolean;
 }
 
 export interface IfContext { sysinfo: IfSysinfo, client: RPCClient }
@@ -60,7 +61,7 @@ export interface IfContext { sysinfo: IfSysinfo, client: RPCClient }
 export async function waitSeconds(seconds: number) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            console.log('*');
+            // console.log('*');
             resolve('0');
         }, 1000 * seconds);
     });
@@ -73,12 +74,16 @@ export async function checkReceipt(ctx: IfContext, txhash: string): Promise<{ re
         let counter = 0;
 
         for (let i = 0; i < MAX_CONFIRM_TIMES; i++) {
+
             console.log('Wait to confirm');
             await waitSeconds(1.1 * BLOCK_INTERVAL);
 
             let result = await ctx.client.callAsync('getTransactionReceipt', { tx: txhash });
 
-            console.log(result);
+            if (ctx.sysinfo.verbose) {
+                console.log(result);
+            }
+
             let obj = JSON.parse(result.resp!);
 
             if (result.ret !== 200 || obj.err !== 0) {
@@ -93,7 +98,7 @@ export async function checkReceipt(ctx: IfContext, txhash: string): Promise<{ re
             }
 
             if (counter >= 1) {
-                console.log('Confirmed');
+                // console.log('Confirmed');
                 resolve({
                     ret: ErrorCode.RESULT_OK,
                     resp: 'TX confirmed'

@@ -55,7 +55,10 @@ export async function unmortgage(ctx: IfContext, args: string[]): Promise<IfResu
         }
 
         tx.nonce = nonce! + 1;
-        console.log('nonce is:', tx.nonce);
+        if (ctx.sysinfo.verbose) {
+            console.log('nonce is:', tx.nonce);
+        }
+
         tx.sign(ctx.sysinfo.secret);
 
         let sendRet = await ctx.client.sendTransaction({ tx });
@@ -75,6 +78,6 @@ export async function unmortgage(ctx: IfContext, args: string[]): Promise<IfResu
         resolve(receiptResult); // {resp, ret}
     });
 }
-export function prnUnmortgage(obj: IfResult) {
+export function prnUnmortgage(ctx: IfContext, obj: IfResult) {
     console.log(obj.resp);
 }

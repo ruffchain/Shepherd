@@ -11,7 +11,7 @@ import { RPCClient } from './client/client/rfc_client';
 
 import { testcmd } from './lib/testcmd';
 
-import { IfResult } from './lib/common';
+import { IfResult, IfSysinfo } from './lib/common';
 import { ErrorCode } from './core/error_code';
 import { getBlock, prnGetBlock } from './lib/getblock';
 import { getBalance, prnGetBalance } from './lib/getbalance';
@@ -36,8 +36,10 @@ const secp256k1 = require('secp256k1');
 const fs = require('fs');
 
 import { parseTesterJson } from './lib/parsetesterjson';
+var pjson = require('../package.json');
+import { IfContext } from './lib/common';
 
-const VERSION = '1.1.0';
+const VERSION = pjson.version;
 const PROMPT = '> ';
 
 let SYSINFO: any = {};
@@ -45,10 +47,12 @@ SYSINFO.secret = "";
 SYSINFO.host = "";
 SYSINFO.port = "";
 SYSINFO.address = "";
+SYSINFO.verbose = false;
+
+
 
 // let chainClient: NewChainClient;
 let clientHttp: RPCClient;
-
 
 
 process.on('unhandledRejection', (err) => {
@@ -88,6 +92,10 @@ let checkArgs = (SYSINFO: any) => {
     if (SYSINFO.port === "") {
         console.log(colors.red("No port\n"));
         process.exit(1);
+    }
+
+    if (SYSINFO.verbose === "1") {
+        // open log print
     }
 
     SYSINFO.address = addressFromSecretKey(SYSINFO.secret);
@@ -311,7 +319,7 @@ let printHelpHeader = () => {
     console.log('USAGE:');
     // console.log('\trfccli [options] command [command options] [arguments ...]');
     // console.log('\trfccli [options] ');
-    console.log('\t$rfccli --secret xxxxxxxx --host 10.0.0.1 --port 18089')
+    console.log('\t$rfccli --secret xxxxxxxx --host 10.0.0.1 --port 18089 [--v|--verbose]')
     console.log('');
     console.log('VERSION:')
     console.log('\t', VERSION);
@@ -422,18 +430,23 @@ const initArgs = () => {
             return;
         }
         let result = val.match(/--(.*)/);
+
         if (result) {
-            currentArg = result[1];
+            if (result[1].toLowerCase() === 'v'
+                || result[1].toLowerCase() === 'verbose') {
+                SYSINFO['verbose'] = true;
+            } else {
+                currentArg = result[1];
+            }
+
 
         } else if (Object.keys(SYSINFO).indexOf(currentArg) !== -1) {
             SYSINFO[currentArg] = val;
-
             currentArg = "";
         } else {
             console.log(colors.red('Wrong arg: ' + val));
             process.exit(1);
         }
-
     });
 
     checkArgs(SYSINFO);
@@ -447,29 +460,27 @@ let initChainClient = (sysinfo: any) => {
     // });
     clientHttp = new RPCClient(
         sysinfo.host,
-        sysinfo.port
+        sysinfo.port,
+        SYSINFO
     );
 };
-let handleResult = (f: (result: IfResult) => void, arg: IfResult) => {
+let handleResult = (f: (ctx: IfContext, result: IfResult) => void, ctx: IfContext, arg: IfResult) => {
     if (arg.ret === ErrorCode.RESULT_WRONG_ARG || arg.ret === ErrorCode.RESULT_FAILED) {
         console.log(arg.resp);
     }
     else if (arg.ret !== 200 && arg.ret !== ErrorCode.RESULT_OK) {
         console.log(colors.red('No result'));
     } else {// arg.ret === 200
-        f(arg);
+        f(ctx, arg);
     }
 }
 let handleCmd = async (cmd: string) => {
-    let words = cmd.replace(/\s+/g, ' ').split(' ');
-    // Remove continuous space , or other blank character
-    // 
 
+    // Remove continuous space , or other blank characte
+    let words = cmd.replace(/\s+/g, ' ').split(' ');
     if (words.length < 1) {
         return;
     }
-
-
 
     const cmd1 = words[0].toLowerCase();
 
@@ -501,91 +512,77 @@ let handleCmd = async (cmd: string) => {
             break;
         case 'getblock':
             result = await getBlock(ctx, args);
-            handleResult(prnGetBlock, result);
+            handleResult(prnGetBlock, ctx, result);
             break;
         case 'getbalance':
             result = await getBalance(ctx, args);
-            handleResult(prnGetBalance, result);
+            handleResult(prnGetBalance, ctx, result);
             break;
         case 'gettokenbalance':
             result = await getTokenBalance(ctx, args);
-            handleResult(prnGetTokenBalance, result);
+            handleResult(prnGetTokenBalance, ctx, result);
             break;
         case 'getreceipt':
             result = await getReceipt(ctx, args);
-            handleResult(prnGetReceipt, result);
+            handleResult(prnGetReceipt, ctx, result);
             break;
         case 'getstake':
             result = await getStake(ctx, args);
-            handleResult(prnGetStake, result);
+            handleResult(prnGetStake, ctx, result);
             break;
         case 'getcandidates':
             result = await getCandidates(ctx, args);
-            handleResult(prnGetCandidates, result);
+            handleResult(prnGetCandidates, ctx, result);
             break;
         case 'getpeers':
             result = await getPeers(ctx, args);
-            handleResult(prnGetPeers, result);
+            handleResult(prnGetPeers, ctx, result);
             break;
         case 'getminers':
             result = await getMiners(ctx, args);
-            handleResult(prnGetMiners, result);
+            handleResult(prnGetMiners, ctx, result);
             break;
         case 'transferto':
             result = await transferTo(ctx, args);
-            handleResult(prnTransferTo, result);
+            handleResult(prnTransferTo, ctx, result);
             break;
         case 'transfertokento':
             result = await transferTokenTo(ctx, args);
-            handleResult(prnTransferTokenTo, result);
+            handleResult(prnTransferTokenTo, ctx, result);
             break;
         case 'createtoken':
             result = await createToken(ctx, args);
-            handleResult(prnCreateToken, result);
+            handleResult(prnCreateToken, ctx, result);
             break;
         case 'getnonce':
             result = await getNonce(ctx, args);
-            handleResult(prnGetNonce, result);
+            handleResult(prnGetNonce, ctx, result);
             break;
         case 'register':
             result = await register(ctx, args);
-            handleResult(prnRegister, result);
+            handleResult(prnRegister, ctx, result);
             break;
         case 'mortgage':
             result = await mortgage(ctx, args);
-            handleResult(prnMortgage, result);
+            handleResult(prnMortgage, ctx, result);
             break;
         case 'unmortgage':
             result = await unmortgage(ctx, args);
-            handleResult(prnUnmortgage, result);
+            handleResult(prnUnmortgage, ctx, result);
             break;
         case 'vote':
             result = await vote(ctx, args);
-            handleResult(prnVote, result);
+            handleResult(prnVote, ctx, result);
             break;
         case 'getvote':
             result = await getVote(ctx, args);
-            handleResult(prnGetVote, result);
+            handleResult(prnGetVote, ctx, result);
             break;
         case 'getaddress':
             console.log(SYSINFO.address);
             break;
         case 'createkey':
-            // let privateKey;
-
             createKey();
-
-            // do {
-            //     privateKey = randomBytes(32);
-            // } while (!secp256k1.privateKeyVerify(privateKey));
-
-            // const pkey = secp256k1.publicKeyCreate(privateKey, true);
-
-            // let address = addressFromSecretKey(privateKey);
-
-            // console.log(colors.green('address   : '), address);
-            // console.log(colors.green('public key: '), pkey.toString('hex'));
-            // console.log(colors.green('secret key: '), privateKey.toString('hex'));
             break;
         case 'sendtotesters':
             let text = fs.readFileSync('./data/tester.json');

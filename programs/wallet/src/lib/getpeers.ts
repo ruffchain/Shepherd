@@ -10,12 +10,18 @@ export async function getPeers(ctx: IfContext, args: string[]): Promise<IfResult
         // check args
 
         let cr = await ctx.client.callAsync(FUNC_NAME, {});
-        console.log(cr);
+        if (ctx.sysinfo.verbose) {
+            console.log(cr);
+        }
+
         resolve(cr);
     });
 }
-export function prnGetPeers(obj: IfResult) {
-    console.log(obj);
+export function prnGetPeers(ctx:IfContext,  obj: IfResult) {
+    if(ctx.sysinfo.verbose){
+        console.log(obj);
+    }
+
     console.log('');
 
     if (!obj.resp) {
