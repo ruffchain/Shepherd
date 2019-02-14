@@ -101,7 +101,7 @@ export async function checkReceipt(ctx: IfContext, txhash: string): Promise<{ re
                 // console.log('Confirmed');
                 resolve({
                     ret: ErrorCode.RESULT_OK,
-                    resp: 'TX confirmed'
+                    resp: 'TX confirmed:' + txhash
                 });
                 return;
             }

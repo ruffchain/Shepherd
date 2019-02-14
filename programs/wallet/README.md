@@ -6,7 +6,7 @@
 - 1.0.7 Add createToken, getMiners ...
 - 1.0.8 Add vote, mortgage, unmortgage ...
 - 1.0.9 upload ， modfity README
-- 1.1.3 Add --verbose, limit cost = 100
+- 1.1.3 Add --verbose (print log switch), limit cost = 100
 - 
 
 ## dependency

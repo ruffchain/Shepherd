@@ -4,3 +4,5 @@ dist/
 .tern-port
 package-lock.json
 data/tester.json
+data/test.json
+
