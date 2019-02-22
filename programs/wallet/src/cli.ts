@@ -30,6 +30,7 @@ import { mortgage, prnMortgage } from './lib/mortgage';
 import { unmortgage, prnUnmortgage } from './lib/unmortgage';
 import { vote, prnVote } from './lib/vote';
 import { getVote, prnGetVote } from './lib/getvote';
+import { createBancorToken, prnCreateBancorToken } from './lib/createBancorToken';
 
 const { randomBytes } = require('crypto');
 const secp256k1 = require('secp256k1');
@@ -38,6 +39,14 @@ const fs = require('fs');
 import { parseTesterJson } from './lib/parsetesterjson';
 var pjson = require('../package.json');
 import { IfContext } from './lib/common';
+import { transferBancorTokenTo, prnTransferBancorTokenTo } from './lib/transferBancorTokenTo';
+import { getBancorTokenBalance, prnGetBancorTokenBalance } from './lib/getBancorTokenBalance';
+import { buyBancorToken, prnBuyBancorToken } from './lib/buyBancorToken';
+import { sellBancorToken, prnSellBancorToken } from './lib/sellBancorToken';
+import { getBancorTokenFactor, prnGetBancorTokenFactor } from './lib/getBancorTokenFactor';
+import { getBancorTokenReserve, prnGetBancorTokenReserve } from './lib/getBancorTokenReserve';
+import { getBancorTokenSupply, prnGetBancorTokenSupply } from './lib/getBancorTokenSupply';
+import { getZeroBalance, prnGetZeroBalance } from './lib/getZeroBalance';
 
 const VERSION = pjson.version;
 const PROMPT = '> ';
@@ -212,6 +221,88 @@ const CMDS: ifCMD[] = [
             + '\targ3  -  cost\n'
             + '\targ4  -  fee\n'
             + '\n\ncreatetoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 100 1'
+    },
+    {
+        name: 'createBancorToken',
+        content: 'create a BancorToken',
+        example:
+            '\n\targ1  -  token-name\n'
+            + '\targ2  -  preBalance\n'
+            + '\targ3  -  factor (0,1)\n'
+            + '\targ4  -  [nonliquidity]\n'
+            + '\targ5  -  cost\n'
+            + '\targ6  -  fee\n'
+            + '\n\ncreatebancortoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 0.5 100 0.1'
+    },
+    {
+        name: 'transferBancorTokenTo',
+        content: 'transfer BancorToken to address',
+        example:
+            '\n\targ1  -  token-name\n'
+            + '\targ2  -  address\n'
+            + '\targ3  -  amount\n'
+            + '\targ4  -  fee\n'
+            + '\n\ntransferBancorTokenTo token2 1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79 1000 0.1'
+    },
+    {
+        name: 'getBancorTokenBalance',
+        content: 'get BancorToken balance under address',
+        example: '\ngetBancorTokenbalance\n'
+            + '\targ1  -  tokenid:string\n'
+            + '\targ2  -  address:string\n'
+            + 'Example:\n'
+            + '\t$ getBancorTokenBalance tokenid 1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J'
+    },
+    {
+        name: 'buyBancorToken',
+        content: 'buy BancorToken',
+        example: '\nbuyBancorToken\n'
+            + '\targ1  -  tokenid\n'
+            + '\targ2  -  cost\n'
+            + '\targ3  -  fee\n'
+            + 'Example:\n'
+            + '\t$ buyBancorToken tokenid cost fee'
+    },
+    {
+        name: 'sellBancorToken',
+        content: 'sell BancorToken',
+        example: '\nsellBancorToken\n'
+            + '\targ1  -  tokenid\n'
+            + '\targ2  -  amount\n'
+            + '\targ3  -  fee\n'
+            + 'Example:\n'
+            + '\t$ sellBancorToken tokenid amount fee'
+    },
+    {
+        name: 'getBancorTokenFactor',
+        content: 'get BancorToken factor',
+        example: '\ngetBancorTokenFactor\n'
+            + '\targ1  -  tokenid:string\n'
+            + 'Example:\n'
+            + '\t$ getBancorTokenFactor tokenid '
+    },
+    {
+        name: 'getBancorTokenReserve',
+        content: 'get BancorToken reserve',
+        example: '\ngetBancorTokenReserve\n'
+            + '\targ1  -  tokenid:string\n'
+            + 'Example:\n'
+            + '\t$ getBancorTokenReserve tokenid '
+    },
+    {
+        name: 'getBancorTokenSupply',
+        content: 'get BancorToken supply',
+        example: '\ngetBancorTokenSupply\n'
+            + '\targ1  -  tokenid:string\n'
+            + 'Example:\n'
+            + '\t$ getBancorTokenSupply tokenid '
+    },
+    {
+        name: 'getZeroBalance',
+        content: 'get Zero account balance',
+        example: '\ngetZeroBalance\n'
+            + 'Example:\n'
+            + '\t$ getZeroBalance '
     },
     {
         name: 'getNonce',
@@ -554,6 +645,43 @@ let handleCmd = async (cmd: string) => {
             result = await createToken(ctx, args);
             handleResult(prnCreateToken, ctx, result);
             break;
+        case 'createBancorToken':
+            result = await createBancorToken(ctx, args);
+            handleResult(prnCreateBancorToken, ctx, result);
+            break;
+        case 'transferBancorTokenTo':
+            result = await transferBancorTokenTo(ctx, args);
+            handleResult(prnTransferBancorTokenTo, ctx, result);
+            break;
+        case 'getBancorTokenBalance':
+            result = await getBancorTokenBalance(ctx, args);
+            handleResult(prnGetBancorTokenBalance, ctx, result);
+            break;
+        case 'buyBancorToken':
+            result = await buyBancorToken(ctx, args);
+            handleResult(prnBuyBancorToken, ctx, result);
+            break;
+        case 'sellBancorToken':
+            result = await sellBancorToken(ctx, args);
+            handleResult(prnSellBancorToken, ctx, result);
+            break;
+        case 'getBancorTokenFactor':
+            result = await getBancorTokenFactor(ctx, args);
+            handleResult(prnGetBancorTokenFactor, ctx, result);
+            break;
+        case 'getBancorTokenReserve':
+            result = await getBancorTokenReserve(ctx, args);
+            handleResult(prnGetBancorTokenReserve, ctx, result);
+            break;
+        case 'getBancorTokenSupply':
+            result = await getBancorTokenSupply(ctx, args);
+            handleResult(prnGetBancorTokenSupply, ctx, result);
+            break;
+        case 'getZeroBalance':
+            result = await getZeroBalance(ctx, args);
+            handleResult(prnGetZeroBalance, ctx, result);
+            break;
+
         case 'getnonce':
             result = await getNonce(ctx, args);
             handleResult(prnGetNonce, ctx, result);
