@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt, check_address, check_amount, check_fee } from './common';
+import { IfResult, IfContext, checkReceipt, checkAddress, checkAmount, checkFee } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
@@ -19,7 +19,7 @@ export async function transferTo(ctx: IfContext, args: string[]): Promise<IfResu
             return;
         }
 
-        if (!check_address(args[0])) {
+        if (!checkAddress(args[0])) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong address"
@@ -27,7 +27,7 @@ export async function transferTo(ctx: IfContext, args: string[]): Promise<IfResu
             return;
         }
 
-        if (!check_amount(args[1])) {
+        if (!checkAmount(args[1])) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong amount"
@@ -35,7 +35,7 @@ export async function transferTo(ctx: IfContext, args: string[]): Promise<IfResu
             return;
         }
 
-        if (!check_fee(args[2])) {
+        if (!checkFee(args[2])) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong fee"
@@ -105,7 +105,7 @@ export async function transferToNoWait(ctx: IfContext, args: string[]): Promise<
             return;
         }
 
-        if (!check_address(args[0])) {
+        if (!checkAddress(args[0])) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong address"
@@ -113,7 +113,7 @@ export async function transferToNoWait(ctx: IfContext, args: string[]): Promise<
             return;
         }
 
-        if (!check_amount(args[1])) {
+        if (!checkAmount(args[1])) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong amount"
@@ -121,7 +121,7 @@ export async function transferToNoWait(ctx: IfContext, args: string[]): Promise<
             return;
         }
 
-        if (!check_fee(args[2])) {
+        if (!checkFee(args[2])) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong fee"

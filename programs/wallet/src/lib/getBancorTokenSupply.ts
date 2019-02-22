@@ -1,13 +1,14 @@
 import { ErrorCode } from "../core";
-import { IfResult, IfContext, checkTokenid } from './common';
+import { IfResult, IfContext, checkTokenid, checkAddress } from './common';
 
-const FUNC_NAME = 'view';
+const METHOD_NAME = 'view';
+const FUNC_NAME = 'getBancorTokenSupply';
 
-export async function getTokenBalance(ctx: IfContext, args: string[]): Promise<IfResult> {
+export async function getBancorTokenSupply(ctx: IfContext, args: string[]): Promise<IfResult> {
     return new Promise<IfResult>(async (resolve) => {
 
         // check args
-        if (args.length < 2) {
+        if (args.length < 1) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong args"
@@ -25,14 +26,13 @@ export async function getTokenBalance(ctx: IfContext, args: string[]): Promise<I
 
         let params =
         {
-            method: 'getTokenBalance',
+            method: FUNC_NAME,
             params: {
-                address: args[1],
                 tokenid: args[0]
             }
         }
 
-        let cr = await ctx.client.callAsync(FUNC_NAME, params);
+        let cr = await ctx.client.callAsync(METHOD_NAME, params);
         if (ctx.sysinfo.verbose) {
             console.log(cr);
         }
@@ -40,7 +40,7 @@ export async function getTokenBalance(ctx: IfContext, args: string[]): Promise<I
         resolve(cr);
     });
 }
-export function prnGetTokenBalance(ctx: IfContext, obj: IfResult) {
+export function prnGetBancorTokenSupply(ctx: IfContext, obj: IfResult) {
     if (ctx.sysinfo.verbose) {
         console.log(obj);
     }
@@ -55,7 +55,7 @@ export function prnGetTokenBalance(ctx: IfContext, obj: IfResult) {
     try {
         objJson = JSON.parse(obj.resp);
         if (objJson.err === 0) {
-            console.log('Balance: ', objJson.value.replace(/n/g, ''));
+            console.log('Supply: ', objJson.value);
         } else {
             console.log('Error:', objJson.err);
         }

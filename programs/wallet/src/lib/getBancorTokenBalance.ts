@@ -1,9 +1,10 @@
 import { ErrorCode } from "../core";
-import { IfResult, IfContext, checkTokenid } from './common';
+import { IfResult, IfContext, checkTokenid, checkAddress } from './common';
 
-const FUNC_NAME = 'view';
+const METHOD_NAME = 'view';
+const FUNC_NAME = 'getBancorTokenBalance';
 
-export async function getTokenBalance(ctx: IfContext, args: string[]): Promise<IfResult> {
+export async function getBancorTokenBalance(ctx: IfContext, args: string[]): Promise<IfResult> {
     return new Promise<IfResult>(async (resolve) => {
 
         // check args
@@ -22,17 +23,24 @@ export async function getTokenBalance(ctx: IfContext, args: string[]): Promise<I
             });
             return;
         }
+        if (!checkAddress(args[1])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong address "
+            });
+            return;
+        }
 
         let params =
         {
-            method: 'getTokenBalance',
+            method: 'getBancorTokenBalance',
             params: {
-                address: args[1],
-                tokenid: args[0]
+                tokenid: args[0],
+                address: args[1]
             }
         }
 
-        let cr = await ctx.client.callAsync(FUNC_NAME, params);
+        let cr = await ctx.client.callAsync(METHOD_NAME, params);
         if (ctx.sysinfo.verbose) {
             console.log(cr);
         }
@@ -40,7 +48,7 @@ export async function getTokenBalance(ctx: IfContext, args: string[]): Promise<I
         resolve(cr);
     });
 }
-export function prnGetTokenBalance(ctx: IfContext, obj: IfResult) {
+export function prnGetBancorTokenBalance(ctx: IfContext, obj: IfResult) {
     if (ctx.sysinfo.verbose) {
         console.log(obj);
     }

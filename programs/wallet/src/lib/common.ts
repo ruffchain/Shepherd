@@ -8,7 +8,10 @@ const BLOCK_INTERVAL = 10;
 export const TOKEN_MAX_LENGTH = 12;
 export const TOKEN_MIN_LENGTH = 3;
 export const FEE_MAX = 2;
-export const FEE_MIN = 0.1;
+export const FEE_MIN = 0.01;
+export const MAX_NONLIQUIDITY = 1000000000000;
+export const MAX_COST = 1000000000000;
+
 
 /**
  * 
@@ -16,21 +19,20 @@ export const FEE_MIN = 0.1;
  * 
  * - it should be a BigNumber
  */
-export function check_amount(amount: string): boolean {
+export function checkAmount(amount: string): boolean {
 
     let bn = new BigNumber(amount);
 
     if (bn.isNaN() === true) {
         return false;
     }
-    else {
-        return true;
-    }
+    let num = JSON.parse(amount);
+    return num > 0;
 }
-export function check_tokenid(token: string): boolean {
+export function checkTokenid(token: string): boolean {
     return token.length >= TOKEN_MIN_LENGTH && token.length <= TOKEN_MAX_LENGTH;
 }
-export function check_fee(fee: string): boolean {
+export function checkFee(fee: string): boolean {
     let bn = new BigNumber(fee);
 
     if (bn.isNaN() === true) {
@@ -41,7 +43,7 @@ export function check_fee(fee: string): boolean {
     return num >= FEE_MIN && num <= FEE_MAX;
 }
 
-export function check_address(addr: string): boolean {
+export function checkAddress(addr: string): boolean {
     //console.log("len:", addr.length)
     return addr.length >= 30;
 }
@@ -114,3 +116,38 @@ export async function checkReceipt(ctx: IfContext, txhash: string): Promise<{ re
 
     });
 }
+
+export function checkTokenFactor(factor: string): boolean {
+    let bn = new BigNumber(factor);
+
+    if (bn.isNan()) {
+        return false;
+    }
+    let num = JSON.parse(factor);
+    return num > 0 && num < 1;
+}
+
+export function checkTokenNonliquidity(nonliquidity: string): boolean {
+    let bn = new BigNumber(nonliquidity);
+
+    if (bn.isNan()) {
+        return false;
+    }
+    let num = JSON.parse(nonliquidity);
+    return num >= 0 && num < MAX_NONLIQUIDITY;
+}
+
+export function checkCost(cost: string): boolean {
+    let bn = new BigNumber(cost);
+
+    if (bn.isNan()) {
+        return false;
+    }
+    let num = JSON.parse(cost);
+    return num > 0 && num < MAX_COST;
+}
+
+
+
+
+

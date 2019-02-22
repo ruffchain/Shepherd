@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt, check_amount, check_fee } from './common';
+import { IfResult, IfContext, checkReceipt, checkAmount, checkFee } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
@@ -19,14 +19,14 @@ export async function unmortgage(ctx: IfContext, args: string[]): Promise<IfResu
             });
             return;
         }
-        if (!check_amount(args[0])) {
+        if (!checkAmount(args[0])) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong amount"
             });
             return;
         }
-        if (!check_fee(args[1])) {
+        if (!checkFee(args[1])) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong fee"

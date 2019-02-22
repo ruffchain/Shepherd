@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt, check_fee, check_tokenid } from './common';
+import { IfResult, IfContext, checkReceipt, checkFee, checkTokenid } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
@@ -19,7 +19,7 @@ export async function createToken(ctx: IfContext, args: string[]): Promise<IfRes
         }
 
         // check token id
-        if (!check_tokenid(args[0])) {
+        if (!checkTokenid(args[0])) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong token id length [3-12]"
@@ -35,7 +35,7 @@ export async function createToken(ctx: IfContext, args: string[]): Promise<IfRes
             return;
         }
 
-        if (!check_fee(args[3])) {
+        if (!checkFee(args[3])) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong fee"

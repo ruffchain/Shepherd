@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt, check_fee, check_amount } from './common';
+import { IfResult, IfContext, checkReceipt, checkFee, checkAmount } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
@@ -19,7 +19,7 @@ export async function mortgage(ctx: IfContext, args: string[]): Promise<IfResult
         }
         let amount = args[0];
 
-        if (!check_amount(args[0])) {
+        if (!checkAmount(args[0])) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong amount"
@@ -27,7 +27,7 @@ export async function mortgage(ctx: IfContext, args: string[]): Promise<IfResult
             return;
         }
 
-        if (!check_fee(args[1])) {
+        if (!checkFee(args[1])) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong fee input"

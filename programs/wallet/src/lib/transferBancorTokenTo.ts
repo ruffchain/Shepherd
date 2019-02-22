@@ -1,46 +1,72 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt, checkFee } from './common';
+import { IfResult, IfContext, checkReceipt, checkTokenid, checkAddress, checkAmount, checkFee } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
-const FUNC_NAME = 'createToken';
-
 // tokenid: string, preBalances: { address: string, amount: string }[], cost: string, fee: string
 
-export async function register(ctx: IfContext, args: string[]): Promise<IfResult> {
+export async function transferBancorTokenTo(ctx: IfContext, args: string[]): Promise<IfResult> {
     return new Promise<IfResult>(async (resolve) => {
 
         // check args
-        if (args.length < 1) {
+        if (args.length < 4) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong args"
             });
             return;
         }
-        let fee = args[0];
 
-        if (!checkFee(args[0])) {
+        if (!checkTokenid(args[0])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong tokenid"
+            });
+            return;
+        }
+        if (!checkAddress(args[1])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong address"
+            });
+            return;
+        }
+        if (!checkAmount(args[2])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong amount"
+            });
+            return;
+        }
+        if (!checkFee(args[3])) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong fee"
             });
             return;
         }
+        let tokenid = args[0];
+        let address = args[1];
+        let amount = args[2];
+        let fee = args[3];
 
         let tx = new ValueTransaction();
-        tx.method = 'register';
+        tx.method = 'transferBancorTokenTo';
         tx.fee = new BigNumber(fee);
-        tx.input = '';
+        tx.input = {
+            tokenid: tokenid,
+            address: address,
+            amount: amount
+        };
 
         let { err, nonce } = await ctx.client.getNonce({ address: ctx.sysinfo.address });
 
         if (err) {
-            console.error(`${tx.method} getNonce failed for ${err}`);
+            console.error(`transferBancorTokenTo getNonce failed for ${err}`);
             resolve({
                 ret: ErrorCode.RESULT_FAILED,
-                resp: `${tx.method} getNonce failed for ${err}`
+                resp: `transferBancorTokenTo getNonce failed for ${err}`
             });
             return;
         }
@@ -54,16 +80,14 @@ export async function register(ctx: IfContext, args: string[]): Promise<IfResult
 
         let sendRet = await ctx.client.sendTransaction({ tx });
         if (sendRet.err) {
-            console.error(`${tx.method} failed for ${sendRet.err}`);
+            console.error(`transferBancorTokenTo failed for ${sendRet.err}`);
             resolve({
                 ret: ErrorCode.RESULT_FAILED,
-                resp: `${tx.method} failed for ${sendRet.err}`
+                resp: `transferBancorTokenTo failed for ${sendRet.err}`
             });
             return;
         }
-        console.log(`Send ${tx.method} tx: ${tx.hash}`);
-
-
+        console.log(`Send transferBancorTokenTo tx: ${tx.hash}`);
 
         // 需要查找receipt若干次，直到收到回执若干次，才确认发送成功, 否则是失败
         let receiptResult = await checkReceipt(ctx, tx.hash);
@@ -71,6 +95,6 @@ export async function register(ctx: IfContext, args: string[]): Promise<IfResult
         resolve(receiptResult); // {resp, ret}
     });
 }
-export function prnRegister(ctx: IfContext, obj: IfResult) {
+export function prnTransferBancorTokenTo(ctx: IfContext, obj: IfResult) {
     console.log(obj.resp);
 }
