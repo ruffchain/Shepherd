@@ -28,7 +28,7 @@ console.log('Test bancor');
 
 let R = new BigNumber(250);  // reserve
 let S = new BigNumber(1000); // supply
-let F = 1;
+let F = 0.5;
 let invF = 1 / F;
 
 let funcBuy = (inE: BigNumber | number): BigNumber => {
@@ -103,12 +103,12 @@ let printRS = () => {
 // console.log(T2);
 
 let test1 = () => {
+
     printRS();
 
     let T = funcBuy(0.5);
 
     let E = funcSell(T);
-
 
     printRS();
 
@@ -124,7 +124,6 @@ let test1 = () => {
 
     printRS();
 
-
 }
 let test2 = () => {
     printRS();
@@ -138,7 +137,11 @@ let test2 = () => {
     printRS();
 }
 
-//test1();
+let test3 = () => {
+    let n = new BigNumber("n1000");
+    console.log(n.toString());
+};
+test1();
 
 // console.log("\nTest2\n");
-test2();
+// test3();
