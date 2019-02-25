@@ -1,5 +1,5 @@
 import { ErrorCode } from "../core";
-import { IfResult, IfContext, checkTokenid, checkAddress } from './common';
+import { IfResult, IfContext, checkTokenid, checkAddress, formatNumber } from './common';
 
 const METHOD_NAME = 'view';
 const FUNC_NAME = 'getBancorTokenReserve';
@@ -55,7 +55,7 @@ export function prnGetBancorTokenReserve(ctx: IfContext, obj: IfResult) {
     try {
         objJson = JSON.parse(obj.resp);
         if (objJson.err === 0) {
-            console.log('Reserve: ', objJson.value);
+            console.log('Reserve: ', formatNumber(objJson.value));
         } else {
             console.log('Error:', objJson.err);
         }

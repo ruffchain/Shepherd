@@ -11,7 +11,7 @@ export const FEE_MAX = 2;
 export const FEE_MIN = 0.01;
 export const MAX_NONLIQUIDITY = 1000000000000;
 export const MAX_COST = 1000000000000;
-
+const NUM_DIGITS = 12;
 
 /**
  * 
@@ -120,7 +120,7 @@ export async function checkReceipt(ctx: IfContext, txhash: string): Promise<{ re
 export function checkTokenFactor(factor: string): boolean {
     let bn = new BigNumber(factor);
 
-    if (bn.isNan()) {
+    if (bn.isNaN()) {
         return false;
     }
     let num = JSON.parse(factor);
@@ -130,7 +130,7 @@ export function checkTokenFactor(factor: string): boolean {
 export function checkTokenNonliquidity(nonliquidity: string): boolean {
     let bn = new BigNumber(nonliquidity);
 
-    if (bn.isNan()) {
+    if (bn.isNaN()) {
         return false;
     }
     let num = JSON.parse(nonliquidity);
@@ -140,14 +140,22 @@ export function checkTokenNonliquidity(nonliquidity: string): boolean {
 export function checkCost(cost: string): boolean {
     let bn = new BigNumber(cost);
 
-    if (bn.isNan()) {
+    if (bn.isNaN()) {
         return false;
     }
     let num = JSON.parse(cost);
     return num > 0 && num < MAX_COST;
 }
 
-
+export function formatNumber(num: string): string {
+    try {
+        let out = JSON.parse(num.replace(/n/g, ''));
+        out = out.toFixed(NUM_DIGITS);
+        return out.toSring();
+    } catch (e) {
+        return 'error';
+    }
+}
 
 
 

@@ -218,9 +218,8 @@ const CMDS: ifCMD[] = [
         example:
             '\n\targ1  -  token-name\n'
             + '\targ2  -  preBalance\n'
-            + '\targ3  -  cost\n'
-            + '\targ4  -  fee\n'
-            + '\n\ncreatetoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 100 1'
+            + '\targ3  -  fee\n'
+            + '\n\ncreatetoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 0.1'
     },
     {
         name: 'createBancorToken',
@@ -645,39 +644,39 @@ let handleCmd = async (cmd: string) => {
             result = await createToken(ctx, args);
             handleResult(prnCreateToken, ctx, result);
             break;
-        case 'createBancorToken':
+        case 'createbancortoken':
             result = await createBancorToken(ctx, args);
             handleResult(prnCreateBancorToken, ctx, result);
             break;
-        case 'transferBancorTokenTo':
+        case 'transferbancortokento':
             result = await transferBancorTokenTo(ctx, args);
             handleResult(prnTransferBancorTokenTo, ctx, result);
             break;
-        case 'getBancorTokenBalance':
+        case 'getbancortokenbalance':
             result = await getBancorTokenBalance(ctx, args);
             handleResult(prnGetBancorTokenBalance, ctx, result);
             break;
-        case 'buyBancorToken':
+        case 'buybancortoken':
             result = await buyBancorToken(ctx, args);
             handleResult(prnBuyBancorToken, ctx, result);
             break;
-        case 'sellBancorToken':
+        case 'sellbancortoken':
             result = await sellBancorToken(ctx, args);
             handleResult(prnSellBancorToken, ctx, result);
             break;
-        case 'getBancorTokenFactor':
+        case 'getbancortokenfactor':
             result = await getBancorTokenFactor(ctx, args);
             handleResult(prnGetBancorTokenFactor, ctx, result);
             break;
-        case 'getBancorTokenReserve':
+        case 'getbancortokenreserve':
             result = await getBancorTokenReserve(ctx, args);
             handleResult(prnGetBancorTokenReserve, ctx, result);
             break;
-        case 'getBancorTokenSupply':
+        case 'getbancortokensupply':
             result = await getBancorTokenSupply(ctx, args);
             handleResult(prnGetBancorTokenSupply, ctx, result);
             break;
-        case 'getZeroBalance':
+        case 'getzerobalance':
             result = await getZeroBalance(ctx, args);
             handleResult(prnGetZeroBalance, ctx, result);
             break;

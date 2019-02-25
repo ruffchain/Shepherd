@@ -10,7 +10,7 @@ export async function createToken(ctx: IfContext, args: string[]): Promise<IfRes
     return new Promise<IfResult>(async (resolve) => {
 
         // check args
-        if (args.length < 4) {
+        if (args.length !== 3) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong args"
@@ -27,15 +27,7 @@ export async function createToken(ctx: IfContext, args: string[]): Promise<IfRes
             return;
         }
 
-        if (args[2] === undefined) {
-            resolve({
-                ret: ErrorCode.RESULT_WRONG_ARG,
-                resp: "Wrong cost"
-            });
-            return;
-        }
-
-        if (!checkFee(args[3])) {
+        if (!checkFee(args[2])) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong fee"
@@ -65,21 +57,19 @@ export async function createToken(ctx: IfContext, args: string[]): Promise<IfRes
         }
 
         let preBalances = JSON.parse(args[1]);
-        let cost = args[2];
-        let fee = args[3];
+        let fee = args[2];
 
-        if (parseInt(cost) < 100) {
-            console.log('createToken cost exact 100 sys, please change it for now');
-            resolve({
-                ret: ErrorCode.RESULT_WRONG_ARG,
-                resp: "Wrong cost"
-            });
-            return;
-        }
+        // if (parseInt(cost) < 100) {
+        //     console.log('createToken cost exact 100 sys, please change it for now');
+        //     resolve({
+        //         ret: ErrorCode.RESULT_WRONG_ARG,
+        //         resp: "Wrong cost"
+        //     });
+        //     return;
+        // }
 
         let tx = new ValueTransaction();
         tx.method = 'createToken';
-        tx.value = new BigNumber(100);
         tx.fee = new BigNumber(fee);
         tx.input = { tokenid, preBalances };
 

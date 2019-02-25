@@ -1,5 +1,5 @@
 import { ErrorCode } from "../core";
-import { IfResult, IfContext, checkTokenid } from './common';
+import { IfResult, IfContext, checkTokenid , formatNumber} from './common';
 
 const FUNC_NAME = 'view';
 
@@ -55,7 +55,7 @@ export function prnGetTokenBalance(ctx: IfContext, obj: IfResult) {
     try {
         objJson = JSON.parse(obj.resp);
         if (objJson.err === 0) {
-            console.log('Balance: ', objJson.value.replace(/n/g, ''));
+            console.log('Balance: ', formatNumber(objJson.value));
         } else {
             console.log('Error:', objJson.err);
         }

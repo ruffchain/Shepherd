@@ -56,7 +56,7 @@ export async function transferBancorTokenTo(ctx: IfContext, args: string[]): Pro
         tx.fee = new BigNumber(fee);
         tx.input = {
             tokenid: tokenid,
-            address: address,
+            to: address,
             amount: amount
         };
 

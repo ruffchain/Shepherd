@@ -77,7 +77,7 @@ export async function createBancorToken(ctx: IfContext, args: string[]): Promise
             console.log(args[1]);
             console.log(typeof args[1]);
         }
-        let preBanlances = JSON.parse(args[1]);
+        let preBalances = JSON.parse(args[1]);
         let factor = args[2];
 
         let nonliquidity: string = "";
@@ -91,11 +91,11 @@ export async function createBancorToken(ctx: IfContext, args: string[]): Promise
         if (args.length === 5) {
             tx.value = new BigNumber(args[3]);
             tx.fee = new BigNumber(args[4]);
-            tx.input = { tokenid, preBanlances, factor };
+            tx.input = { tokenid, preBalances, factor };
         } else {
             tx.value = new BigNumber(args[4]);
             tx.fee = new BigNumber(args[5]);
-            tx.input = { tokenid, preBanlances, factor, nonliquidity };
+            tx.input = { tokenid, preBalances, factor, nonliquidity };
         }
 
         let { err, nonce } = await ctx.client.getNonce({ address: ctx.sysinfo.address });

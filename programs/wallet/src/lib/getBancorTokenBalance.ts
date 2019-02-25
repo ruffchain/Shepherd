@@ -1,5 +1,5 @@
 import { ErrorCode } from "../core";
-import { IfResult, IfContext, checkTokenid, checkAddress } from './common';
+import { IfResult, IfContext, checkTokenid, checkAddress, formatNumber } from './common';
 
 const METHOD_NAME = 'view';
 const FUNC_NAME = 'getBancorTokenBalance';
@@ -63,7 +63,7 @@ export function prnGetBancorTokenBalance(ctx: IfContext, obj: IfResult) {
     try {
         objJson = JSON.parse(obj.resp);
         if (objJson.err === 0) {
-            console.log('Balance: ', objJson.value.replace(/n/g, ''));
+            console.log('Balance: ', formatNumber(objJson.value));
         } else {
             console.log('Error:', objJson.err);
         }
