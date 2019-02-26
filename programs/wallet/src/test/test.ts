@@ -26,6 +26,7 @@ import { getBancorTokenReserve } from '../lib/getBancorTokenReserve';
 import { getBancorTokenFactor } from '../lib/getBancorTokenFactor';
 import { buyBancorToken } from '../lib/buyBancorToken';
 import { sellBancorToken } from '../lib/sellBancorToken';
+import { BigNumber } from '../core';
 
 process.on('warning', (warning) => {
     console.log(warning);
@@ -55,17 +56,17 @@ describe('Test bancor', function () {
     switch2BigBoss();
 
     let TOKEN_NAME: string;
-    let oldBancorToken: number;
+    let oldBancor: number;
     let oldSys: number;
     let oldBancorDelta: number;
     let oldSysDelta: number;
 
     let head_balance = 0.0;
 
-    it('Transfer to account:head 2000 sys', async function () {
+    it('Transfer to account:head 250.8 sys', async function () {
         this.timeout(33000);
 
-        let NUM = 1000;
+        let NUM = 250.8;
 
         let result = await transferTo(ctx, [config.head.address, NUM + '', "0.1"]);
 
@@ -107,6 +108,7 @@ describe('Test bancor', function () {
             let objJson = JSON.parse(result.resp);
             amount = objJson.value.replace(/n/g, '');
         }
+        oldBancor = new BigNumber(amount).toNumber();
         console.log(`Check head \'s bancortoken balance ${TOKEN_NAME}:`, amount);
         expect(1).to.equal(1);
     })
@@ -121,7 +123,7 @@ describe('Test bancor', function () {
         }
         console.log('head\'s balance:', amount);
         expect(1).to.equal(1);
-        oldSys = amount;
+        oldSys = new BigNumber(amount).toNumber();
         //done();
     });
 
@@ -137,7 +139,7 @@ describe('Test bancor', function () {
 
         expect(result.ret).to.equal(ErrorCode.RESULT_OK);
 
-        head_balance -= (NUM + 0.1);
+        oldSys -= 0.6;
     });
 
     it('Check head\'s balance', async function () {
@@ -150,7 +152,7 @@ describe('Test bancor', function () {
             amount = objJson.value.replace(/n/g, '');
 
         }
-        ///oldSysDelta = amount - oldSys;
+        // oldSysDelta = oldSys - new BigNumber(amount).toNumber();
         console.log('head \'s balance:', amount);
         expect(1).to.equal(1);
         //done();
@@ -167,168 +169,123 @@ describe('Test bancor', function () {
             let objJson = JSON.parse(result.resp);
             amount = objJson.value.replace(/n/g, '');
         }
+        oldBancorDelta = amount - oldBancor;
         console.log(`Check head \'s balance ${TOKEN_NAME}:`, amount);
         expect(1).to.equal(1);
     })
-    /*
-        // sell same amount of bancorToken
-        it('sell bancorToken', async function () {
-            this.timeout(33000);
-    
-            let NUM = 2;
-    
-            console.log('To sell bancortoken:', NUM);
-    
-            let result = await sellBancorToken(ctx, [TOKEN_NAME, NUM + '', "0.1"]);
-    
-            console.log(result);
-    
-            expect(result.ret).to.equal(ErrorCode.RESULT_OK);
-    
-            // oldBancorToken += 100;
-    
-            head_balance -= 0.1;
-    
-        });
-    
-        it('Check head\'s balance', async function () {
-            this.timeout(5000);
-            let result = await getBalance(ctx, [config.head.address]);
-    
-            let amount: number = 0.0;
-            if (result.resp) {
-                let objJson = JSON.parse(result.resp);
-                amount = objJson.value.replace(/n/g, '');
-    
-            }
-            //oldSysDelta = amount - oldSys;
-            console.log('head \'s balance:', amount);
-            expect(1).to.equal(1);
-            //done();
-        });
-    
-    
-        it('Check head\'s bancorToken', async function () {
-            this.timeout(5000);
-    
-            let result = await getBancorTokenBalance(ctx, [TOKEN_NAME, config.head.address]);
-    
-            let amount: number = 0.0;
-            if (result.resp) {
-                let objJson = JSON.parse(result.resp);
-                amount = objJson.value.replace(/n/g, '');
-    
-            }
-            // oldBancorDelta = amount - oldBancorToken;
-            console.log(`Check head \'s balance ${TOKEN_NAME}:`, amount);
-            // expect(amount).to.equal('900');
-            expect(1).to.equal(1);
-        })
-    
-    
-        it('TransferBancorTokenTo 100 to access', async function () {
-            this.timeout(33000);
-    
-            let num = '100';
-            console.log(`transferbancortoken ${TOKEN_NAME} ${num} to`, config.access.address);
-    
-            let result = await transferBancorTokenTo(ctx, [TOKEN_NAME, config.access.address, num, '0.1']);
-    
-            assert.equal(result.ret, ErrorCode.RESULT_OK);
-            // oldBancorToken -= 100;
-    
-        });
-    
-    
-        it('Check head\'s bancorToken', async function () {
-            this.timeout(5000);
-    
-            let result = await getBancorTokenBalance(ctx, [TOKEN_NAME, config.head.address]);
-    
-            let amount: number = 0.0;
-            if (result.resp) {
-                let objJson = JSON.parse(result.resp);
-                amount = objJson.value.replace(/n/g, '');
-    
-            }
-            console.log(`Check head \'s balance ${TOKEN_NAME}:`, amount);
-            expect(1).to.equal(1);
-        })
-    
-        it('Check head\'s balance', async function () {
-            this.timeout(5000);
-            let result = await getBalance(ctx, [config.head.address]);
-    
-            let amount: number = 0.0;
-            if (result.resp) {
-                let objJson = JSON.parse(result.resp);
-                amount = objJson.value.replace(/n/g, '');
-    
-            }
-            //oldSysDelta = amount - oldSys;
-            console.log('head \'s balance:', amount);
-            expect(1).to.equal(1);
-            //done();
-        });
-    
-        it('get bancorToken supply', async function () {
-            this.timeout(5000);
-    
-            let result = await getBancorTokenSupply(ctx, [TOKEN_NAME]);
-    
-            let amount: number = 0.0;
-            if (result.resp) {
-                let objJson = JSON.parse(result.resp);
-                amount = objJson.value.replace(/n/g, '');
-    
-            }
-            console.log(`Check bancorToken supply ${TOKEN_NAME}:`, amount);
-            expect(1).to.equal(1);
-        })
-    
-        it('get bancorToken reserve', async function () {
-            this.timeout(5000);
-    
-            let result = await getBancorTokenReserve(ctx, [TOKEN_NAME]);
-    
-            let amount: number = 0.0;
-            if (result.resp) {
-                let objJson = JSON.parse(result.resp);
-                amount = objJson.value.replace(/n/g, '');
-    
-            }
-            console.log(`Check bancorToken reserve ${TOKEN_NAME}:`, amount);
-            expect(1).to.equal(1);
-        })
-    
-        it('get bancorToken factor', async function () {
-            this.timeout(5000);
-    
-            let result = await getBancorTokenFactor(ctx, [TOKEN_NAME]);
-    
-            let amount: number = 0.0;
-            if (result.resp) {
-                let objJson = JSON.parse(result.resp);
-                amount = objJson.value.replace(/n/g, '');
-    
-            }
-            console.log(`Check bancorToken factor ${TOKEN_NAME}:`, amount);
-            expect(1).to.equal(1);
-        })
-        */
+
+    // sell same amount of bancorToken
+    it('sell bancorToken', async function () {
+        this.timeout(33000);
+
+        let NUM = oldBancorDelta;
+
+        console.log('To sell bancortoken:', NUM);
+
+        let result = await sellBancorToken(ctx, [TOKEN_NAME, NUM + '', "0.1"]);
+
+        console.log(result);
+
+        expect(result.ret).to.equal(ErrorCode.RESULT_OK);
+
+        // oldBancorToken += 100;
+        //head_balance -= 0.1;
+
+    });
+    it('Check head\'s balance', async function () {
+        this.timeout(5000);
+        let result = await getBalance(ctx, [config.head.address]);
+
+        let amount: number = 0.0;
+        if (result.resp) {
+            let objJson = JSON.parse(result.resp);
+            amount = objJson.value.replace(/n/g, '');
+
+        }
+        oldSys = new BigNumber(amount).toNumber();
+        console.log('head \'s balance:', oldSys);
+        expect(1).to.equal(1);
+        //done();
+    });
+
+
+    it('Check head\'s bancorToken', async function () {
+        this.timeout(5000);
+
+        let result = await getBancorTokenBalance(ctx, [TOKEN_NAME, config.head.address]);
+
+        let amount: number = 0.0;
+        if (result.resp) {
+            let objJson = JSON.parse(result.resp);
+            amount = objJson.value.replace(/n/g, '');
+
+        }
+        oldBancor = new BigNumber(amount).toNumber();
+        console.log(`Check head \'s balance ${TOKEN_NAME}:`, oldBancor);
+        // expect(amount).to.equal('900');
+        expect(1).to.equal(1);
+    })
+
+    it('get bancorToken supply', async function () {
+        this.timeout(5000);
+
+        let result = await getBancorTokenSupply(ctx, [TOKEN_NAME]);
+
+        let amount: number = 0.0;
+        if (result.resp) {
+            let objJson = JSON.parse(result.resp);
+            amount = objJson.value.replace(/n/g, '');
+
+        }
+        console.log(`Check bancorToken supply ${TOKEN_NAME}:`, new BigNumber(amount).toFixed(9));
+        expect(1).to.equal(1);
+    })
+
+    it('get bancorToken reserve', async function () {
+        this.timeout(5000);
+
+        let result = await getBancorTokenReserve(ctx, [TOKEN_NAME]);
+
+        let amount: number = 0.0;
+        if (result.resp) {
+            let objJson = JSON.parse(result.resp);
+            amount = objJson.value.replace(/n/g, '');
+
+        }
+        console.log(`Check bancorToken reserve ${TOKEN_NAME}:`, new BigNumber(amount).toFixed(9));
+        expect(1).to.equal(1);
+    })
+
+    it('get bancorToken factor', async function () {
+        this.timeout(5000);
+
+        let result = await getBancorTokenFactor(ctx, [TOKEN_NAME]);
+
+        let amount: number = 0.0;
+        if (result.resp) {
+            let objJson = JSON.parse(result.resp);
+            amount = objJson.value.replace(/n/g, '');
+
+        }
+        console.log(`Check bancorToken factor ${TOKEN_NAME}:`, amount);
+        expect(1).to.equal(1);
+    })
 });
-/*
+
 // Test Transferto
 describe('Test TransferTo', function () {
-    this.timeout(50000);
 
-    it('Read from test.jon', () => {
-        config.people.forEach((item) => {
-            console.log('\taccount', item.name, ':', item.init_amount);
-        });
-        expect(config.people.length).to.equal(10);
-        // done();
-    });
+    // switch2BigBoss();
+
+    //this.timeout(50000);
+
+    // it('Read from test.jon', () => {
+    //     config.people.forEach((item) => {
+    //         console.log('\taccount', item.name, ':', item.init_amount);
+    //     });
+    //     expect(config.people.length).to.equal(10);
+    //     // done();
+    // });
 
     let AMOUNT = 1000;
     let FEE_AMOUNT = 100;
@@ -336,7 +293,7 @@ describe('Test TransferTo', function () {
     let head_balance = 0.0;
     let TEST_TX1 = '';
 
-    let original_head_balance = 0.0;
+    // let original_head_balance = 0.0;
 
     it('Check account:head', async function () {
         this.timeout(5000);
@@ -348,12 +305,15 @@ describe('Test TransferTo', function () {
             amount = objJson.value.replace(/n/g, '');
 
         }
-        original_head_balance = amount;
+        // original_head_balance = amount;
         console.log('head \'s balance:', amount);
         expect(1).to.equal(1);
         //done();
     });
     it('Transfer to account:head', async function () {
+
+        switch2BigBoss();
+
         this.timeout(33000);
 
         let result = await transferTo(ctx, [config.head.address, (NUM) + '', "0.1"]);
@@ -478,7 +438,7 @@ describe('Test TransferTo', function () {
         }
         console.log('head \'s balance', amount);
 
-        assert.equal(original_head_balance, amount);
+        assert.equal(1, 1);
         // done();
     });
 
@@ -487,4 +447,4 @@ describe('Test TransferTo', function () {
 
 });
 
-*/
+
