@@ -96,6 +96,14 @@ testbancor.ts
 - TransferTo back big boss account
 - Check Account:head balance
 
+### Phase-2 测试的新命令
+- register
+- mortgage
+- unmortgage
+- getstake
+- vote
+- getvote
+
 ### 进行速度测试，交易完成量
 
 

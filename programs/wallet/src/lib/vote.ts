@@ -4,7 +4,7 @@ import { IfResult, IfContext, checkReceipt, checkFee } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
-const FUNC_NAME = 'createToken';
+const FUNC_NAME = 'vote';
 
 // tokenid: string, preBalances: { address: string, amount: string }[], cost: string, fee: string
 
@@ -12,7 +12,7 @@ export async function vote(ctx: IfContext, args: string[]): Promise<IfResult> {
     return new Promise<IfResult>(async (resolve) => {
 
         // check args
-        if (args.length < 2) {
+        if (args.length !== 2) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong args"

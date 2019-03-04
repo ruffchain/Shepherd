@@ -4,7 +4,7 @@ import { IfResult, IfContext, checkReceipt, checkAmount, checkFee } from './comm
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
-const FUNC_NAME = 'createToken';
+const FUNC_NAME = 'unmortgage';
 
 // tokenid: string, preBalances: { address: string, amount: string }[], cost: string, fee: string
 
@@ -12,7 +12,7 @@ export async function unmortgage(ctx: IfContext, args: string[]): Promise<IfResu
     return new Promise<IfResult>(async (resolve) => {
 
         // check args
-        if (args.length < 2) {
+        if (args.length !== 2) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong args"
@@ -39,9 +39,7 @@ export async function unmortgage(ctx: IfContext, args: string[]): Promise<IfResu
         let tx = new ValueTransaction();
         tx.method = 'unmortgage';
         tx.fee = new BigNumber(fee);
-        // tx.value = new BigNumber(amount);
         tx.input = amount;
-
 
         let { err, nonce } = await ctx.client.getNonce({ address: ctx.sysinfo.address });
 

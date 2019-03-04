@@ -320,15 +320,15 @@ const CMDS: ifCMD[] = [
         content: 'register to be a candidate with caller\'s address',
         example: '\n' +
             '\targ1  -  fee\n'
-            + '\n\nExample:\n$ register 5'
+            + '\n\nExample:\n$ register 0.1'
     },
     {
         name: 'mortgage',
-        content: 'mortgage some balance',
+        content: 'mortgage some balance, so you can vote for candidates',
         example: '\n' +
             '\targ1  -  amount\n'
             + '\targ2 -  fee\n'
-            + '\n\nExample:\n$ mortgage 1000 5'
+            + '\n\nExample:\n$ mortgage 1000 0.1'
     },
     {
         name: 'unmortgage',
@@ -344,7 +344,7 @@ const CMDS: ifCMD[] = [
         example: '\n' +
             '\targ1  -  [candidate1, candidate2]\n'
             + '\targ2 -  fee\n'
-            + '\n\nExample:\n$ vote ["13dhmGDEuaoV7QvwbTm4gC6fx7CCRM7VkY","xxx"] 5'
+            + '\n\nExample:\n$ vote ["13dhmGDEuaoV7QvwbTm4gC6fx7CCRM7VkY","xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"] 0.1'
     },
     {
         name: 'getVote',

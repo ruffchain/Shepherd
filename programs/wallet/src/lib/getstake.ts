@@ -1,27 +1,36 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core";
-import { IfResult, IfContext, sysTokenSym } from './common';
+import { IfResult, IfContext, sysTokenSym, checkAddress } from './common';
 import * as colors from 'colors';
 
 const FUNC_NAME = 'view';
 
 export async function getStake(ctx: IfContext, args: string[]): Promise<IfResult> {
     return new Promise<IfResult>(async (resolve) => {
+        let params: any;
 
-        // check args
         if (args.length < 1) {
-            resolve({
-                ret: ErrorCode.RESULT_WRONG_ARG,
-                resp: "Wrong args"
-            });
-            return;
-        }
+            params =
+                {
+                    method: 'getStake',
+                    params: { address: ctx.sysinfo.address }
+                }
+        } else {
+            if (!checkAddress(args[0])) {
+                resolve({
+                    ret: ErrorCode.RESULT_WRONG_ARG,
+                    resp: "Wrong Address"
+                });
+                return;
+            }
 
-        let params =
-        {
-            method: 'getStake',
-            params: { address: args[0] }
+            params =
+                {
+                    method: 'getStake',
+                    params: { address: args[0] }
+                }
         }
+        // check args
 
         let cr = await ctx.client.callAsync(FUNC_NAME, params);
         if (ctx.sysinfo.verbose) {
