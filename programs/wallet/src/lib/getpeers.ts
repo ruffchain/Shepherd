@@ -17,8 +17,8 @@ export async function getPeers(ctx: IfContext, args: string[]): Promise<IfResult
         resolve(cr);
     });
 }
-export function prnGetPeers(ctx:IfContext,  obj: IfResult) {
-    if(ctx.sysinfo.verbose){
+export function prnGetPeers(ctx: IfContext, obj: IfResult) {
+    if (ctx.sysinfo.verbose) {
         console.log(obj);
     }
 
