@@ -16,6 +16,8 @@ import { ErrorCode } from './core/error_code';
 import { getBlock, prnGetBlock } from './lib/getblock';
 import { getBalance, prnGetBalance } from './lib/getbalance';
 import { createToken, prnCreateToken } from './lib/createtoken';
+import { setUserCode, prnSetUserCode } from './lib/setusercode';
+import { getUserCode, prnGetUserCode } from './lib/getusercode';
 import { getReceipt, prnGetReceipt } from './lib/getreceipt';
 import { transferTo, prnTransferTo } from './lib/transferto';
 import { getNonce, prnGetNonce } from './lib/getNonce';
@@ -220,6 +222,19 @@ const CMDS: ifCMD[] = [
             + '\targ2  -  preBalance\n'
             + '\targ3  -  fee\n'
             + '\n\ncreatetoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 0.1'
+    },
+    {
+        name: 'setUserCode',
+        content: 'set user code (!!Experiment)',
+        example:
+            '\n\targs1 - user code path\n'
+          + '\targs2 - fee\n'
+    },
+    {
+        name: 'getUserCode',
+        content: 'get user code(!!Experiment)',
+        example: '\n'
+            + '\n\nExample:\n$ getUserCode'
     },
     {
         name: 'createBancorToken',
@@ -727,6 +742,14 @@ let handleCmd = async (cmd: string) => {
                 await parseTesterJson(ctx, obj);
             }
 
+            break;
+        case 'setusercode':
+            result = await setUserCode(ctx, args);
+            handleResult(prnSetUserCode, ctx, result);
+            break;
+        case 'getusercode':
+            result = await getUserCode(ctx, args);
+            handleResult(prnGetUserCode, ctx, result);
             break;
         case 'help':
             printHelp(args);
