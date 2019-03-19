@@ -124,7 +124,7 @@ export function checkTokenFactor(factor: string): boolean {
         return false;
     }
     let num = JSON.parse(factor);
-    return num > 0 && num < 1;
+    return num > 0 && num <= 1;
 }
 
 export function checkTokenNonliquidity(nonliquidity: string): boolean {
