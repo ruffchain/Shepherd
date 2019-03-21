@@ -5,8 +5,8 @@ function doTransfer(amount) {
     const accountA = '12nD5LgUnLZDbyncFnoFB43YxhSFsERcgQ';
     const accountB = '1LuwjNj8wkqo237N7Gh8nZSSvUa6TZ5ds4';
 
-    assert.equal(this.getReceiver(), '1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79', 'invalid receiver');
-    assert.equal(this.getCaller(), '1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79', 'invalid caller');
+    //assert.equal(this.getReceiver(), '1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79', 'invalid receiver');
+    //assert.equal(this.getCaller(), '1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79', 'invalid caller');
 
     var amountValue = new BigNumber(amount);
     let toAValue = amountValue.div(2).toString();
