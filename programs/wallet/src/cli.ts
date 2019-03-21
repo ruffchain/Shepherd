@@ -18,6 +18,7 @@ import { getBalance, prnGetBalance } from './lib/getbalance';
 import { createToken, prnCreateToken } from './lib/createtoken';
 import { setUserCode, prnSetUserCode } from './lib/setusercode';
 import { getUserCode, prnGetUserCode } from './lib/getusercode';
+import { runUserMethod, prnRunUserMethod } from './lib/runusermethod';
 import { getReceipt, prnGetReceipt } from './lib/getreceipt';
 import { transferTo, prnTransferTo } from './lib/transferto';
 import { getNonce, prnGetNonce } from './lib/getNonce';
@@ -242,6 +243,16 @@ const CMDS: ifCMD[] = [
         content: 'get user code(!!Experiment)',
         example: '\n'
             + '\n\nExample:\n$ getUserCode'
+    },
+    {
+        name: 'runUserMethod',
+        content: ' run user method (!!Experiment)',
+        example:
+            '\n\targs1 - to account address\n'
+            + '\targs2 - amount systoken to send to account address\n'
+            + '\targs3 - fee\n'
+            + '\targs4 - action to run\n'
+            + '\targs5 - params\n'
     },
     {
         name: 'createBancorToken',
@@ -761,6 +772,10 @@ let handleCmd = async (cmd: string) => {
         case 'getusercode':
             result = await getUserCode(ctx, args);
             handleResult(prnGetUserCode, ctx, result);
+            break;
+        case 'runusermethod':
+            result = await runUserMethod(ctx, args);
+            handleResult(prnRunUserMethod, ctx, result);
             break;
         case 'help':
             printHelp(args);
