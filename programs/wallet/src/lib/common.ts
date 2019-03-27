@@ -14,9 +14,9 @@ export const MAX_COST = 1000000000000;
 const NUM_DIGITS = 12;
 
 /**
- * 
+ *
  * @param amount: amount of token
- * 
+ *
  * - it should be a BigNumber
  */
 export function checkAmount(amount: string): boolean {
@@ -41,6 +41,17 @@ export function checkFee(fee: string): boolean {
 
     let num = JSON.parse(fee);
     return num >= FEE_MIN && num <= FEE_MAX;
+}
+
+export function checkFeeForRange(fee: string, min: number, max: number) {
+    let bn = new BigNumber(fee);
+
+    if (bn.isNaN() === true) {
+        return false;
+    }
+
+    let num = JSON.parse(fee);
+    return num >= min && num <= max;
 }
 
 export function checkAddress(addr: string): boolean {

@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt, checkFee, checkTokenid } from './common';
+import { IfResult, IfContext, checkReceipt, checkFeeForRange, checkTokenid } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 import * as fs from 'fs';
@@ -23,10 +23,10 @@ export async function setUserCode(ctx: IfContext, args: string[]): Promise<IfRes
         const code = fs.readFileSync(codePath, 'utf-8');
         let userCode = Buffer.from(code);
 
-        if (!checkFee(args[1])) {
+        if (!checkFeeForRange(args[1], 0.1298, 0.1524)) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
-                resp: "Wrong fee"
+                resp: "Wrong fee range [0.1298, 0.1524]"
             });
             return;
         }

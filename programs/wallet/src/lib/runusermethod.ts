@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt, checkFee, checkTokenid } from './common';
+import { IfResult, IfContext, checkReceipt, checkFeeForRange, checkTokenid } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
@@ -19,10 +19,10 @@ export async function runUserMethod(ctx: IfContext, args: string[]): Promise<IfR
         const fee = args[2];
         const action = args[3];
         const params = args[4];
-        if (!checkFee(fee)) {
+        if (!checkFeeForRange(fee, 0.002, 0.005)) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
-                resp: "Wrong fee"
+                resp: "Wrong fee range [0.002 ~ 0.005]"
             });
             return;
         }
@@ -48,9 +48,6 @@ export async function runUserMethod(ctx: IfContext, args: string[]): Promise<IfR
         tx.value = new BigNumber(amount);
         tx.input = {action, to, params};
 
-        tx.nonce = nonce! + 1;
-        tx.sign(ctx.sysinfo.secret);
-
         let sendRet = await ctx.client.sendTransaction({ tx });
         if (sendRet.err) {
             console.error(`transferTo failed for ${sendRet.err}`);
@@ -60,6 +57,9 @@ export async function runUserMethod(ctx: IfContext, args: string[]): Promise<IfR
             });
             return;
         }
+
+        tx.nonce = nonce! + 1;
+        tx.sign(ctx.sysinfo.secret);
 
         console.log(`send transferTo tx: ${tx.hash}`);
 
