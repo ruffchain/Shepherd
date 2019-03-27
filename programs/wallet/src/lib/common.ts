@@ -7,8 +7,8 @@ const BLOCK_INTERVAL = 10;
 
 export const TOKEN_MAX_LENGTH = 12;
 export const TOKEN_MIN_LENGTH = 3;
-export const FEE_MAX = 2;
-export const FEE_MIN = 0.01;
+export const FEE_MAX = 0.001;
+export const FEE_MIN = 0.001;
 export const MAX_NONLIQUIDITY = 1000000000000;
 export const MAX_COST = 1000000000000;
 const NUM_DIGITS = 12;
