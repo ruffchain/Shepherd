@@ -47,6 +47,8 @@ export async function runUserMethod(ctx: IfContext, args: string[]): Promise<IfR
         tx.fee = new BigNumber(fee);
         tx.value = new BigNumber(amount);
         tx.input = {action, to, params};
+        tx.nonce = nonce! + 1;
+        tx.sign(ctx.sysinfo.secret);
 
         let sendRet = await ctx.client.sendTransaction({ tx });
         if (sendRet.err) {
@@ -57,9 +59,6 @@ export async function runUserMethod(ctx: IfContext, args: string[]): Promise<IfR
             });
             return;
         }
-
-        tx.nonce = nonce! + 1;
-        tx.sign(ctx.sysinfo.secret);
 
         console.log(`send transferTo tx: ${tx.hash}`);
 
