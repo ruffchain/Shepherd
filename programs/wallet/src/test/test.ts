@@ -19,8 +19,8 @@ import { getMiners, prnGetMiners } from '../lib/getminers';
 import { getPeers, prnGetPeers } from '../lib/getpeers';
 import { getReceipt, prnGetReceipt } from '../lib/getreceipt';
 import { createBancorToken } from '../lib/createBancorToken';
-import { getBancorTokenBalance, prnGetBancorTokenBalance } from '../lib/getBancorTokenBalance';
-import { transferBancorTokenTo } from '../lib/transferBancorTokenTo';
+// import { getBancorTokenBalance, prnGetBancorTokenBalance } from '../lib/getBancorTokenBalance';
+//import { transferBancorTokenTo } from '../lib/transferBancorTokenTo';
 import { getBancorTokenSupply } from '../lib/getBancorTokenSupply';
 import { getBancorTokenReserve } from '../lib/getBancorTokenReserve';
 import { getBancorTokenFactor } from '../lib/getBancorTokenFactor';
@@ -90,10 +90,10 @@ describe('Test bancor', function () {
 
         expect(result.ret).to.equal(ErrorCode.RESULT_OK);
 
-        result = await getBancorTokenBalance(ctx, [TOKEN_NAME, "1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79"]);
+        result = await getTokenBalance(ctx, [TOKEN_NAME, "1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79"]);
         let obj = JSON.parse(result.resp!);
         assert.equal(obj.err, ErrorCode.RESULT_OK);
-        prnGetBancorTokenBalance(ctx, result);
+        prnGetTokenBalance(ctx, result);
 
         head_balance -= 250.1;
     });
@@ -101,7 +101,7 @@ describe('Test bancor', function () {
     it('Check head\'s bancorToken', async function () {
         this.timeout(5000);
 
-        let result = await getBancorTokenBalance(ctx, [TOKEN_NAME, config.head.address]);
+        let result = await getTokenBalance(ctx, [TOKEN_NAME, config.head.address]);
 
         let amount: number = 0.0;
         if (result.resp) {
@@ -162,7 +162,7 @@ describe('Test bancor', function () {
     it('Check head\'s bancorToken', async function () {
         this.timeout(5000);
 
-        let result = await getBancorTokenBalance(ctx, [TOKEN_NAME, config.head.address]);
+        let result = await getTokenBalance(ctx, [TOKEN_NAME, config.head.address]);
 
         let amount: number = 0.0;
         if (result.resp) {
@@ -212,7 +212,7 @@ describe('Test bancor', function () {
     it('Check head\'s bancorToken', async function () {
         this.timeout(5000);
 
-        let result = await getBancorTokenBalance(ctx, [TOKEN_NAME, config.head.address]);
+        let result = await getTokenBalance(ctx, [TOKEN_NAME, config.head.address]);
 
         let amount: number = 0.0;
         if (result.resp) {
@@ -439,12 +439,7 @@ describe('Test TransferTo', function () {
         console.log('head \'s balance', amount);
 
         assert.equal(1, 1);
-        // done();
     });
-
-
-
-
 });
 
 

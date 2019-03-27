@@ -43,7 +43,7 @@ import { parseTesterJson } from './lib/parsetesterjson';
 var pjson = require('../package.json');
 import { IfContext } from './lib/common';
 // import { transferBancorTokenTo, prnTransferBancorTokenTo } from './lib/transferBancorTokenTo';
-import { getBancorTokenBalance, prnGetBancorTokenBalance } from './lib/getBancorTokenBalance';
+// import { getBancorTokenBalance, prnGetBancorTokenBalance } from './lib/getBancorTokenBalance';
 import { buyBancorToken, prnBuyBancorToken } from './lib/buyBancorToken';
 import { sellBancorToken, prnSellBancorToken } from './lib/sellBancorToken';
 import { getBancorTokenFactor, prnGetBancorTokenFactor } from './lib/getBancorTokenFactor';
@@ -276,15 +276,15 @@ const CMDS: ifCMD[] = [
             + '\targ4  -  fee\n'
             + '\n\ntransferBancorTokenTo token2 1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79 1000 0.1'
     },
-    {
-        name: 'getBancorTokenBalance',
-        content: 'get BancorToken balance under address',
-        example: '\ngetBancorTokenbalance\n'
-            + '\targ1  -  tokenid:string\n'
-            + '\targ2  -  address:string\n'
-            + 'Example:\n'
-            + '\t$ getBancorTokenBalance tokenid 1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J'
-    },
+    // {
+    //     name: 'getBancorTokenBalance',
+    //     content: 'get BancorToken balance under address',
+    //     example: '\ngetBancorTokenbalance\n'
+    //         + '\targ1  -  tokenid:string\n'
+    //         + '\targ2  -  address:string\n'
+    //         + 'Example:\n'
+    //         + '\t$ getBancorTokenBalance tokenid 1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J'
+    // },
     {
         name: 'buyBancorToken',
         content: 'buy BancorToken',
@@ -689,10 +689,10 @@ let handleCmd = async (cmd: string) => {
         //     result = await transferBancorTokenTo(ctx, args);
         //     handleResult(prnTransferBancorTokenTo, ctx, result);
         //     break;
-        case 'getbancortokenbalance':
-            result = await getBancorTokenBalance(ctx, args);
-            handleResult(prnGetBancorTokenBalance, ctx, result);
-            break;
+        // case 'getbancortokenbalance':
+        //     result = await getBancorTokenBalance(ctx, args);
+        //     handleResult(prnGetBancorTokenBalance, ctx, result);
+        //     break;
         case 'buybancortoken':
             result = await buyBancorToken(ctx, args);
             handleResult(prnBuyBancorToken, ctx, result);

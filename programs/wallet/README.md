@@ -7,7 +7,7 @@
 - 1.0.8 Add vote, mortgage, unmortgage ...
 - 1.0.9 upload ， modfity README
 - 1.1.3 Add --verbose (print log switch), limit cost = 100
-- 
+- 2.0.1 Remove tansferbancortoken createbancortoken
 
 ## dependency
 - node.js  (version == 8.11)
