@@ -1,5 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from '../core/error_code';
+import { isValidAddress } from '../core';
 const BigNumber = require('bignumber.js');
 
 const MAX_CONFIRM_TIMES = 3;
@@ -12,6 +13,8 @@ export const FEE_MIN = 0.001;
 export const MAX_NONLIQUIDITY = 1000000000000;
 export const MAX_COST = 1000000000000;
 const NUM_DIGITS = 12;
+
+const MAX_NORMAL_TOKEN_PRECISION = 9;
 
 /**
  *
@@ -56,9 +59,20 @@ export function checkFeeForRange(fee: string, min: number, max: number) {
 
 export function checkAddress(addr: string): boolean {
     //console.log("len:", addr.length)
-    return addr.length >= 30;
+    // return addr.length >= 30;
+    return isValidAddress(addr);
 }
 
+export function checkAddressArray(addrStr: string): boolean {
+    //console.log("len:", addr.length)
+    let addr: any;
+    try {
+        addr = JSON.parse(addrStr);
+    } catch (e) {
+        return false;
+    }
+    return addr.length !== undefined && addr.length > 0;
+}
 export interface IfResult { resp: string | null, ret: number };
 
 export interface IfSysinfo {
@@ -80,7 +94,7 @@ export async function waitSeconds(seconds: number) {
     });
 }
 
-export const sysTokenSym = 'sys';
+export const sysTokenSym = 'SYS';
 
 export async function checkReceipt(ctx: IfContext, txhash: string): Promise<{ resp: string | null, ret: number }> {
     return new Promise<{ resp: string | null, ret: number }>(async (resolve, reject) => {
@@ -169,5 +183,14 @@ export function formatNumber(num: string): string {
     }
 }
 
+export function checkPrecision(arg: string) {
+    let bn = new BigNumber(arg);
+
+    if (bn.isNaN()) {
+        return false;
+    }
+    let num = parseInt(arg);
+    return num >= 0 && num <= MAX_NORMAL_TOKEN_PRECISION;
+}
 
 

@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt, checkFee, checkTokenid } from './common';
+import { IfResult, IfContext, checkReceipt, checkFee, checkTokenid, checkPrecision } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
@@ -10,7 +10,7 @@ export async function createToken(ctx: IfContext, args: string[]): Promise<IfRes
     return new Promise<IfResult>(async (resolve) => {
 
         // check args
-        if (args.length !== 3) {
+        if (args.length !== 4) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong args"
@@ -27,7 +27,15 @@ export async function createToken(ctx: IfContext, args: string[]): Promise<IfRes
             return;
         }
 
-        if (!checkFee(args[2])) {
+        if (!checkPrecision(args[2])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong precision"
+            });
+            return;
+        }
+
+        if (!checkFee(args[3])) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong fee"
@@ -43,7 +51,6 @@ export async function createToken(ctx: IfContext, args: string[]): Promise<IfRes
             console.log(typeof args[1]);
         }
 
-
         try {
             let objPrebalances = JSON.parse(args[1]);
             console.log(objPrebalances);
@@ -57,21 +64,14 @@ export async function createToken(ctx: IfContext, args: string[]): Promise<IfRes
         }
 
         let preBalances = JSON.parse(args[1]);
-        let fee = args[2];
+        let precision = args[2];
+        let fee = args[3];
 
-        // if (parseInt(cost) < 100) {
-        //     console.log('createToken cost exact 100 sys, please change it for now');
-        //     resolve({
-        //         ret: ErrorCode.RESULT_WRONG_ARG,
-        //         resp: "Wrong cost"
-        //     });
-        //     return;
-        // }
 
         let tx = new ValueTransaction();
         tx.method = 'createToken';
         tx.fee = new BigNumber(fee);
-        tx.input = { tokenid, preBalances };
+        tx.input = { tokenid: tokenid.toUpperCase(), preBalances, precision };
 
         let { err, nonce } = await ctx.client.getNonce({ address: ctx.sysinfo.address });
         if (err) {

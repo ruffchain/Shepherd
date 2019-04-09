@@ -228,8 +228,9 @@ const CMDS: ifCMD[] = [
         example:
             '\n\targ1  -  token-name\n'
             + '\targ2  -  preBalance\n'
-            + '\targ3  -  fee\n'
-            + '\n\ncreatetoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 0.1'
+            + '\targ3  -  precision\n'
+            + '\targ4  -  fee\n'
+            + '\n\ncreatetoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 9 0.1'
     },
     {
         name: 'setUserCode',

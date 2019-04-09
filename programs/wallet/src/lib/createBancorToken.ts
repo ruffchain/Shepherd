@@ -91,11 +91,11 @@ export async function createBancorToken(ctx: IfContext, args: string[]): Promise
         if (args.length === 5) {
             tx.value = new BigNumber(args[3]);
             tx.fee = new BigNumber(args[4]);
-            tx.input = { tokenid, preBalances, factor };
+            tx.input = { tokenid: tokenid.toUpperCase(), preBalances, factor };
         } else {
             tx.value = new BigNumber(args[4]);
             tx.fee = new BigNumber(args[5]);
-            tx.input = { tokenid, preBalances, factor, nonliquidity };
+            tx.input = { tokenid: tokenid.toUpperCase(), preBalances, factor, nonliquidity };
         }
 
         let { err, nonce } = await ctx.client.getNonce({ address: ctx.sysinfo.address });
