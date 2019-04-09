@@ -51,6 +51,9 @@ import { getBancorTokenReserve, prnGetBancorTokenReserve } from './lib/getBancor
 import { getBancorTokenSupply, prnGetBancorTokenSupply } from './lib/getBancorTokenSupply';
 import { getZeroBalance, prnGetZeroBalance } from './lib/getZeroBalance';
 import { getLastIrreversibleBlockNumber, prnGetLastIrreversibleBlockNumber } from './lib/getLIBNumber';
+import { getBalances, prnGetBalances } from './lib/getbalances';
+import { getTokenBalances, prnGetTokenBalances } from './lib/getTokenBalances';
+import { getBancorTokenBalances, prnGetBancorTokenBalances } from './lib/getBancorTokenBalances';
 
 const VERSION = pjson.version;
 const PROMPT = '> ';
@@ -149,6 +152,14 @@ const CMDS: ifCMD[] = [
             + '\t$ getbalance 1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J'
     },
     {
+        name: 'getBalances',
+        content: 'get balances under address',
+        example: '\ngetbalances\n'
+            + '\targ  -  [address]:string[]\n'
+            + 'Example:\n'
+            + '\t$ getbalances ["1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J"]'
+    },
+    {
         name: 'getTokenBalance',
         content: 'get Token balance under address',
         example: '\ngetTokenbalance\n'
@@ -156,6 +167,15 @@ const CMDS: ifCMD[] = [
             + '\targ2  -  address:string\n'
             + 'Example:\n'
             + '\t$ getTokenBalance tokenid 1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J'
+    },
+    {
+        name: 'getTokenBalances',
+        content: 'get Token balances under address',
+        example: '\ngetTokenbalances\n'
+            + '\targ1  -  tokenid:string\n'
+            + '\targ2  -  [address]:string[]\n'
+            + 'Example:\n'
+            + '\t$ getTokenBalances tokenid ["1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J"]'
     },
     {
         name: 'getStake',
@@ -285,6 +305,15 @@ const CMDS: ifCMD[] = [
             + '\targ2  -  address:string\n'
             + 'Example:\n'
             + '\t$ getBancorTokenBalance tokenid 1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J'
+    },
+    {
+        name: 'getBancorTokenBalances',
+        content: 'get BancorToken balances under address',
+        example: '\ngetBancorTokenbalances\n'
+            + '\targ1  -  tokenid:string\n'
+            + '\targ2  -  [address]:string[]\n'
+            + 'Example:\n'
+            + '\t$ getBancorTokenBalances tokenid ["1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J"]'
     },
     {
         name: 'buyBancorToken',
@@ -642,9 +671,17 @@ let handleCmd = async (cmd: string) => {
             result = await getBalance(ctx, args);
             handleResult(prnGetBalance, ctx, result);
             break;
+        case 'getbalances':
+            result = await getBalances(ctx, args);
+            handleResult(prnGetBalances, ctx, result);
+            break;
         case 'gettokenbalance':
             result = await getTokenBalance(ctx, args);
             handleResult(prnGetTokenBalance, ctx, result);
+            break;
+        case 'gettokenbalances':
+            result = await getTokenBalances(ctx, args);
+            handleResult(prnGetTokenBalances, ctx, result);
             break;
         case 'getreceipt':
             result = await getReceipt(ctx, args);
@@ -693,6 +730,10 @@ let handleCmd = async (cmd: string) => {
         case 'getbancortokenbalance':
             result = await getBancorTokenBalance(ctx, args);
             handleResult(prnGetBancorTokenBalance, ctx, result);
+            break;
+        case 'getbancortokenbalances':
+            result = await getBancorTokenBalances(ctx, args);
+            handleResult(prnGetBancorTokenBalances, ctx, result);
             break;
         case 'buybancortoken':
             result = await buyBancorToken(ctx, args);

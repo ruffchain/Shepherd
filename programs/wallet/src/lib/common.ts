@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from '../core/error_code';
-import { isValidAddress } from '../core';
+import { isValidAddress } from '../core/address';
 const BigNumber = require('bignumber.js');
 
 const MAX_CONFIRM_TIMES = 3;
@@ -68,10 +68,19 @@ export function checkAddressArray(addrStr: string): boolean {
     let addr: any;
     try {
         addr = JSON.parse(addrStr);
+        console.log('addr', addr);
+
+        for (let i = 0; i < addr.length; i++) {
+            console.log(addr[i])
+            if (!isValidAddress(addr[i])) {
+                return false;
+            }
+        }
     } catch (e) {
         return false;
     }
-    return addr.length !== undefined && addr.length > 0;
+
+    return addr.length > 0;
 }
 export interface IfResult { resp: string | null, ret: number };
 

@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core";
-import { IfResult, IfContext, sysTokenSym, checkAddress, formatNumber, checkAddressArray } from './common';
+import { IfResult, IfContext, checkAddressArray } from './common';
 import * as colors from 'colors';
 
 const FUNC_NAME = 'view';
@@ -19,7 +19,7 @@ export async function getBalances(ctx: IfContext, args: string[]): Promise<IfRes
     if (!checkAddressArray(args[0])) {
       resolve({
         ret: ErrorCode.RESULT_WRONG_ARG,
-        resp: "Wrong address"
+        resp: "Wrong addresses, no space in address array"
       });
       return;
     }
@@ -41,7 +41,7 @@ export async function getBalances(ctx: IfContext, args: string[]): Promise<IfRes
     resolve(cr);
   });
 }
-export function prnGetBalance(ctx: IfContext, obj: IfResult) {
+export function prnGetBalances(ctx: IfContext, obj: IfResult) {
   if (ctx.sysinfo.verbose) {
     console.log(obj);
   }
@@ -55,7 +55,8 @@ export function prnGetBalance(ctx: IfContext, obj: IfResult) {
   let objJson: any;
   try {
     objJson = JSON.parse(obj.resp);
-    console.log(colors.green(`${sysTokenSym}`), ":", formatNumber(objJson.value))
+    // console.log(colors.green(`${sysTokenSym}`), ":", formatNumber(objJson.value))
+    console.log(objJson);
   } catch (e) {
     console.log(e);
   }
