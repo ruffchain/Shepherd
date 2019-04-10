@@ -54,6 +54,7 @@ import { getLastIrreversibleBlockNumber, prnGetLastIrreversibleBlockNumber } fro
 import { getBalances, prnGetBalances } from './lib/getbalances';
 import { getTokenBalances, prnGetTokenBalances } from './lib/getTokenBalances';
 import { getBancorTokenBalances, prnGetBancorTokenBalances } from './lib/getBancorTokenBalances';
+import { getBancorTokenParams, prnGetBancorTokenParams } from './lib/getBancorTokenParams';
 
 const VERSION = pjson.version;
 const PROMPT = '> ';
@@ -358,6 +359,14 @@ const CMDS: ifCMD[] = [
             + '\targ1  -  tokenid:string\n'
             + 'Example:\n'
             + '\t$ getBancorTokenSupply tokenid '
+    },
+    {
+        name: 'getBancorTokenParams',
+        content: 'get BancorToken params',
+        example: '\ngetBancorTokenParams\n'
+            + '\targ1  -  tokenid:string\n'
+            + 'Example:\n'
+            + '\t$ getBancorTokenParams tokenid '
     },
     {
         name: 'getZeroBalance',
@@ -754,6 +763,10 @@ let handleCmd = async (cmd: string) => {
         case 'getbancortokensupply':
             result = await getBancorTokenSupply(ctx, args);
             handleResult(prnGetBancorTokenSupply, ctx, result);
+            break;
+        case 'getbancortokenparams':
+            result = await getBancorTokenParams(ctx, args);
+            handleResult(prnGetBancorTokenParams, ctx, result);
             break;
         case 'getzerobalance':
             result = await getZeroBalance(ctx, args);
