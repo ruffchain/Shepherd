@@ -56,7 +56,7 @@ export async function transferTokenTo(ctx: IfContext, args: string[]): Promise<I
         tx.method = 'transferTokenTo';
         tx.fee = new BigNumber(fee);
         tx.input = {
-            tokenid: tokenid,
+            tokenid: tokenid.toUpperCase(),
             to: address,
             amount: amount
         };

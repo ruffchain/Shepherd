@@ -55,6 +55,7 @@ import { getBalances, prnGetBalances } from './lib/getbalances';
 import { getTokenBalances, prnGetTokenBalances } from './lib/getTokenBalances';
 import { getBancorTokenBalances, prnGetBancorTokenBalances } from './lib/getBancorTokenBalances';
 import { getBancorTokenParams, prnGetBancorTokenParams } from './lib/getBancorTokenParams';
+import { getBlocks, prnGetBlocks } from './lib/getblocks';
 
 const VERSION = pjson.version;
 const PROMPT = '> ';
@@ -216,6 +217,15 @@ const CMDS: ifCMD[] = [
             '\targ1  -  block number | hash value | \'latest\'\n'
             + '\targ2  -  contain transactions?'
             + '\n\nExample:\n$ getblock 1 false'
+    },
+    {
+        name: 'getBlocks',
+        content: 'get Blocks, max number is 20 blocks',
+        example: '\n' +
+            '\targ1  -  block  min number\n'
+            + '\targ2  -  block max number\n'
+            + '\targ3  -  contain transactions?'
+            + '\n\nExample:\n$ getblocks 1 10 false'
     },
     {
         name: 'getReceipt',
@@ -675,6 +685,10 @@ let handleCmd = async (cmd: string) => {
         case 'getblock':
             result = await getBlock(ctx, args);
             handleResult(prnGetBlock, ctx, result);
+            break
+        case 'getblocks':
+            result = await getBlocks(ctx, args);
+            handleResult(prnGetBlocks, ctx, result);
             break;
         case 'getbalance':
             result = await getBalance(ctx, args);
