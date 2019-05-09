@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt, checkFee, checkTokenid, checkPrecision } from './common';
+import { IfResult, IfContext, checkReceipt, checkFee, checkTokenid, checkPrecision, checkTokenAmount} from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
@@ -67,6 +67,18 @@ export async function createToken(ctx: IfContext, args: string[]): Promise<IfRes
         let precision = args[2];
         let fee = args[3];
 
+        let amount = preBalances.map((x: {address: string, amount: string}) => x.amount)
+            .reduce((accumulator: BigNumber, currentValue: string) => {
+                return accumulator.plus(currentValue);
+            }, new BigNumber(0));
+
+        if (!checkTokenAmount(amount.toString())) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong amount"
+            });
+            return;
+        }
 
         let tx = new ValueTransaction();
         tx.method = 'createToken';

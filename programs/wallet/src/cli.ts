@@ -33,6 +33,7 @@ import { mortgage, prnMortgage } from './lib/mortgage';
 import { unmortgage, prnUnmortgage } from './lib/unmortgage';
 import { vote, prnVote } from './lib/vote';
 import { getVote, prnGetVote } from './lib/getvote';
+import { getUserTable, prnGetUserTable} from './lib/getusertable';
 import { createBancorToken, prnCreateBancorToken } from './lib/createBancorToken';
 
 const { randomBytes } = require('crypto');
@@ -293,10 +294,10 @@ const CMDS: ifCMD[] = [
             '\n\targ1  -  token-name\n'
             + '\targ2  -  preBalance\n'
             + '\targ3  -  factor (0,1)\n'
-            + '\targ4  -  [nonliquidity]\n'
+            + '\targ4  -  nonliquidity\n'
             + '\targ5  -  cost\n'
             + '\targ6  -  fee\n'
-            + '\n\ncreatebancortoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 0.5 100 0.1'
+            + '\n\ncreatebancortoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 0.5 10000000000 100 0.1'
     },
     {
         name: 'transferBancorTokenTo',
@@ -433,6 +434,14 @@ const CMDS: ifCMD[] = [
         content: 'getVote',
         example: '\n'
             + '\n\nExample:\n$ getVote'
+    },
+    {
+        name: 'getUserTable',
+        content: 'get value from user table',
+        example: '\n' +
+            '\targ1 - contractName\n'
+          + '\targ2 - table name\n'
+          + '\targ3 - key name\n'
     },
     {
         name: 'sendToTesters',
@@ -810,6 +819,10 @@ let handleCmd = async (cmd: string) => {
         case 'getvote':
             result = await getVote(ctx, args);
             handleResult(prnGetVote, ctx, result);
+            break;
+        case 'getusertable':
+            result = await getUserTable(ctx, args);
+            handleResult(prnGetUserTable, ctx, result);
             break;
         case 'getaddress':
             console.log(SYSINFO.address);

@@ -10,7 +10,8 @@ export const TOKEN_MAX_LENGTH = 12;
 export const TOKEN_MIN_LENGTH = 3;
 export const FEE_MAX = 0.001;
 export const FEE_MIN = 0.001;
-export const MAX_NONLIQUIDITY = 1000000000000;
+export const MAX_NONLIQUIDITY = 1000000000000000000;
+export const MAX_TOKEN_AMOUNT = 1000000000000000000;
 export const MAX_COST = 1000000000000;
 const NUM_DIGITS = 12;
 
@@ -157,8 +158,7 @@ export function checkTokenFactor(factor: string): boolean {
     if (bn.isNaN()) {
         return false;
     }
-    let num = JSON.parse(factor);
-    return num > 0 && num <= 1;
+    return bn.isLessThanOrEqualTo(1) && bn.isGreaterThan(0);
 }
 
 export function checkTokenNonliquidity(nonliquidity: string): boolean {
@@ -167,8 +167,17 @@ export function checkTokenNonliquidity(nonliquidity: string): boolean {
     if (bn.isNaN()) {
         return false;
     }
-    let num = JSON.parse(nonliquidity);
-    return num >= 0 && num < MAX_NONLIQUIDITY;
+    return bn.isLessThan(MAX_NONLIQUIDITY) && bn.isGreaterThan(0);
+}
+
+export function checkTokenAmount(amount: string): boolean {
+    let bn = new BigNumber(amount);
+
+    if (bn.isNaN()) {
+        return false;
+    }
+
+    return bn.isLessThan(MAX_TOKEN_AMOUNT) && bn.isGreaterThan(0);
 }
 
 export function checkCost(cost: string): boolean {
@@ -201,5 +210,3 @@ export function checkPrecision(arg: string) {
     let num = parseInt(arg);
     return num >= 0 && num <= MAX_NORMAL_TOKEN_PRECISION;
 }
-
-
