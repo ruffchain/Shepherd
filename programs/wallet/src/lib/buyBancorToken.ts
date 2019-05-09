@@ -49,7 +49,7 @@ export async function buyBancorToken(ctx: IfContext, args: string[]): Promise<If
         tx.fee = new BigNumber(fee);
         tx.value = new BigNumber(cost);
         tx.input = {
-            tokenid: tokenid
+            tokenid: tokenid.toUpperCase()
         };
 
         let { err, nonce } = await ctx.client.getNonce({ address: ctx.sysinfo.address });
