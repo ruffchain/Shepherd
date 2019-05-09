@@ -33,6 +33,7 @@ import { mortgage, prnMortgage } from './lib/mortgage';
 import { unmortgage, prnUnmortgage } from './lib/unmortgage';
 import { vote, prnVote } from './lib/vote';
 import { getVote, prnGetVote } from './lib/getvote';
+import { getUserTable, prnGetUserTable} from './lib/getusertable';
 import { createBancorToken, prnCreateBancorToken } from './lib/createBancorToken';
 
 const { randomBytes } = require('crypto');
@@ -435,6 +436,14 @@ const CMDS: ifCMD[] = [
             + '\n\nExample:\n$ getVote'
     },
     {
+        name: 'getUserTable',
+        content: 'get value from user table',
+        example: '\n' +
+            '\targ1 - contractName\n'
+          + '\targ2 - table name\n'
+          + '\targ3 - key name\n'
+    },
+    {
         name: 'sendToTesters',
         content: 'Send token according to prebalance json file',
         example: '\n'
@@ -810,6 +819,10 @@ let handleCmd = async (cmd: string) => {
         case 'getvote':
             result = await getVote(ctx, args);
             handleResult(prnGetVote, ctx, result);
+            break;
+        case 'getusertable':
+            result = await getUserTable(ctx, args);
+            handleResult(prnGetUserTable, ctx, result);
             break;
         case 'getaddress':
             console.log(SYSINFO.address);
