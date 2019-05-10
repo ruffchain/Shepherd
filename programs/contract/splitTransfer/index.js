@@ -22,15 +22,17 @@ function Contract(receiver, caller) {
 }
 
 function doSetDB() {
+    bcLog('#### Receive is', this.getReceiver());
+    bcLog('#### caller is', this.getCaller());
     assert.equal(this.getReceiver(), this.getCaller());
 
-    assert.equal(bcDBCreate('IotDemo'), true);
+    bcLog('#### DB create ret is', bcDBCreate('IotDemo'));
     return true;
 }
 
 function doUnlock() {
+    bcLog('before bcDBGet');
     let owner = bcDBGet('IotDemo', 'owner');
-    //bcLog('##### Owner is', owner);
     assert.equal(owner, this.getCaller());
     assert.equal(bcDBSet('IotDemo', 'state', 'unlock'), true);
     return true;
