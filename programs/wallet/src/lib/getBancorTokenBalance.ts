@@ -35,7 +35,7 @@ export async function getBancorTokenBalance(ctx: IfContext, args: string[]): Pro
         {
             method: 'getBancorTokenBalance',
             params: {
-                tokenid: args[0],
+                tokenid: args[0].toUpperCase(),
                 address: args[1]
             }
         }

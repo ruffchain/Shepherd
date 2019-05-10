@@ -28,7 +28,7 @@ export async function getBancorTokenReserve(ctx: IfContext, args: string[]): Pro
         {
             method: FUNC_NAME,
             params: {
-                tokenid: args[0]
+                tokenid: args[0].toUpperCase()
             }
         }
 

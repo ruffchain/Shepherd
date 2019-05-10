@@ -48,7 +48,7 @@ export async function sellBancorToken(ctx: IfContext, args: string[]): Promise<I
         tx.method = FUNC_NAME;
         tx.fee = new BigNumber(fee);
         tx.input = {
-            tokenid: tokenid,
+            tokenid: tokenid.toUpperCase(),
             amount: amount
         };
 

@@ -28,7 +28,7 @@ export async function getBancorTokenParams(ctx: IfContext, args: string[]): Prom
     {
       method: FUNC_NAME,
       params: {
-        tokenid: args[0]
+        tokenid: args[0].toUpperCase()
       }
     }
 

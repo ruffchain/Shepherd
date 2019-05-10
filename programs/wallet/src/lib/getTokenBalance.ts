@@ -1,5 +1,5 @@
 import { ErrorCode } from "../core";
-import { IfResult, IfContext, checkTokenid , formatNumber} from './common';
+import { IfResult, IfContext, checkTokenid, formatNumber } from './common';
 
 const FUNC_NAME = 'view';
 
@@ -28,7 +28,7 @@ export async function getTokenBalance(ctx: IfContext, args: string[]): Promise<I
             method: 'getTokenBalance',
             params: {
                 address: args[1],
-                tokenid: args[0]
+                tokenid: args[0].toUpperCase()
             }
         }
 
