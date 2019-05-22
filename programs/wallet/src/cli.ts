@@ -33,7 +33,7 @@ import { mortgage, prnMortgage } from './lib/mortgage';
 import { unmortgage, prnUnmortgage } from './lib/unmortgage';
 import { vote, prnVote } from './lib/vote';
 import { getVote, prnGetVote } from './lib/getvote';
-import { getUserTable, prnGetUserTable} from './lib/getusertable';
+import { getUserTable, prnGetUserTable } from './lib/getusertable';
 import { createBancorToken, prnCreateBancorToken } from './lib/createBancorToken';
 
 const { randomBytes } = require('crypto');
@@ -403,7 +403,7 @@ const CMDS: ifCMD[] = [
         content: 'register to be a candidate with caller\'s address',
         example: '\n' +
             '\targ1  -  fee\n'
-            + '\n\nExample:\n$ register 0.1'
+            + '\n\nExample:\n$ register 0.001'
     },
     {
         name: 'mortgage',
@@ -411,7 +411,7 @@ const CMDS: ifCMD[] = [
         example: '\n' +
             '\targ1  -  amount\n'
             + '\targ2 -  fee\n'
-            + '\n\nExample:\n$ mortgage 1000 0.1'
+            + '\n\nExample:\n$ mortgage 1000 0.001'
     },
     {
         name: 'unmortgage',
@@ -419,7 +419,7 @@ const CMDS: ifCMD[] = [
         example: '\n' +
             '\targ1  -  amount\n'
             + '\targ2 -  fee\n'
-            + '\n\nExample:\n$ unmortgage 1000 5'
+            + '\n\nExample:\n$ unmortgage 1000 0.001'
     },
     {
         name: 'vote',
@@ -427,7 +427,7 @@ const CMDS: ifCMD[] = [
         example: '\n' +
             '\targ1  -  [candidate1, candidate2]\n'
             + '\targ2 -  fee\n'
-            + '\n\nExample:\n$ vote ["13dhmGDEuaoV7QvwbTm4gC6fx7CCRM7VkY","xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"] 0.1'
+            + '\n\nExample:\n$ vote ["13dhmGDEuaoV7QvwbTm4gC6fx7CCRM7VkY","xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"] 0.001'
     },
     {
         name: 'getVote',
@@ -440,8 +440,8 @@ const CMDS: ifCMD[] = [
         content: 'get value from user table',
         example: '\n' +
             '\targ1 - contractName\n'
-          + '\targ2 - table name\n'
-          + '\targ3 - key name\n'
+            + '\targ2 - table name\n'
+            + '\targ3 - key name\n'
     },
     {
         name: 'sendToTesters',
