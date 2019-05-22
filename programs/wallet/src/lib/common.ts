@@ -21,6 +21,7 @@ const NUM_DIGITS = 12;
 const MAX_NORMAL_TOKEN_PRECISION = 9;
 
 
+export const sysTokenSym = 'SYS';
 /**
  *
  * @param amount: amount of token
@@ -108,7 +109,11 @@ export async function waitSeconds(seconds: number) {
     });
 }
 
-export const sysTokenSym = 'SYS';
+export function strAmountPrecision(num: string, precision: number): string {
+    let nTemp = parseFloat(num);
+    return nTemp.toFixed(precision);
+}
+
 
 export async function checkReceipt(ctx: IfContext, txhash: string): Promise<{ resp: string | null, ret: number }> {
     return new Promise<{ resp: string | null, ret: number }>(async (resolve, reject) => {

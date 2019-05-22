@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt, checkTokenid, checkAddress, checkAmount, checkFee } from './common';
+import { IfResult, IfContext, checkReceipt, checkTokenid, checkAddress, checkAmount, checkFee, sendAndCheckTx } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
@@ -61,39 +61,8 @@ export async function transferTokenTo(ctx: IfContext, args: string[]): Promise<I
             amount: amount
         };
 
-        let { err, nonce } = await ctx.client.getNonce({ address: ctx.sysinfo.address });
-
-        if (err) {
-            console.error(`transferTokenTo getNonce failed for ${err}`);
-            resolve({
-                ret: ErrorCode.RESULT_FAILED,
-                resp: `transferTokenTo getNonce failed for ${err}`
-            });
-            return;
-        }
-
-        tx.nonce = nonce! + 1;
-        if (ctx.sysinfo.verbose) {
-            console.log('nonce is:', tx.nonce);
-        }
-
-        tx.sign(ctx.sysinfo.secret);
-
-        let sendRet = await ctx.client.sendTransaction({ tx });
-        if (sendRet.err) {
-            console.error(`transferTokenTo failed for ${sendRet.err}`);
-            resolve({
-                ret: ErrorCode.RESULT_FAILED,
-                resp: `transferTokenTo failed for ${sendRet.err}`
-            });
-            return;
-        }
-        console.log(`Send transferTokenTo tx: ${tx.hash}`);
-
-        // 需要查找receipt若干次，直到收到回执若干次，才确认发送成功, 否则是失败
-        let receiptResult = await checkReceipt(ctx, tx.hash);
-
-        resolve(receiptResult); // {resp, ret}
+        let rtn = await sendAndCheckTx(ctx, tx);
+        resolve(rtn);
     });
 }
 export function prnTransferTokenTo(ctx: IfContext, obj: IfResult) {

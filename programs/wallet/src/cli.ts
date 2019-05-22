@@ -410,16 +410,14 @@ const CMDS: ifCMD[] = [
         content: 'mortgage some balance, so you can vote for candidates',
         example: '\n' +
             '\targ1  -  amount\n'
-            + '\targ2 -  fee\n'
-            + '\n\nExample:\n$ mortgage 1000 0.001'
+            + '\n\nExample:\n$ mortgage 1000'
     },
     {
         name: 'unmortgage',
         content: 'unmortgage back to balance',
         example: '\n' +
             '\targ1  -  amount\n'
-            + '\targ2 -  fee\n'
-            + '\n\nExample:\n$ unmortgage 1000 0.001'
+            + '\n\nExample:\n$ unmortgage 1000'
     },
     {
         name: 'vote',
