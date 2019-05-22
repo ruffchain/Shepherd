@@ -8,8 +8,6 @@ const FUNC_NAME = 'view';
 export async function getCandidates(ctx: IfContext, args: string[]): Promise<IfResult> {
     return new Promise<IfResult>(async (resolve) => {
 
-        // check args
-
         let params =
         {
             method: 'getCandidates',
