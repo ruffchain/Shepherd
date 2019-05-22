@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt, checkFee } from './common';
+import { IfResult, IfContext, checkReceipt, checkFee, MAX_VOTE_CANDIDATES } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
@@ -26,15 +26,30 @@ export async function vote(ctx: IfContext, args: string[]): Promise<IfResult> {
             });
             return;
         }
-        let candidates = JSON.parse(args[0]);
+        let candidates;
+        try {
+            candidates = JSON.parse(args[0]);
+        } catch (e) {
+            console.log();
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong candidates"
+            });
+        }
+
+        if (candidates.length > MAX_VOTE_CANDIDATES) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong candidates num"
+            });
+        }
+
         let fee = args[1];
 
         let tx = new ValueTransaction();
-        tx.method = 'vote';
+        tx.method = FUNC_NAME;
         tx.fee = new BigNumber(fee);
-        // tx.value = new BigNumber(amount);
         tx.input = candidates;
-
 
         let { err, nonce } = await ctx.client.getNonce({ address: ctx.sysinfo.address });
 

@@ -1,45 +1,34 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt, checkAmount, checkFee } from './common';
+import { IfResult, IfContext, checkReceipt, checkFee, checkAmount } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
-const FUNC_NAME = 'unmortgage';
+const FUNC_NAME = 'unregister';
 
-// tokenid: string, preBalances: { address: string, amount: string }[], cost: string, fee: string
-
-export async function unmortgage(ctx: IfContext, args: string[]): Promise<IfResult> {
+export async function unregister(ctx: IfContext, args: string[]): Promise<IfResult> {
     return new Promise<IfResult>(async (resolve) => {
 
         // check args
-        if (args.length !== 2) {
+        if (args.length < 1) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong args"
             });
             return;
         }
-        if (!checkAmount(args[0])) {
-            resolve({
-                ret: ErrorCode.RESULT_WRONG_ARG,
-                resp: "Wrong amount"
-            });
-            return;
-        }
-        if (!checkFee(args[1])) {
-            resolve({
-                ret: ErrorCode.RESULT_WRONG_ARG,
-                resp: "Wrong fee"
-            });
-            return;
-        }
-        let amount = args[0];
-        let fee = args[1];
+        // 
 
+        if (args[0] !== ctx.sysinfo.address) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong input " + args[0]
+            });
+            return;
+        }
         let tx = new ValueTransaction();
         tx.method = FUNC_NAME;
-        tx.fee = new BigNumber(fee);
-        tx.input = amount;
+        tx.input = '';
 
         let { err, nonce } = await ctx.client.getNonce({ address: ctx.sysinfo.address });
 
@@ -70,12 +59,14 @@ export async function unmortgage(ctx: IfContext, args: string[]): Promise<IfResu
         }
         console.log(`Send ${tx.method} tx: ${tx.hash}`);
 
+
+
         // 需要查找receipt若干次，直到收到回执若干次，才确认发送成功, 否则是失败
         let receiptResult = await checkReceipt(ctx, tx.hash);
 
         resolve(receiptResult); // {resp, ret}
     });
 }
-export function prnUnmortgage(ctx: IfContext, obj: IfResult) {
+export function prnUnregister(ctx: IfContext, obj: IfResult) {
     console.log(obj.resp);
 }

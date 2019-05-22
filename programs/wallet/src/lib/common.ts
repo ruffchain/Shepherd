@@ -1,6 +1,7 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from '../core/error_code';
 import { isValidAddress } from '../core/address';
+import { ValueTransaction } from '../core';
 const BigNumber = require('bignumber.js');
 
 const MAX_CONFIRM_TIMES = 3;
@@ -14,9 +15,11 @@ export const MAX_NONLIQUIDITY = 1000000000000000000;
 export const MAX_TOKEN_AMOUNT = 1000000000000000000;
 export const MAX_COST = 1000000000000;
 export const MAX_DEPOSIT_SYS = 3000000;
+export const MAX_VOTE_CANDIDATES = 7;
 
 const NUM_DIGITS = 12;
 const MAX_NORMAL_TOKEN_PRECISION = 9;
+
 
 /**
  *
@@ -211,3 +214,37 @@ export function checkPrecision(arg: string) {
     let num = parseInt(arg);
     return num >= 0 && num <= MAX_NORMAL_TOKEN_PRECISION;
 }
+////////////////////////////////////////////////
+// functions in common
+export async function sendAndCheckTx(ctx: IfContext, tx: ValueTransaction): Promise<IfResult> {
+    let { err, nonce } = await ctx.client.getNonce({ address: ctx.sysinfo.address });
+
+    if (err) {
+        console.error(`${tx.method} getNonce failed for ${err}`);
+        return {
+            ret: ErrorCode.RESULT_FAILED,
+            resp: `${tx.method} getNonce failed for ${err}`
+        };
+    }
+
+    tx.nonce = nonce! + 1;
+    if (ctx.sysinfo.verbose) {
+        console.log('nonce is:', tx.nonce);
+    }
+
+    tx.sign(ctx.sysinfo.secret);
+    let sendRet = await ctx.client.sendTransaction({ tx });
+    if (sendRet.err) {
+        console.error(`${tx.method} failed for ${sendRet.err}`);
+        return {
+            ret: ErrorCode.RESULT_FAILED,
+            resp: `${tx.method} failed for ${sendRet.err}`
+        };
+    }
+
+    console.log(`Send ${tx.method} tx: ${tx.hash}`);
+    // 需要查找receipt若干次，直到收到回执若干次，才确认发送成功, 否则是失败
+    let receiptResult = await checkReceipt(ctx, tx.hash);
+
+    return receiptResult; // {resp, ret}
+} 
