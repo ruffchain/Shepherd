@@ -12,20 +12,14 @@ export async function vote(ctx: IfContext, args: string[]): Promise<IfResult> {
     return new Promise<IfResult>(async (resolve) => {
 
         // check args
-        if (args.length !== 2) {
+        if (args.length !== 1) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong args"
             });
             return;
         }
-        if (!checkFee(args[1])) {
-            resolve({
-                ret: ErrorCode.RESULT_WRONG_ARG,
-                resp: "Wrong fee"
-            });
-            return;
-        }
+
         let candidates;
         try {
             candidates = JSON.parse(args[0]);
@@ -44,11 +38,9 @@ export async function vote(ctx: IfContext, args: string[]): Promise<IfResult> {
             });
         }
 
-        let fee = args[1];
-
         let tx = new ValueTransaction();
         tx.method = FUNC_NAME;
-        tx.fee = new BigNumber(fee);
+        tx.fee = new BigNumber(0);
         tx.input = candidates;
 
         let rtn = await sendAndCheckTx(ctx, tx);

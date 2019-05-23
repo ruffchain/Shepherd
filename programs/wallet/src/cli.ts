@@ -58,6 +58,7 @@ import { getBancorTokenBalances, prnGetBancorTokenBalances } from './lib/getBanc
 import { getBancorTokenParams, prnGetBancorTokenParams } from './lib/getBancorTokenParams';
 import { getBlocks, prnGetBlocks } from './lib/getblocks';
 import { unregister, prnUnregister } from './lib/unregister';
+import { getTicket, prnGetTicket } from './lib/getticket';
 
 const VERSION = pjson.version;
 const PROMPT = '> ';
@@ -432,7 +433,6 @@ const CMDS: ifCMD[] = [
         content: 'vote to candidates',
         example: '\n' +
             '\targ1  -  [candidate1, candidate2]\n'
-            + '\targ2 -  fee\n'
             + '\n\nExample:\n$ vote ["13dhmGDEuaoV7QvwbTm4gC6fx7CCRM7VkY","xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"] 0.001'
     },
     {
@@ -440,6 +440,13 @@ const CMDS: ifCMD[] = [
         content: 'getVote',
         example: '\n'
             + '\n\nExample:\n$ getVote'
+    },
+    {
+        name: 'getTicket',
+        content: 'getTicket',
+        example: '\n'
+            + '\targ1 - [address]\n'
+            + '\n\nExample:\n$ getTicket xxxxxxxxxxxxxx'
     },
     {
         name: 'getUserTable',
@@ -828,6 +835,10 @@ let handleCmd = async (cmd: string) => {
         case 'getvote':
             result = await getVote(ctx, args);
             handleResult(prnGetVote, ctx, result);
+            break;
+        case 'getticket':
+            result = await getTicket(ctx, args);
+            handleResult(prnGetTicket, ctx, result);
             break;
         case 'getusertable':
             result = await getUserTable(ctx, args);

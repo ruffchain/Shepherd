@@ -10,24 +10,22 @@ export async function getTicket(ctx: IfContext, args: string[]): Promise<IfResul
     let params: any;
 
     if (args.length < 1) {
-      params =
-        {
-          method: 'getTicket',
-          params: { address: ctx.sysinfo.address }
-        }
+      params = {
+        method: 'getTicket',
+        params: ctx.sysinfo.address
+      };
     } else {
       if (!checkAddress(args[0])) {
         resolve({
           ret: ErrorCode.RESULT_WRONG_ARG,
-          resp: "Wrong Address"
+          resp: "Wrong input address"
         });
         return;
       }
-
       params =
         {
           method: 'getTicket',
-          params: { address: args[0] }
+          params: args[0]
         }
     }
     // check args
@@ -54,7 +52,7 @@ export function prnGetTicket(ctx: IfContext, obj: IfResult) {
   let objJson: any;
   try {
     objJson = JSON.parse(obj.resp);
-    console.log(colors.green('On stake:'));
+    console.log(colors.green('On ticket:'));
 
     // if (objJson.value) {
     //     console.log(`${sysTokenSym}:`, objJson.value.replace(/n/g, ''))
