@@ -57,6 +57,7 @@ import { getTokenBalances, prnGetTokenBalances } from './lib/getTokenBalances';
 import { getBancorTokenBalances, prnGetBancorTokenBalances } from './lib/getBancorTokenBalances';
 import { getBancorTokenParams, prnGetBancorTokenParams } from './lib/getBancorTokenParams';
 import { getBlocks, prnGetBlocks } from './lib/getblocks';
+import { unregister, prnUnregister } from './lib/unregister';
 
 const VERSION = pjson.version;
 const PROMPT = '> ';
@@ -400,10 +401,17 @@ const CMDS: ifCMD[] = [
     },
     {
         name: 'register',
-        content: 'register to be a candidate with caller\'s address',
+        content: 'register to be a candidate with caller\'s address, you should have at least 300000 SYS',
         example: '\n' +
-            '\targ1  -  fee\n'
-            + '\n\nExample:\n$ register 0.001'
+            '\targ1  -  amount\n'
+            + '\n\nExample:\n$ register 3000000'
+    },
+    {
+        name: 'unegister',
+        content: 'unregister, not to be a candidate any more, with caller\'s own address. Can not unregister other address',
+        example: '\n' +
+            '\targ1  -  address\n'
+            + '\n\nExample:\n$ register 154bdF5WH3FXGo4v24F4dYwXnR8br8rc2r'
     },
     {
         name: 'mortgage',
@@ -801,6 +809,9 @@ let handleCmd = async (cmd: string) => {
         case 'register':
             result = await register(ctx, args);
             handleResult(prnRegister, ctx, result);
+            break;
+        case 'unregister':
+            handleResult(prnUnregister, ctx, await unregister(ctx, args));
             break;
         case 'mortgage':
             result = await mortgage(ctx, args);

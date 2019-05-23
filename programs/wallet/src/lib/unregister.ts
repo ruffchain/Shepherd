@@ -28,7 +28,7 @@ export async function unregister(ctx: IfContext, args: string[]): Promise<IfResu
         }
         let tx = new ValueTransaction();
         tx.method = FUNC_NAME;
-        tx.input = '';
+        tx.input = args[0];
 
         let rtn = await sendAndCheckTx(ctx, tx);
         resolve(rtn);

@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt, checkFee, checkAmount, sendAndCheckTx } from './common';
+import { IfResult, IfContext, checkReceipt, checkFee, checkAmount, sendAndCheckTx, checkDepositAmount, strAmountPrecision } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
@@ -21,14 +21,14 @@ export async function register(ctx: IfContext, args: string[]): Promise<IfResult
         }
         // 
 
-        if (!checkAmount(args[0])) {
+        if (!checkAmount(args[0])|| !checkDepositAmount(args[0])) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong amount"
             });
             return;
         }
-        let amount = args[0];
+        let amount = strAmountPrecision(args[0], 0);;
         let tx = new ValueTransaction();
         tx.method = FUNC_NAME;
         tx.value = new BigNumber(amount);

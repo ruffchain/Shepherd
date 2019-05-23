@@ -38,6 +38,14 @@ export function checkAmount(amount: string): boolean {
     let num = JSON.parse(amount);
     return num > 0;
 }
+export function checkDepositAmount(amount: string): boolean {
+    let bn = new BigNumber(amount);
+    if (bn.lt(new BigNumber(MAX_DEPOSIT_SYS))) {
+        return false;
+    } else {
+        return true;
+    }
+}
 export function checkTokenid(token: string): boolean {
     return token.length >= TOKEN_MIN_LENGTH && token.length <= TOKEN_MAX_LENGTH;
 }
