@@ -414,18 +414,18 @@ const CMDS: ifCMD[] = [
             + '\n\nExample:\n$ register 154bdF5WH3FXGo4v24F4dYwXnR8br8rc2r'
     },
     {
-        name: 'mortgage',
-        content: 'mortgage some balance, so you can vote for candidates',
+        name: 'freeze',
+        content: 'freeze some balance, so you can vote for candidates',
         example: '\n' +
             '\targ1  -  amount\n'
-            + '\n\nExample:\n$ mortgage 1000'
+            + '\n\nExample:\n$ freeze 1000'
     },
     {
-        name: 'unmortgage',
-        content: 'unmortgage back to balance',
+        name: 'unfreeze',
+        content: 'unfreeze back to balance',
         example: '\n' +
             '\targ1  -  amount\n'
-            + '\n\nExample:\n$ unmortgage 1000'
+            + '\n\nExample:\n$ unfreeze 1000'
     },
     {
         name: 'vote',
@@ -813,11 +813,11 @@ let handleCmd = async (cmd: string) => {
         case 'unregister':
             handleResult(prnUnregister, ctx, await unregister(ctx, args));
             break;
-        case 'mortgage':
+        case 'freeze':
             result = await mortgage(ctx, args);
             handleResult(prnMortgage, ctx, result);
             break;
-        case 'unmortgage':
+        case 'unfreeze':
             result = await unmortgage(ctx, args);
             handleResult(prnUnmortgage, ctx, result);
             break;
