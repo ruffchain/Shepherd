@@ -34,12 +34,14 @@ export function prnGetCandidates(ctx: IfContext, obj: IfResult) {
         return;
     }
     let objJson: any;
+
     try {
         objJson = JSON.parse(obj.resp);
         if (objJson.err === 0) {
-            objJson.value.forEach((element: string) => {
-                console.log(element.slice(1));
-            });
+            // objJson.value.forEach((element: string) => {
+            //     console.log(element.slice(1));
+            // });
+            console.log(JSON.stringify(objJson));
         }
     } catch (e) {
         console.log(e);

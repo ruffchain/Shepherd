@@ -22,6 +22,10 @@ const MAX_NORMAL_TOKEN_PRECISION = 9;
 
 
 export const sysTokenSym = 'SYS';
+
+
+const REGIP = /^[1-9]{1}\d{0,2}\.[1-9]{1}\d{0,2}\.[1-9]{1}\d{0,2}\.[1-9]{1}\d{0,2}(:\d{5,9})?$/g;
+
 /**
  *
  * @param amount: amount of token
@@ -96,6 +100,35 @@ export function checkAddressArray(addrStr: string): boolean {
 
     return addr.length > 0;
 }
+export function checkRegisterName(name: string): boolean {
+    if (name.length > 20) {
+        return false;
+    } else {
+        return true;
+    }
+}
+export function checkRegisterIp(name: string): boolean {
+    if (name.match(REGIP) === null) {
+        return false;
+    } else {
+        return true;
+    }
+}
+export function checkRegisterUrl(name: string): boolean {
+    if (name.length > 50) {
+        return false;
+    } else {
+        return true;
+    }
+}
+export function checkRegisterAddress(name: string): boolean {
+    if (name.length > 50) {
+        return false;
+    } else {
+        return true;
+    }
+}
+//////////////////////////////////////////////////////////////
 export interface IfResult { resp: string | null, ret: number };
 
 export interface IfSysinfo {

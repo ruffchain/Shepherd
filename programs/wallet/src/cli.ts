@@ -404,8 +404,12 @@ const CMDS: ifCMD[] = [
         name: 'register',
         content: 'register to be a candidate with caller\'s address, you should have at least 300000 SYS',
         example: '\n' +
-            '\targ1  -  amount\n'
-            + '\n\nExample:\n$ register 3000000'
+            '\targ1  -  amount\n' +
+            '\targ2  -  name\n' +
+            '\targ3  -  ip\n' +
+            '\targ4  -  url\n' +
+            '\targ5  -  location\n'
+            + '\n\nExample:\n$ register 3000000 node-test 10.23.23.103 http://bigboss.com Shanghai'
     },
     {
         name: 'unegister',
@@ -825,6 +829,14 @@ let handleCmd = async (cmd: string) => {
             handleResult(prnMortgage, ctx, result);
             break;
         case 'unfreeze':
+            result = await unmortgage(ctx, args);
+            handleResult(prnUnmortgage, ctx, result);
+            break;
+        case 'mortgage':
+            result = await mortgage(ctx, args);
+            handleResult(prnMortgage, ctx, result);
+            break;
+        case 'unmortgage':
             result = await unmortgage(ctx, args);
             handleResult(prnUnmortgage, ctx, result);
             break;
