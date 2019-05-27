@@ -82,7 +82,11 @@ export async function createBancorToken(ctx: IfContext, args: string[]): Promise
 
         let nonliquidity: string = args[3];
 
-        let amount = preBalances.map((x: { address: string, amount: string }) => x.amount)
+        let amount = preBalances.map((x: { address: string, amount: string, lock_amount: string, time_expiration: string }) => {
+            let amount1 = parseInt(x.amount);
+            let amountlock1 = parseInt(x.lock_amount);
+            return (amount1 + amountlock1) + '';
+        })
             .reduce((accumulator: BigNumber, currentValue: string) => {
                 return accumulator.plus(currentValue);
             }, new BigNumber(nonliquidity));

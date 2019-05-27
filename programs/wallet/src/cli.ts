@@ -264,7 +264,7 @@ const CMDS: ifCMD[] = [
             + '\targ2  -  preBalance\n'
             + '\targ3  -  precision\n'
             + '\targ4  -  fee\n'
-            + '\n\ncreatetoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 9 0.1'
+            + '\n\ncreatetoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 9 0.001'
     },
     {
         name: 'setUserCode',
@@ -299,7 +299,7 @@ const CMDS: ifCMD[] = [
             + '\targ4  -  nonliquidity\n'
             + '\targ5  -  cost\n'
             + '\targ6  -  fee\n'
-            + '\n\ncreatebancortoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 0.5 10000000000 100 0.1'
+            + '\n\ncreatebancortoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000", "lock_amount":"1000","time_expiration":"240"},{"address":"16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg","amount":"10000", "lock_amount":"","time_expiration":""}]  0.5 0 100 0.001'
     },
     {
         name: 'transferBancorTokenTo',
