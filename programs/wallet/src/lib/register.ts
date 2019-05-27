@@ -12,7 +12,7 @@ export async function register(ctx: IfContext, args: string[]): Promise<IfResult
     return new Promise<IfResult>(async (resolve) => {
 
         // check args
-        if (args.length < 5) {
+        if (args.length < 6) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong args"
@@ -59,11 +59,20 @@ export async function register(ctx: IfContext, args: string[]): Promise<IfResult
             return;
         }
 
+        if (!checkFee(args[5])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong fee"
+            });
+            return;
+        }
+
         let amount = strAmountPrecision(args[0], 0);
 
         let tx = new ValueTransaction();
         tx.method = FUNC_NAME;
         tx.value = new BigNumber(amount);
+        tx.fee = new BigNumber(args[5]);
         tx.input = {
             name: args[1],
             ip: args[2],

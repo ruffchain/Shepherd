@@ -10,14 +10,14 @@ export async function unregister(ctx: IfContext, args: string[]): Promise<IfResu
     return new Promise<IfResult>(async (resolve) => {
 
         // check args
-        if (args.length < 1) {
+        if (args.length < 2) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong args"
             });
             return;
         }
-        // 
+
 
         if (args[0] !== ctx.sysinfo.address) {
             resolve({
@@ -26,9 +26,19 @@ export async function unregister(ctx: IfContext, args: string[]): Promise<IfResu
             });
             return;
         }
+        // 
+        if (!checkFee(args[1])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong fee"
+            });
+            return;
+        }
+
         let tx = new ValueTransaction();
         tx.method = FUNC_NAME;
         tx.input = args[0];
+        tx.fee = new BigNumber(args[1]);
 
         let rtn = await sendAndCheckTx(ctx, tx);
         resolve(rtn);

@@ -408,14 +408,16 @@ const CMDS: ifCMD[] = [
             '\targ2  -  name\n' +
             '\targ3  -  ip\n' +
             '\targ4  -  url\n' +
-            '\targ5  -  location\n'
-            + '\n\nExample:\n$ register 3000000 node-test 10.23.23.103 http://bigboss.com Shanghai'
+            '\targ5  -  location\n' +
+            '\targ6  -  fee\n'
+            + '\n\nExample:\n$ register 3000000 node-test 10.23.23.103 http://bigboss.com Shanghai 0.001'
     },
     {
         name: 'unegister',
         content: 'unregister, not to be a candidate any more, with caller\'s own address. Can not unregister other address',
         example: '\n' +
-            '\targ1  -  address\n'
+            '\targ1  -  address\n' +
+            '\targ2  -  fee\n'
             + '\n\nExample:\n$ register 154bdF5WH3FXGo4v24F4dYwXnR8br8rc2r'
     },
     {
