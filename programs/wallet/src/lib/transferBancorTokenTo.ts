@@ -1,12 +1,12 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt, checkTokenid, checkAddress, checkAmount, checkFee, sendAndCheckTx } from './common';
+import { IfResult, IfContext, checkReceipt, checkTokenid, checkAddress, checkAmount, checkFee } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
 // tokenid: string, preBalances: { address: string, amount: string }[], cost: string, fee: string
 
-export async function transferLockBancorTokenTo(ctx: IfContext, args: string[]): Promise<IfResult> {
+export async function transferBancorTokenTo(ctx: IfContext, args: string[]): Promise<IfResult> {
     return new Promise<IfResult>(async (resolve) => {
 
         // check args
@@ -52,7 +52,7 @@ export async function transferLockBancorTokenTo(ctx: IfContext, args: string[]):
         let fee = args[3];
 
         let tx = new ValueTransaction();
-        tx.method = 'transferLockBancorTokenTo';
+        tx.method = 'transferBancorTokenTo';
         tx.fee = new BigNumber(fee);
         tx.input = {
             tokenid: tokenid.toUpperCase(),
@@ -60,10 +60,41 @@ export async function transferLockBancorTokenTo(ctx: IfContext, args: string[]):
             amount: amount
         };
 
-        let rtn = await sendAndCheckTx(ctx, tx);
-        resolve(rtn);
+        let { err, nonce } = await ctx.client.getNonce({ address: ctx.sysinfo.address });
+
+        if (err) {
+            console.error(`transferBancorTokenTo getNonce failed for ${err}`);
+            resolve({
+                ret: ErrorCode.RESULT_FAILED,
+                resp: `transferBancorTokenTo getNonce failed for ${err}`
+            });
+            return;
+        }
+
+        tx.nonce = nonce! + 1;
+        if (ctx.sysinfo.verbose) {
+            console.log('nonce is:', tx.nonce);
+        }
+
+        tx.sign(ctx.sysinfo.secret);
+
+        let sendRet = await ctx.client.sendTransaction({ tx });
+        if (sendRet.err) {
+            console.error(`transferBancorTokenTo failed for ${sendRet.err}`);
+            resolve({
+                ret: ErrorCode.RESULT_FAILED,
+                resp: `transferBancorTokenTo failed for ${sendRet.err}`
+            });
+            return;
+        }
+        console.log(`Send transferBancorTokenTo tx: ${tx.hash}`);
+
+        // 需要查找receipt若干次，直到收到回执若干次，才确认发送成功, 否则是失败
+        let receiptResult = await checkReceipt(ctx, tx.hash);
+
+        resolve(receiptResult); // {resp, ret}
     });
 }
-export function prnTransferLockBancorTokenTo(ctx: IfContext, obj: IfResult) {
+export function prnTransferBancorTokenTo(ctx: IfContext, obj: IfResult) {
     console.log(obj.resp);
 }

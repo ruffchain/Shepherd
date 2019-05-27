@@ -2,9 +2,9 @@ import { ErrorCode } from "../core";
 import { IfResult, IfContext, checkTokenid, checkAddress, formatNumber } from './common';
 
 const METHOD_NAME = 'view';
-const FUNC_NAME = 'getLockBancorTokenBalance';
+const FUNC_NAME = 'getBancorTokenBalance';
 
-export async function getLockBancorTokenBalance(ctx: IfContext, args: string[]): Promise<IfResult> {
+export async function getBancorTokenBalance(ctx: IfContext, args: string[]): Promise<IfResult> {
     return new Promise<IfResult>(async (resolve) => {
 
         // check args
@@ -33,7 +33,7 @@ export async function getLockBancorTokenBalance(ctx: IfContext, args: string[]):
 
         let params =
         {
-            method: 'getLockBancorTokenBalance',
+            method: 'getBancorTokenBalance',
             params: {
                 tokenid: args[0].toUpperCase(),
                 address: args[1]
@@ -48,7 +48,7 @@ export async function getLockBancorTokenBalance(ctx: IfContext, args: string[]):
         resolve(cr);
     });
 }
-export function prnGetLockBancorTokenBalance(ctx: IfContext, obj: IfResult) {
+export function prnGetBancorTokenBalance(ctx: IfContext, obj: IfResult) {
     if (ctx.sysinfo.verbose) {
         console.log(obj);
     }

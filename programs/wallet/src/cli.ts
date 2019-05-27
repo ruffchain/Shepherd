@@ -34,7 +34,7 @@ import { unmortgage, prnUnmortgage } from './lib/unmortgage';
 import { vote, prnVote } from './lib/vote';
 import { getVote, prnGetVote } from './lib/getvote';
 import { getUserTable, prnGetUserTable } from './lib/getusertable';
-import { createBancorToken, prnCreateBancorToken } from './lib/createLockBancorToken';
+import { createLockBancorToken, prnCreateLockBancorToken } from './lib/createLockBancorToken';
 
 const { randomBytes } = require('crypto');
 const secp256k1 = require('secp256k1');
@@ -43,8 +43,8 @@ const fs = require('fs');
 import { parseTesterJson } from './lib/parsetesterjson';
 var pjson = require('../package.json');
 import { IfContext } from './lib/common';
-import { transferBancorTokenTo, prnTransferBancorTokenTo } from './lib/transferLockBancorTokenTo';
-import { getBancorTokenBalance, prnGetBancorTokenBalance } from './lib/getLockBancorTokenBalance';
+import { prnTransferLockBancorTokenTo, transferLockBancorTokenTo } from './lib/transferLockBancorTokenTo';
+import { prnGetLockBancorTokenBalance, getLockBancorTokenBalance } from './lib/getLockBancorTokenBalance';
 import { buyBancorToken, prnBuyBancorToken } from './lib/buyBancorToken';
 import { sellBancorToken, prnSellBancorToken } from './lib/sellBancorToken';
 import { getBancorTokenFactor, prnGetBancorTokenFactor } from './lib/getBancorTokenFactor';
@@ -59,6 +59,9 @@ import { getBancorTokenParams, prnGetBancorTokenParams } from './lib/getBancorTo
 import { getBlocks, prnGetBlocks } from './lib/getblocks';
 import { unregister, prnUnregister } from './lib/unregister';
 import { getTicket, prnGetTicket } from './lib/getticket';
+import { prnGetBancorTokenBalance, getBancorTokenBalance } from './lib/getBancorTokenBalance';
+import { prnTransferBancorTokenTo, transferBancorTokenTo } from './lib/transferBancorTokenTo';
+import { createBancorToken, prnCreateBancorToken } from './lib/createBancorToken';
 
 const VERSION = pjson.version;
 const PROMPT = '> ';
@@ -288,6 +291,37 @@ const CMDS: ifCMD[] = [
             + '\targs3 - fee\n'
             + '\targs4 - action to run\n'
             + '\targs5 - params\n'
+    },
+    {
+        name: 'createBancorToken',
+        content: 'create a BancorToken',
+        example:
+            '\n\targ1  -  token-name\n'
+            + '\targ2  -  preBalance\n'
+            + '\targ3  -  factor (0,1)\n'
+            + '\targ4  -  nonliquidity\n'
+            + '\targ5  -  cost\n'
+            + '\targ6  -  fee\n'
+            + '\n\ncreatebancortoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 0.5 10000000000 100 0.1'
+    },
+    {
+        name: 'transferBancorTokenTo',
+        content: 'transfer BancorToken to address',
+        example:
+            '\n\targ1  -  token-name\n'
+            + '\targ2  -  address\n'
+            + '\targ3  -  amount\n'
+            + '\targ4  -  fee\n'
+            + '\n\ntransferBancorTokenTo token2 1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79 1000 0.1'
+    },
+    {
+        name: 'getBancorTokenBalance',
+        content: 'get BancorToken balance under address',
+        example: '\ngetBancorTokenbalance\n'
+            + '\targ1  -  tokenid:string\n'
+            + '\targ2  -  address:string\n'
+            + 'Example:\n'
+            + '\t$ getBancorTokenBalance tokenid 1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J'
     },
     {
         name: 'createLockBancorToken',
@@ -774,13 +808,25 @@ let handleCmd = async (cmd: string) => {
             result = await createBancorToken(ctx, args);
             handleResult(prnCreateBancorToken, ctx, result);
             break;
+        case 'createlockbancortoken':
+            result = await createLockBancorToken(ctx, args);
+            handleResult(prnCreateLockBancorToken, ctx, result);
+            break;
         case 'transferbancortokento':
             result = await transferBancorTokenTo(ctx, args);
             handleResult(prnTransferBancorTokenTo, ctx, result);
             break;
+        case 'transferlockbancortokento':
+            result = await transferLockBancorTokenTo(ctx, args);
+            handleResult(prnTransferLockBancorTokenTo, ctx, result);
+            break;
         case 'getbancortokenbalance':
             result = await getBancorTokenBalance(ctx, args);
             handleResult(prnGetBancorTokenBalance, ctx, result);
+            break;
+        case 'getlockbancortokenbalance':
+            result = await getLockBancorTokenBalance(ctx, args);
+            handleResult(prnGetLockBancorTokenBalance, ctx, result);
             break;
         case 'getbancortokenbalances':
             result = await getBancorTokenBalances(ctx, args);
