@@ -40,7 +40,7 @@ export function checkAmount(amount: string): boolean {
         return false;
     }
     let num = JSON.parse(amount);
-    return num > 0;
+    return num >= 0;
 }
 export function checkDepositAmount(amount: string): boolean {
     let bn = new BigNumber(amount);
@@ -127,6 +127,30 @@ export function checkRegisterAddress(name: string): boolean {
     } else {
         return true;
     }
+}
+
+export function checkBancorTokenPrebalance(prebalance: any): boolean {
+    if (prebalance.length === undefined
+        || prebalance.length === 0) {
+        return false;
+    }
+    for (let p of prebalance) {
+        if (p.amount === undefined
+            || !checkAmount(p.amount)
+            || p.address === undefined
+            || !checkAddress(p.address)
+        ) {
+            return false;
+        }
+        if ((p.lock_amount !== undefined
+            && !checkAmount(p.lock_amount))
+            || (p.lock_expiration !== undefined
+                && !checkAmount(p.lock_expiration))) {
+            return false;
+        }
+    }
+
+    return true;
 }
 //////////////////////////////////////////////////////////////
 export interface IfResult { resp: string | null, ret: number };
@@ -217,7 +241,7 @@ export function checkTokenNonliquidity(nonliquidity: string): boolean {
     if (bn.isNaN()) {
         return false;
     }
-    return bn.isLessThan(MAX_NONLIQUIDITY) && bn.isGreaterThan(0);
+    return bn.isLessThan(MAX_NONLIQUIDITY) && (bn.isGreaterThan(0) || bn.eq(0));
 }
 
 export function checkTokenAmount(amount: string): boolean {

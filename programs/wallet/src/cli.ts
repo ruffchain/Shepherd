@@ -34,7 +34,7 @@ import { unmortgage, prnUnmortgage } from './lib/unmortgage';
 import { vote, prnVote } from './lib/vote';
 import { getVote, prnGetVote } from './lib/getvote';
 import { getUserTable, prnGetUserTable } from './lib/getusertable';
-import { createBancorToken, prnCreateBancorToken } from './lib/createBancorToken';
+import { createBancorToken, prnCreateBancorToken } from './lib/createLockBancorToken';
 
 const { randomBytes } = require('crypto');
 const secp256k1 = require('secp256k1');
@@ -43,8 +43,8 @@ const fs = require('fs');
 import { parseTesterJson } from './lib/parsetesterjson';
 var pjson = require('../package.json');
 import { IfContext } from './lib/common';
-import { transferBancorTokenTo, prnTransferBancorTokenTo } from './lib/transferBancorTokenTo';
-import { getBancorTokenBalance, prnGetBancorTokenBalance } from './lib/getBancorTokenBalance';
+import { transferBancorTokenTo, prnTransferBancorTokenTo } from './lib/transferLockBancorTokenTo';
+import { getBancorTokenBalance, prnGetBancorTokenBalance } from './lib/getLockBancorTokenBalance';
 import { buyBancorToken, prnBuyBancorToken } from './lib/buyBancorToken';
 import { sellBancorToken, prnSellBancorToken } from './lib/sellBancorToken';
 import { getBancorTokenFactor, prnGetBancorTokenFactor } from './lib/getBancorTokenFactor';
@@ -290,8 +290,8 @@ const CMDS: ifCMD[] = [
             + '\targs5 - params\n'
     },
     {
-        name: 'createBancorToken',
-        content: 'create a BancorToken',
+        name: 'createLockBancorToken',
+        content: 'create a BancorToken; time_expiration minutes after which lock_amount will be freed',
         example:
             '\n\targ1  -  token-name\n'
             + '\targ2  -  preBalance\n'
@@ -299,26 +299,26 @@ const CMDS: ifCMD[] = [
             + '\targ4  -  nonliquidity\n'
             + '\targ5  -  cost\n'
             + '\targ6  -  fee\n'
-            + '\n\ncreatebancortoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000", "lock_amount":"1000","time_expiration":"240"},{"address":"16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg","amount":"10000", "lock_amount":"","time_expiration":""}]  0.5 0 100 0.001'
+            + '\n\ncreatelockbancortoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000", "lock_amount":"1000","time_expiration":"240"},{"address":"16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg","amount":"10000", "lock_amount":"","time_expiration":""}]  0.5 0 100 0.001'
     },
     {
-        name: 'transferBancorTokenTo',
+        name: 'transferLockBancorTokenTo',
         content: 'transfer BancorToken to address',
         example:
             '\n\targ1  -  token-name\n'
             + '\targ2  -  address\n'
             + '\targ3  -  amount\n'
             + '\targ4  -  fee\n'
-            + '\n\ntransferBancorTokenTo token2 1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79 1000 0.1'
+            + '\n\ntransferLockBancorTokenTo token2 1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79 1000 0.1'
     },
     {
-        name: 'getBancorTokenBalance',
+        name: 'getLockBancorTokenBalance',
         content: 'get BancorToken balance under address',
-        example: '\ngetBancorTokenbalance\n'
+        example: '\ngetLockBancorTokenbalance\n'
             + '\targ1  -  tokenid:string\n'
             + '\targ2  -  address:string\n'
             + 'Example:\n'
-            + '\t$ getBancorTokenBalance tokenid 1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J'
+            + '\t$ getLockBancorTokenBalance tokenid 1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J'
     },
     {
         name: 'getBancorTokenBalances',

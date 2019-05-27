@@ -1,5 +1,5 @@
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt, checkFee, checkTokenid, checkTokenFactor, checkTokenNonliquidity, checkCost, checkTokenAmount, sendAndCheckTx } from './common';
+import { IfResult, IfContext, checkReceipt, checkFee, checkTokenid, checkTokenFactor, checkTokenNonliquidity, checkCost, checkTokenAmount, sendAndCheckTx, checkBancorTokenPrebalance } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
@@ -20,15 +20,22 @@ export async function createBancorToken(ctx: IfContext, args: string[]): Promise
             });
             return;
         }
-
+        let objPrebalances;
         try {
-            let objPrebalances = JSON.parse(args[1]);
+            objPrebalances = JSON.parse(args[1]);
             console.log(objPrebalances);
         } catch (e) {
             console.log(e);
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong preBanlances"
+            });
+            return;
+        }
+        if (!checkBancorTokenPrebalance(objPrebalances)) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong preBanlances format"
             });
             return;
         }

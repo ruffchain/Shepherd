@@ -52,7 +52,7 @@ export async function transferBancorTokenTo(ctx: IfContext, args: string[]): Pro
         let fee = args[3];
 
         let tx = new ValueTransaction();
-        tx.method = 'transferBancorTokenTo';
+        tx.method = 'transferLockBancorTokenTo';
         tx.fee = new BigNumber(fee);
         tx.input = {
             tokenid: tokenid.toUpperCase(),

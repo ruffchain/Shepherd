@@ -18,7 +18,7 @@ import { getCandidates, prnGetCandidates } from '../lib/getCandidates';
 import { getMiners, prnGetMiners } from '../lib/getminers';
 import { getPeers, prnGetPeers } from '../lib/getpeers';
 import { getReceipt, prnGetReceipt } from '../lib/getreceipt';
-import { createBancorToken } from '../lib/createBancorToken';
+import { createBancorToken } from '../lib/createLockBancorToken';
 // import { getBancorTokenBalance, prnGetBancorTokenBalance } from '../lib/getBancorTokenBalance';
 //import { transferBancorTokenTo } from '../lib/transferBancorTokenTo';
 import { getBancorTokenSupply } from '../lib/getBancorTokenSupply';

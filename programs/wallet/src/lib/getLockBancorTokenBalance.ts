@@ -2,7 +2,7 @@ import { ErrorCode } from "../core";
 import { IfResult, IfContext, checkTokenid, checkAddress, formatNumber } from './common';
 
 const METHOD_NAME = 'view';
-const FUNC_NAME = 'getBancorTokenBalance';
+const FUNC_NAME = 'getLockBancorTokenBalance';
 
 export async function getBancorTokenBalance(ctx: IfContext, args: string[]): Promise<IfResult> {
     return new Promise<IfResult>(async (resolve) => {
