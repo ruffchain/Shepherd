@@ -44,7 +44,7 @@ export function checkFee(fee: string): boolean {
     }
 
     let num = JSON.parse(fee);
-    return num >= FEE_MIN && num <= FEE_MAX;
+    return num >= FEE_MIN;
 }
 
 export function checkFeeForRange(fee: string, min: number, max: number) {
