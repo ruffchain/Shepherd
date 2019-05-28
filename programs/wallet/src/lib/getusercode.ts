@@ -52,6 +52,11 @@ export function prnGetUserCode(ctx: IfContext, obj: IfResult) {
     let objJson: any;
     try {
         objJson = JSON.parse(obj.resp);
+
+        if (!objJson.value) {
+            console.log('No UserCode deployed');
+            return;
+        }
         const t = objJson.value[0];
         if (t !== 'b') {
             console.log('Wrong format');
