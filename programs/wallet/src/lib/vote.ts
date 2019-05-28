@@ -12,7 +12,7 @@ export async function vote(ctx: IfContext, args: string[]): Promise<IfResult> {
     return new Promise<IfResult>(async (resolve) => {
 
         // check args
-        if (args.length !== 1) {
+        if (args.length !== 2) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong args"
@@ -38,9 +38,18 @@ export async function vote(ctx: IfContext, args: string[]): Promise<IfResult> {
             });
         }
 
+        // check fee
+        if (!checkFee(args[1])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong fee value"
+            });
+            return;
+        }
+
         let tx = new ValueTransaction();
         tx.method = FUNC_NAME;
-        tx.fee = new BigNumber(0);
+        tx.fee = new BigNumber(args[1]);
         tx.input = candidates;
 
         let rtn = await sendAndCheckTx(ctx, tx);

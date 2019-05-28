@@ -11,7 +11,6 @@ import { getBalance } from '../lib/getbalance';
 
 import { config, ctx, switch2BigBoss, switch2Head } from './test_common';
 import { createToken } from '../lib/createtoken';
-import { AssertionError } from 'assert';
 import { getTokenBalance, prnGetTokenBalance } from '../lib/getTokenBalance';
 import { getBlock, prnGetBlock } from '../lib/getblock';
 import { getCandidates, prnGetCandidates } from '../lib/getCandidates';

@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt, checkTokenid, checkAddress, checkAmount, checkFee, sendAndCheckTx } from './common';
+import { IfResult, IfContext,  checkTokenid, checkAddress, checkAmount, checkFee, sendAndCheckTx } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 

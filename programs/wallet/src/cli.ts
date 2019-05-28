@@ -458,21 +458,40 @@ const CMDS: ifCMD[] = [
         name: 'freeze',
         content: 'freeze some balance, so you can vote for candidates',
         example: '\n' +
-            '\targ1  -  amount\n'
-            + '\n\nExample:\n$ freeze 1000'
+            '\targ1  -  amount\n' +
+            '\targ2  -  fee\n'
+            + '\n\nExample:\n$ freeze 1000 0.001'
+    },
+    {
+        name: 'mortgage',
+        content: 'mortgage some balance, so you can vote for candidates',
+        example: '\n' +
+            '\targ1  -  amount\n' +
+            '\targ2  -  fee\n'
+            + '\n\nExample:\n$ freeze 1000 0.001'
     },
     {
         name: 'unfreeze',
         content: 'unfreeze back to balance',
         example: '\n' +
-            '\targ1  -  amount\n'
-            + '\n\nExample:\n$ unfreeze 1000'
+            '\targ1  -  amount\n' +
+            '\targ2  -  fee\n'
+            + '\n\nExample:\n$ unfreeze 1000 0.001'
+    },
+    {
+        name: 'unmortgage',
+        content: 'unmortgage back to balance',
+        example: '\n' +
+            '\targ1  -  amount\n' +
+            '\targ2  -  fee\n'
+            + '\n\nExample:\n$ unmortgage 1000 0.001'
     },
     {
         name: 'vote',
         content: 'vote to candidates',
         example: '\n' +
-            '\targ1  -  [candidate1, candidate2]\n'
+            '\targ1  -  [candidate1, candidate2]\n' +
+            '\targ2  -  fee\n'
             + '\n\nExample:\n$ vote ["13dhmGDEuaoV7QvwbTm4gC6fx7CCRM7VkY","xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"] 0.001'
     },
     {

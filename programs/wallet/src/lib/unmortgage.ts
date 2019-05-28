@@ -12,7 +12,7 @@ export async function unmortgage(ctx: IfContext, args: string[]): Promise<IfResu
     return new Promise<IfResult>(async (resolve) => {
 
         // check args
-        if (args.length !== 1) {
+        if (args.length !== 2) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong args"
@@ -27,11 +27,20 @@ export async function unmortgage(ctx: IfContext, args: string[]): Promise<IfResu
             return;
         }
 
+        // check fee
+        if (!checkFee(args[1])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong fee value"
+            });
+            return;
+        }
+
         let amount = args[0];
 
         let tx = new ValueTransaction();
         tx.method = FUNC_NAME;
-        tx.fee = new BigNumber(0);
+        tx.fee = new BigNumber(args[1]);
         tx.input = amount;
 
         let rtn = await sendAndCheckTx(ctx, tx);

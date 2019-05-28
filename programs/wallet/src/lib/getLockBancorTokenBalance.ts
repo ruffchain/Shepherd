@@ -62,11 +62,12 @@ export function prnGetLockBancorTokenBalance(ctx: IfContext, obj: IfResult) {
     let objJson: any;
     try {
         objJson = JSON.parse(obj.resp);
-        if (objJson.err === 0) {
-            console.log('Balance: ', formatNumber(objJson.value));
-        } else {
-            console.log('Error:', objJson.err);
-        }
+        // if (objJson.err === 0) {
+        //     console.log('Balance: ', formatNumber(objJson.value));
+        // } else {
+        //     console.log('Error:', objJson.err);
+        // }
+        console.log(objJson);
 
     } catch (e) {
         console.log(e);
