@@ -62,6 +62,8 @@ import { getTicket, prnGetTicket } from './lib/getticket';
 import { prnGetBancorTokenBalance, getBancorTokenBalance } from './lib/getBancorTokenBalance';
 import { prnTransferBancorTokenTo, transferBancorTokenTo } from './lib/transferBancorTokenTo';
 import { createBancorToken, prnCreateBancorToken } from './lib/createBancorToken';
+import { buyLockBancorToken, prnBuyLockBancorToken } from './lib/buyLockBancorToken';
+import { sellLockBancorToken, prnSellLockBancorToken } from './lib/sellLockBancorToken';
 
 const VERSION = pjson.version;
 const PROMPT = '> ';
@@ -855,9 +857,17 @@ let handleCmd = async (cmd: string) => {
             result = await buyBancorToken(ctx, args);
             handleResult(prnBuyBancorToken, ctx, result);
             break;
+        case 'buylockbancortoken':
+            result = await buyLockBancorToken(ctx, args);
+            handleResult(prnBuyLockBancorToken, ctx, result);
+            break;
         case 'sellbancortoken':
             result = await sellBancorToken(ctx, args);
             handleResult(prnSellBancorToken, ctx, result);
+            break;
+        case 'selllockbancortoken':
+            result = await sellLockBancorToken(ctx, args);
+            handleResult(prnSellLockBancorToken, ctx, result);
             break;
         case 'getbancortokenfactor':
             result = await getBancorTokenFactor(ctx, args);
