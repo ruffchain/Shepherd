@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt, checkFeeForRange, checkTokenid } from './common';
+import { IfResult, IfContext, checkReceipt, checkFee, checkTokenid } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
@@ -19,10 +19,11 @@ export async function runUserMethod(ctx: IfContext, args: string[]): Promise<IfR
         const fee = args[2];
         const action = args[3];
         const params = args[4];
-        if (!checkFeeForRange(fee, 0.002, 0.005)) {
+
+        if (!checkFee(fee)) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
-                resp: "Wrong fee range [0.002 ~ 0.005]"
+                resp: "Wrong fee min 0.001"
             });
             return;
         }
