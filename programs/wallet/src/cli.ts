@@ -357,6 +357,26 @@ const CMDS: ifCMD[] = [
             + '\t$ getLockBancorTokenBalance tokenid 1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J'
     },
     {
+        name: 'buyLockBancorToken',
+        content: 'buy LockBancorToken',
+        example: '\nbuyBancorToken\n'
+            + '\targ1  -  tokenid\n'
+            + '\targ2  -  cost\n'
+            + '\targ3  -  fee\n'
+            + 'Example:\n'
+            + '\t$ buyLockBancorToken tokenid cost fee'
+    },
+    {
+        name: 'sellLockBancorToken',
+        content: 'sell LockBancorToken',
+        example: '\nsellBancorToken\n'
+            + '\targ1  -  tokenid\n'
+            + '\targ2  -  amount\n'
+            + '\targ3  -  fee\n'
+            + 'Example:\n'
+            + '\t$ sellLockBancorToken tokenid amount fee'
+    },
+    {
         name: 'getBancorTokenBalances',
         content: 'get BancorToken balances under address',
         example: '\ngetBancorTokenbalances\n'
