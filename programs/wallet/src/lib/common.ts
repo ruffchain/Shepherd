@@ -19,7 +19,7 @@ export const MAX_VOTE_CANDIDATES = 7;
 
 const NUM_DIGITS = 12;
 const MAX_NORMAL_TOKEN_PRECISION = 9;
-
+const MAX_QUERY_NUM = 21;
 
 export const sysTokenSym = 'SYS';
 
@@ -283,6 +283,32 @@ export function checkPrecision(arg: string) {
     }
     let num = parseInt(arg);
     return num >= 0 && num <= MAX_NORMAL_TOKEN_PRECISION;
+}
+
+export function checkLockBancorTokenMultiPreBalances(arg: string): boolean {
+    try {
+        let obj = JSON.parse(arg);
+
+        if (obj.length > MAX_QUERY_NUM || obj.length <= 0) {
+            return false;
+        }
+
+        for (let i = 0; i < obj.length; i++) {
+            if (!isValidAddress(obj[i].address)) {
+                return false;
+            }
+            if (!checkAmount) {
+                return false;
+            }
+        }
+
+    } catch (e) {
+        console.log("parse arg prebalances failed");
+        return false;
+    }
+
+
+    return true;
 }
 ////////////////////////////////////////////////
 // functions in common

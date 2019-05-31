@@ -65,6 +65,7 @@ import { createBancorToken, prnCreateBancorToken } from './lib/createBancorToken
 import { buyLockBancorToken, prnBuyLockBancorToken } from './lib/buyLockBancorToken';
 import { sellLockBancorToken, prnSellLockBancorToken } from './lib/sellLockBancorToken';
 import { getCandidateInfo, prnGetCandidateInfo } from './lib/getCandidateInfo';
+import { transferLockBancorTokenToMulti, prnTransferLockBancorTokenToMulti } from './lib/transferLockBancorTokenToMulti';
 
 const VERSION = pjson.version;
 const PROMPT = '> ';
@@ -342,7 +343,7 @@ const CMDS: ifCMD[] = [
             + '\targ4  -  nonliquidity\n'
             + '\targ5  -  cost\n'
             + '\targ6  -  fee\n'
-            + '\n\ncreatelockbancortoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000", "lock_amount":"1000","time_expiration":"240"},{"address":"16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg","amount":"10000", "lock_amount":"","time_expiration":""}]  0.5 0 100 0.001'
+            + '\n\ncreatelockbancortoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000", "lock_amount":"1000","time_expiration":"240"},{"address":"16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg","amount":"10000", "lock_amount":"0","time_expiration":"0"}]  0.5 0 100 0.001'
     },
     {
         name: 'transferLockBancorTokenTo',
@@ -353,6 +354,15 @@ const CMDS: ifCMD[] = [
             + '\targ3  -  amount\n'
             + '\targ4  -  fee\n'
             + '\n\ntransferLockBancorTokenTo token2 1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79 1000 0.1'
+    },
+    {
+        name: 'transferLockBancorTokenToMulti',
+        content: 'transfer BancorToken to multi address',
+        example:
+            '\n\targ1  -  token-name\n'
+            + '\targ2  -  preBalances | airdrop.json\n'
+            + '\targ3  -  fee\n'
+            + '\n\ntransferLockBancorTokenTo token2 [{"address":"16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg","amount":"10000"},{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"100"}] 0.1'
     },
     {
         name: 'getLockBancorTokenBalance',
@@ -828,7 +838,7 @@ let handleCmd = async (cmd: string) => {
             result = await getCandidates(ctx, args);
             handleResult(prnGetCandidates, ctx, result);
             break;
-        case 'getcandidateInfo':
+        case 'getcandidateinfo':
             result = await getCandidateInfo(ctx, args);
             handleResult(prnGetCandidateInfo, ctx, result);
             break;
@@ -871,6 +881,10 @@ let handleCmd = async (cmd: string) => {
         case 'transferlockbancortokento':
             result = await transferLockBancorTokenTo(ctx, args);
             handleResult(prnTransferLockBancorTokenTo, ctx, result);
+            break;
+        case 'transferlockbancortokentomulti':
+            result = await transferLockBancorTokenToMulti(ctx, args);
+            handleResult(prnTransferLockBancorTokenToMulti, ctx, result);
             break;
         case 'getbancortokenbalance':
             result = await getBancorTokenBalance(ctx, args);
