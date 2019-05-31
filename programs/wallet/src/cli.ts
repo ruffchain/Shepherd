@@ -64,6 +64,7 @@ import { prnTransferBancorTokenTo, transferBancorTokenTo } from './lib/transferB
 import { createBancorToken, prnCreateBancorToken } from './lib/createBancorToken';
 import { buyLockBancorToken, prnBuyLockBancorToken } from './lib/buyLockBancorToken';
 import { sellLockBancorToken, prnSellLockBancorToken } from './lib/sellLockBancorToken';
+import { getCandidateInfo, prnGetCandidateInfo } from './lib/getCandidateInfo';
 
 const VERSION = pjson.version;
 const PROMPT = '> ';
@@ -199,6 +200,12 @@ const CMDS: ifCMD[] = [
         content: 'get candidates ',
         example: '\n'
             + '\n\nExample:\n$ getCandidates'
+    },
+    {
+        name: 'getCandidateInfo',
+        content: 'get a candidate info ',
+        example: '\n'
+            + '\n\nExample:\n$ getCandidateInfo 1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J'
     },
     {
         name: 'getMiners',
@@ -820,6 +827,10 @@ let handleCmd = async (cmd: string) => {
         case 'getcandidates':
             result = await getCandidates(ctx, args);
             handleResult(prnGetCandidates, ctx, result);
+            break;
+        case 'getcandidateInfo':
+            result = await getCandidateInfo(ctx, args);
+            handleResult(prnGetCandidateInfo, ctx, result);
             break;
         case 'getpeers':
             result = await getPeers(ctx, args);
