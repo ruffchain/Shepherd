@@ -362,7 +362,7 @@ const CMDS: ifCMD[] = [
             '\n\targ1  -  token-name\n'
             + '\targ2  -  preBalances | airdrop.json\n'
             + '\targ3  -  fee\n'
-            + '\n\ntransferLockBancorTokenTo token2 [{"address":"16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg","amount":"10000"},{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"100"}] 0.1'
+            + '\n\ntransferLockBancorTokenToMulti token2 [{"address":"16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg","amount":"10000"},{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"100"}] 0.001'
     },
     {
         name: 'getLockBancorTokenBalance',

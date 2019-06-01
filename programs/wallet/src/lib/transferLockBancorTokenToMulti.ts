@@ -65,7 +65,7 @@ export async function transferLockBancorTokenToMulti(ctx: IfContext, args: strin
             });
             return;
         } else {
-            addresses = args[1];
+            addresses = JSON.parse(args[1]);
         }
 
         let tx = new ValueTransaction();
