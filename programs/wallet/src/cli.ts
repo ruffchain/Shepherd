@@ -66,6 +66,7 @@ import { buyLockBancorToken, prnBuyLockBancorToken } from './lib/buyLockBancorTo
 import { sellLockBancorToken, prnSellLockBancorToken } from './lib/sellLockBancorToken';
 import { getCandidateInfo, prnGetCandidateInfo } from './lib/getCandidateInfo';
 import { transferLockBancorTokenToMulti, prnTransferLockBancorTokenToMulti } from './lib/transferLockBancorTokenToMulti';
+import { getLockBancorTokenBalances, prnGetLockBancorTokenBalances } from './lib/getLockBancorTokenBalances';
 
 const VERSION = pjson.version;
 const PROMPT = '> ';
@@ -334,7 +335,7 @@ const CMDS: ifCMD[] = [
     //         + '\t$ getBancorTokenBalance tokenid 1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J'
     // },
     {
-        name: 'createLockBancorToken',
+        name: 'createBancorToken',
         content: 'create a BancorToken; time_expiration minutes after which lock_amount will be freed',
         example:
             '\n\targ1  -  token-name\n'
@@ -343,55 +344,64 @@ const CMDS: ifCMD[] = [
             + '\targ4  -  nonliquidity\n'
             + '\targ5  -  cost\n'
             + '\targ6  -  fee\n'
-            + '\n\ncreatelockbancortoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000", "lock_amount":"1000","time_expiration":"240"},{"address":"16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg","amount":"10000", "lock_amount":"0","time_expiration":"0"}]  0.5 0 100 0.001'
+            + '\n\ncreatebancortoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000", "lock_amount":"1000","time_expiration":"240"},{"address":"16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg","amount":"10000", "lock_amount":"0","time_expiration":"0"}]  0.5 0 100 0.001'
     },
     {
-        name: 'transferLockBancorTokenTo',
+        name: 'transferBancorTokenTo',
         content: 'transfer BancorToken to address',
         example:
             '\n\targ1  -  token-name\n'
             + '\targ2  -  address\n'
             + '\targ3  -  amount\n'
             + '\targ4  -  fee\n'
-            + '\n\ntransferLockBancorTokenTo token2 1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79 1000 0.1'
+            + '\n\ntransferBancorTokenTo token2 1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79 1000 0.1'
     },
     {
-        name: 'transferLockBancorTokenToMulti',
+        name: 'transferBancorTokenToMulti',
         content: 'transfer BancorToken to multi address',
         example:
             '\n\targ1  -  token-name\n'
             + '\targ2  -  preBalances | airdrop.json\n'
             + '\targ3  -  fee\n'
-            + '\n\ntransferLockBancorTokenToMulti token2 [{"address":"16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg","amount":"10000"},{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"100"}] 0.001'
+            + '\n\ntransferBancorTokenToMulti token2 [{"address":"16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg","amount":"10000"},{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"100"}] 0.001'
     },
     {
-        name: 'getLockBancorTokenBalance',
+        name: 'getBancorTokenBalance',
         content: 'get BancorToken balance under address',
-        example: '\ngetLockBancorTokenbalance\n'
+        example: '\ngetBancorTokenbalance\n'
             + '\targ1  -  tokenid:string\n'
             + '\targ2  -  address:string\n'
             + 'Example:\n'
-            + '\t$ getLockBancorTokenBalance tokenid 1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J'
+            + '\t$ getBancorTokenBalance tokenid 1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J'
     },
     {
-        name: 'buyLockBancorToken',
-        content: 'buy LockBancorToken',
+        name: 'buyBancorToken',
+        content: 'buy BancorToken',
         example: '\nbuyBancorToken\n'
             + '\targ1  -  tokenid\n'
             + '\targ2  -  cost\n'
             + '\targ3  -  fee\n'
             + 'Example:\n'
-            + '\t$ buyLockBancorToken tokenid cost fee'
+            + '\t$ buyBancorToken tokenid cost fee'
     },
     {
-        name: 'sellLockBancorToken',
+        name: 'sellBancorToken',
         content: 'sell LockBancorToken',
         example: '\nsellBancorToken\n'
             + '\targ1  -  tokenid\n'
             + '\targ2  -  amount\n'
             + '\targ3  -  fee\n'
             + 'Example:\n'
-            + '\t$ sellLockBancorToken tokenid amount fee'
+            + '\t$ sellBancorToken tokenid amount fee'
+    },
+    {
+        name: 'getBancorTokenBalances',
+        content: 'get BancorToken balances under address',
+        example: '\ngetBancorTokenbalances\n'
+            + '\targ1  -  tokenid:string\n'
+            + '\targ2  -  [address]:string[]\n'
+            + 'Example:\n'
+            + '\t$ getBancorTokenBalances tokenid ["1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J"]'
     },
     // {
     //     name: 'getBancorTokenBalances',
@@ -866,51 +876,55 @@ let handleCmd = async (cmd: string) => {
             result = await createToken(ctx, args);
             handleResult(prnCreateToken, ctx, result);
             break;
+        // case 'createbancortoken':
+        //     result = await createBancorToken(ctx, args);
+        //     handleResult(prnCreateBancorToken, ctx, result);
+        //     break;
         case 'createbancortoken':
-            result = await createBancorToken(ctx, args);
-            handleResult(prnCreateBancorToken, ctx, result);
-            break;
-        case 'createlockbancortoken':
             result = await createLockBancorToken(ctx, args);
             handleResult(prnCreateLockBancorToken, ctx, result);
             break;
+        // case 'transferbancortokento':
+        //     result = await transferBancorTokenTo(ctx, args);
+        //     handleResult(prnTransferBancorTokenTo, ctx, result);
+        //     break;
         case 'transferbancortokento':
-            result = await transferBancorTokenTo(ctx, args);
-            handleResult(prnTransferBancorTokenTo, ctx, result);
-            break;
-        case 'transferlockbancortokento':
             result = await transferLockBancorTokenTo(ctx, args);
             handleResult(prnTransferLockBancorTokenTo, ctx, result);
             break;
-        case 'transferlockbancortokentomulti':
+        case 'transferbancortokentomulti':
             result = await transferLockBancorTokenToMulti(ctx, args);
             handleResult(prnTransferLockBancorTokenToMulti, ctx, result);
             break;
+        // case 'getbancortokenbalance':
+        //     result = await getBancorTokenBalance(ctx, args);
+        //     handleResult(prnGetBancorTokenBalance, ctx, result);
+        //     break;
         case 'getbancortokenbalance':
-            result = await getBancorTokenBalance(ctx, args);
-            handleResult(prnGetBancorTokenBalance, ctx, result);
-            break;
-        case 'getlockbancortokenbalance':
             result = await getLockBancorTokenBalance(ctx, args);
             handleResult(prnGetLockBancorTokenBalance, ctx, result);
             break;
         case 'getbancortokenbalances':
-            result = await getBancorTokenBalances(ctx, args);
-            handleResult(prnGetBancorTokenBalances, ctx, result);
+            result = await getLockBancorTokenBalances(ctx, args);
+            handleResult(prnGetLockBancorTokenBalances, ctx, result);
             break;
+        // case 'getbancortokenbalances':
+        //     result = await getBancorTokenBalances(ctx, args);
+        //     handleResult(prnGetBancorTokenBalances, ctx, result);
+        //     break;
+        // case 'buybancortoken':
+        //     result = await buyBancorToken(ctx, args);
+        //     handleResult(prnBuyBancorToken, ctx, result);
+        //     break;
         case 'buybancortoken':
-            result = await buyBancorToken(ctx, args);
-            handleResult(prnBuyBancorToken, ctx, result);
-            break;
-        case 'buylockbancortoken':
             result = await buyLockBancorToken(ctx, args);
             handleResult(prnBuyLockBancorToken, ctx, result);
             break;
+        // case 'sellbancortoken':
+        //     result = await sellBancorToken(ctx, args);
+        //     handleResult(prnSellBancorToken, ctx, result);
+        //     break;
         case 'sellbancortoken':
-            result = await sellBancorToken(ctx, args);
-            handleResult(prnSellBancorToken, ctx, result);
-            break;
-        case 'selllockbancortoken':
             result = await sellLockBancorToken(ctx, args);
             handleResult(prnSellLockBancorToken, ctx, result);
             break;

@@ -107,7 +107,7 @@ export async function createLockBancorToken(ctx: IfContext, args: string[]): Pro
         }
 
         let tx = new ValueTransaction();
-        tx.method = 'createLockBancorToken';
+        tx.method = 'createBancorToken';
 
         tx.value = new BigNumber(args[4]);
         tx.fee = new BigNumber(args[5]);

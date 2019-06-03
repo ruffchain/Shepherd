@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext,  checkTokenid, checkAddress, checkAmount, checkFee, sendAndCheckTx } from './common';
+import { IfResult, IfContext, checkTokenid, checkAddress, checkAmount, checkFee, sendAndCheckTx } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
@@ -52,7 +52,7 @@ export async function transferLockBancorTokenTo(ctx: IfContext, args: string[]):
         let fee = args[3];
 
         let tx = new ValueTransaction();
-        tx.method = 'transferLockBancorTokenTo';
+        tx.method = 'transferBancorTokenTo';
         tx.fee = new BigNumber(fee);
         tx.input = {
             tokenid: tokenid.toUpperCase(),

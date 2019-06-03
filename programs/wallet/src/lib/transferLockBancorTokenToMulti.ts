@@ -69,7 +69,7 @@ export async function transferLockBancorTokenToMulti(ctx: IfContext, args: strin
         }
 
         let tx = new ValueTransaction();
-        tx.method = 'transferLockBancorTokenToMulti';
+        tx.method = 'transferBancorTokenToMulti';
         tx.fee = new BigNumber(fee);
         tx.input = {
             tokenid: tokenid.toUpperCase(),

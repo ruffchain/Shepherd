@@ -5,7 +5,7 @@ import { ValueTransaction } from '../core/value_chain/transaction'
 
 // tokenid: string, preBalances: { address: string, amount: string }[], cost: string, fee: string
 
-const FUNC_NAME = 'buyLockBancorToken';
+const FUNC_NAME = 'buyBancorToken';
 
 export async function buyLockBancorToken(ctx: IfContext, args: string[]): Promise<IfResult> {
     return new Promise<IfResult>(async (resolve) => {
