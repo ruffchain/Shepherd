@@ -259,26 +259,26 @@ const CMDS: ifCMD[] = [
             + '\targ3  -  fee\n'
             + '\n\nExample:\n$ transferTo 16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg 1000 1'
     },
-    {
-        name: 'transferTokenTo',
-        content: 'Transfer Token to some address',
-        example:
-            '\n\targ1  -  tokenid\n'
-            + '\targ2  -  address\n'
-            + '\targ3  -  amount\n'
-            + '\targ3  -  fee\n'
-            + '\n\nExample:\n$ transferTokenTo tokenid 16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg 1000 1'
-    },
-    {
-        name: 'createToken',
-        content: 'create a token',
-        example:
-            '\n\targ1  -  token-name\n'
-            + '\targ2  -  preBalance\n'
-            + '\targ3  -  precision\n'
-            + '\targ4  -  fee\n'
-            + '\n\ncreatetoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 9 0.001'
-    },
+    // {
+    //     name: 'transferTokenTo',
+    //     content: 'Transfer Token to some address',
+    //     example:
+    //         '\n\targ1  -  tokenid\n'
+    //         + '\targ2  -  address\n'
+    //         + '\targ3  -  amount\n'
+    //         + '\targ3  -  fee\n'
+    //         + '\n\nExample:\n$ transferTokenTo tokenid 16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg 1000 1'
+    // },
+    // {
+    //     name: 'createToken',
+    //     content: 'create a token',
+    //     example:
+    //         '\n\targ1  -  token-name\n'
+    //         + '\targ2  -  preBalance\n'
+    //         + '\targ3  -  precision\n'
+    //         + '\targ4  -  fee\n'
+    //         + '\n\ncreatetoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 9 0.001'
+    // },
     {
         name: 'setUserCode',
         content: 'set user code (!!Experiment)',
@@ -324,15 +324,15 @@ const CMDS: ifCMD[] = [
             + '\targ4  -  fee\n'
             + '\n\ntransferBancorTokenTo token2 1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79 1000 0.1'
     },
-    {
-        name: 'getBancorTokenBalance',
-        content: 'get BancorToken balance under address',
-        example: '\ngetBancorTokenbalance\n'
-            + '\targ1  -  tokenid:string\n'
-            + '\targ2  -  address:string\n'
-            + 'Example:\n'
-            + '\t$ getBancorTokenBalance tokenid 1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J'
-    },
+    // {
+    //     name: 'getBancorTokenBalance',
+    //     content: 'get BancorToken balance under address',
+    //     example: '\ngetBancorTokenbalance\n'
+    //         + '\targ1  -  tokenid:string\n'
+    //         + '\targ2  -  address:string\n'
+    //         + 'Example:\n'
+    //         + '\t$ getBancorTokenBalance tokenid 1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J'
+    // },
     {
         name: 'createLockBancorToken',
         content: 'create a BancorToken; time_expiration minutes after which lock_amount will be freed',
@@ -393,35 +393,35 @@ const CMDS: ifCMD[] = [
             + 'Example:\n'
             + '\t$ sellLockBancorToken tokenid amount fee'
     },
-    {
-        name: 'getBancorTokenBalances',
-        content: 'get BancorToken balances under address',
-        example: '\ngetBancorTokenbalances\n'
-            + '\targ1  -  tokenid:string\n'
-            + '\targ2  -  [address]:string[]\n'
-            + 'Example:\n'
-            + '\t$ getBancorTokenBalances tokenid ["1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J"]'
-    },
-    {
-        name: 'buyBancorToken',
-        content: 'buy BancorToken',
-        example: '\nbuyBancorToken\n'
-            + '\targ1  -  tokenid\n'
-            + '\targ2  -  cost\n'
-            + '\targ3  -  fee\n'
-            + 'Example:\n'
-            + '\t$ buyBancorToken tokenid cost fee'
-    },
-    {
-        name: 'sellBancorToken',
-        content: 'sell BancorToken',
-        example: '\nsellBancorToken\n'
-            + '\targ1  -  tokenid\n'
-            + '\targ2  -  amount\n'
-            + '\targ3  -  fee\n'
-            + 'Example:\n'
-            + '\t$ sellBancorToken tokenid amount fee'
-    },
+    // {
+    //     name: 'getBancorTokenBalances',
+    //     content: 'get BancorToken balances under address',
+    //     example: '\ngetBancorTokenbalances\n'
+    //         + '\targ1  -  tokenid:string\n'
+    //         + '\targ2  -  [address]:string[]\n'
+    //         + 'Example:\n'
+    //         + '\t$ getBancorTokenBalances tokenid ["1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J"]'
+    // },
+    // {
+    //     name: 'buyBancorToken',
+    //     content: 'buy BancorToken',
+    //     example: '\nbuyBancorToken\n'
+    //         + '\targ1  -  tokenid\n'
+    //         + '\targ2  -  cost\n'
+    //         + '\targ3  -  fee\n'
+    //         + 'Example:\n'
+    //         + '\t$ buyBancorToken tokenid cost fee'
+    // },
+    // {
+    //     name: 'sellBancorToken',
+    //     content: 'sell BancorToken',
+    //     example: '\nsellBancorToken\n'
+    //         + '\targ1  -  tokenid\n'
+    //         + '\targ2  -  amount\n'
+    //         + '\targ3  -  fee\n'
+    //         + 'Example:\n'
+    //         + '\t$ sellBancorToken tokenid amount fee'
+    // },
     {
         name: 'getBancorTokenFactor',
         content: 'get BancorToken factor',
