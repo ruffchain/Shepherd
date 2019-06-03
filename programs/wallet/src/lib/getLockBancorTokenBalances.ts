@@ -1,5 +1,5 @@
 import { ErrorCode } from "../core";
-import { IfResult, IfContext, checkTokenid, checkAddress, formatNumber } from './common';
+import { IfResult, IfContext, checkTokenid, checkAddress, formatNumber, checkAddressArray } from './common';
 
 const METHOD_NAME = 'view';
 const FUNC_NAME = 'getBancorTokenBalances';
@@ -12,6 +12,7 @@ export async function getLockBancorTokenBalances(ctx: IfContext, args: string[])
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong args"
+
             });
             return;
         }
@@ -23,7 +24,7 @@ export async function getLockBancorTokenBalances(ctx: IfContext, args: string[])
             });
             return;
         }
-        if (!checkAddress(args[1])) {
+        if (!checkAddressArray(args[1])) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong address "
@@ -75,12 +76,16 @@ export function prnGetLockBancorTokenBalances(ctx: IfContext, obj: IfResult) {
     let objJson: any;
     try {
         objJson = JSON.parse(obj.resp);
-        // if (objJson.err === 0) {
-        //     console.log('Balance: ', formatNumber(objJson.value));
-        // } else {
-        //     console.log('Error:', objJson.err);
-        // }
-        console.log(objJson);
+        if (objJson.err === 0) {
+            // console.log('Balance: ', formatNumber(objJson.value));
+            objJson.value.forEach((ele: any) => {
+                console.log(ele);
+            });
+        } else {
+            console.log('Error:', objJson.err);
+        }
+
+        // console.log(objJson);
 
     } catch (e) {
         console.log(e);

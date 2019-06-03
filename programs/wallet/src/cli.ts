@@ -303,18 +303,18 @@ const CMDS: ifCMD[] = [
             + '\targs4 - action to run\n'
             + '\targs5 - params\n'
     },
-    {
-        name: 'createBancorToken',
-        content: 'create a BancorToken',
-        example:
-            '\n\targ1  -  token-name\n'
-            + '\targ2  -  preBalance\n'
-            + '\targ3  -  factor (0,1)\n'
-            + '\targ4  -  nonliquidity\n'
-            + '\targ5  -  cost\n'
-            + '\targ6  -  fee\n'
-            + '\n\ncreatebancortoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 0.5 10000000000 100 0.1'
-    },
+    // {
+    //     name: 'createBancorToken',
+    //     content: 'create a BancorToken',
+    //     example:
+    //         '\n\targ1  -  token-name\n'
+    //         + '\targ2  -  preBalance\n'
+    //         + '\targ3  -  factor (0,1)\n'
+    //         + '\targ4  -  nonliquidity\n'
+    //         + '\targ5  -  cost\n'
+    //         + '\targ6  -  fee\n'
+    //         + '\n\ncreatebancortoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 0.5 10000000000 100 0.1'
+    // },
     {
         name: 'transferBancorTokenTo',
         content: 'transfer BancorToken to address',
