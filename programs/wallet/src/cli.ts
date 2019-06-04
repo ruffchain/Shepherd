@@ -3,14 +3,13 @@
 /**
 * Action according to arg input
 */
-import * as readline from 'readline';
+//import * as readline from 'readline';
 import * as process from 'process';
 import * as colors from 'colors';
+import * as path from 'path';
 import { addressFromSecretKey } from './core/address';
 import { RPCClient } from './client/client/rfc_client';
-
 import { testcmd } from './lib/testcmd';
-
 import { IfResult, IfSysinfo } from './lib/common';
 import { ErrorCode } from './core/error_code';
 import { getBlock, prnGetBlock } from './lib/getblock';
@@ -35,6 +34,8 @@ import { vote, prnVote } from './lib/vote';
 import { getVote, prnGetVote } from './lib/getvote';
 import { getUserTable, prnGetUserTable} from './lib/getusertable';
 import { createBancorToken, prnCreateBancorToken } from './lib/createBancorToken';
+const prompt = require('prompts');
+const keyStore = require('../js/key-store');
 
 const { randomBytes } = require('crypto');
 const secp256k1 = require('secp256k1');
@@ -58,21 +59,22 @@ import { getBancorTokenBalances, prnGetBancorTokenBalances } from './lib/getBanc
 import { getBancorTokenParams, prnGetBancorTokenParams } from './lib/getBancorTokenParams';
 import { getBlocks, prnGetBlocks } from './lib/getblocks';
 
+import * as program from 'commander';
+
 const VERSION = pjson.version;
+const SECRET_TIMEOUT = 5 * 60 * 10000;
 const PROMPT = '> ';
 
 let SYSINFO: any = {};
 SYSINFO.secret = "";
 SYSINFO.host = "";
-SYSINFO.port = "";
+SYSINFO.port = 18089;
 SYSINFO.address = "";
 SYSINFO.verbose = false;
-
-
+SYSINFO.keystore = "";
 
 // let chainClient: NewChainClient;
 let clientHttp: RPCClient;
-
 
 process.on('unhandledRejection', (err) => {
     console.log(colors.red('unhandledRrejection'));
@@ -93,10 +95,9 @@ process.on('warning', (warning) => {
     console.log('to: var sys = require(\'util\'),');
 });
 
-let keyin = readline.createInterface(process.stdin, process.stdout);
 
 let checkArgs = (SYSINFO: any) => {
-    if (SYSINFO.secret === "") {
+    if (SYSINFO.secret === "" && SYSINFO.keystore === "") {
         console.log(colors.red("No secret\n"));
 
         console.log('\tPlease create your own secret with command:\n')
@@ -117,9 +118,11 @@ let checkArgs = (SYSINFO: any) => {
         // open log print
     }
 
-    SYSINFO.address = addressFromSecretKey(SYSINFO.secret);
-    // console.log(SYSINFO);
+    if (SYSINFO.secret) {
+        SYSINFO.address = addressFromSecretKey(SYSINFO.secret);
+    }
 }
+
 interface ifCMD {
     name: string;
     content: string;
@@ -475,6 +478,11 @@ const CMDS: ifCMD[] = [
         example: ''
     },
     {
+        name: 'unlock',
+        content: 'unlock',
+        example: ''
+    },
+    {
         name: 'q',
         content: 'quit',
         example: ''
@@ -490,6 +498,7 @@ let getMaxCmdWidth = (cmds: any) => {
 const showPrompt = () => {
     process.stdout.write(PROMPT);
 };
+
 let printHelpHeader = () => {
     console.log('');
     console.log('NAME:');
@@ -581,6 +590,39 @@ let createKey = function () {
     console.log(colors.green('secret key: '), privateKey.toString('hex'));
     console.log('');
 }
+
+async function genKeyStore(keyFile: string) {
+    const response = await prompt({
+        type: 'password',
+        name: 'secret',
+        message: 'password',
+        validate: (value:string) =>  value.length < 8 ? 'password length must >= 8': true
+    });
+
+    let privateKey;
+
+    do {
+        privateKey = randomBytes(32);
+    } while (!secp256k1.privateKeyVerify(privateKey));
+
+    const pkey = secp256k1.publicKeyCreate(privateKey, true);
+
+    let address = addressFromSecretKey(privateKey);
+
+    let keyJson = keyStore.toV3Keystore(privateKey.toString('hex'), address, response.secret);
+
+    let keyPath;
+
+    if (path.isAbsolute(keyFile)) {
+        keyPath = keyFile;
+    } else {
+        keyPath = path.join(process.cwd(), keyFile);
+    }
+
+    fs.writeFileSync(keyPath, JSON.stringify(keyJson, null, 4));
+
+    //console.log('openkeyb', keyStore.fromV3Keystore(keyJson, response.secret));
+}
 /**
  * Expected args
  *
@@ -589,46 +631,64 @@ let createKey = function () {
  * secret
  *
  */
-const initArgs = () => {
+const initArgs = async () => {
 
     // console.log(process.argv);
     // console.log(process.argv.length);
 
     // console.log('****************');
+    program
+        .version('2.1.0')
+        .option('-v, --verbose', 'Enable Verbose log output')
+        .option('-s, --secret <value>', 'secret key')
+        .option('-h, --host <value>', 'host address')
+        .option('-p, --port <value>', 'host port')
+        .option('--createKey', 'createKey')
+        .option('--keyStore <value>', 'key store file')
+        .option('--createKeyStore <value>', 'create key store')
+        .parse(process.argv);
 
-    if (process.argv.length === 3 && process.argv[2].toLowerCase() === 'createkey') {
+    if (program.verbose) {
+        SYSINFO['verbose'] = true;
+    }
+
+    if (program.createKey) {
         createKey();
         process.exit(0);
+    }
+
+    const outKeyFile = program.createKeyStore;
+    if (outKeyFile) {
+        await genKeyStore(outKeyFile);
+        process.exit(0);
+    }
+
+    const keyStoreFile = program.keyStore;
+    if (keyStoreFile) {
+        let keyPath = keyStoreFile;
+        if (!path.isAbsolute(keyStoreFile)) {
+            keyPath = path.join(process.cwd(), keyStoreFile);
+        }
+        if (!fs.existsSync(keyPath)) {
+            console.log(`keystore file ${keyPath} not exist`);
+            process.exit(1);
+        }
+        SYSINFO['keystore'] = fs.readFileSync(keyPath).toString();
+    }
+
+    SYSINFO['secret'] = program.secret;
+
+    if (program.host) {
+        SYSINFO['host'] = program.host;
+    }
+
+    if (program.port) {
+        SYSINFO['port'] = program.port;
     }
 
     printHelpHeader();
 
     let currentArg = "";
-
-    process.argv.forEach((val, index, array) => {
-        // console.log(index + ": " + val);
-        if ([0, 1].indexOf(index) !== -1) {
-            return;
-        }
-        let result = val.match(/--(.*)/);
-
-        if (result) {
-            if (result[1].toLowerCase() === 'v'
-                || result[1].toLowerCase() === 'verbose') {
-                SYSINFO['verbose'] = true;
-            } else {
-                currentArg = result[1];
-            }
-
-
-        } else if (Object.keys(SYSINFO).indexOf(currentArg) !== -1) {
-            SYSINFO[currentArg] = val;
-            currentArg = "";
-        } else {
-            console.log(colors.red('Wrong arg: ' + val));
-            process.exit(1);
-        }
-    });
 
     checkArgs(SYSINFO);
 
@@ -655,6 +715,7 @@ let handleResult = (f: (ctx: IfContext, result: IfResult) => void, ctx: IfContex
         f(ctx, arg);
     }
 }
+
 let handleCmd = async (cmd: string) => {
 
     // Remove continuous space , or other blank characte
@@ -874,6 +935,28 @@ let handleCmd = async (cmd: string) => {
             console.log('Bye\n');
             process.exit(0);
             break;
+        case 'unlock':
+            if (SYSINFO['keystore'].length > 0) {
+                const response = await prompt({
+                    type: 'password',
+                    name: 'secret',
+                    message: 'password',
+                    validate: (value:string) =>  value.length < 8 ? 'password length must >= 8': true
+                });
+
+                try {
+                    if (response.secret) {
+                        SYSINFO['secret'] = keyStore.fromV3Keystore(SYSINFO['keystore'], response.secret);
+                        SYSINFO['address'] = addressFromSecretKey(SYSINFO['secret']);
+                        setTimeout(() => {
+                            SYSINFO['secret'] = null;
+                        }, SECRET_TIMEOUT);
+                    }
+                } catch (err) {
+                    console.log('invalid passwd');
+                }
+            }
+            break;
         case '':
             break;
         default:
@@ -881,19 +964,30 @@ let handleCmd = async (cmd: string) => {
             console.log(cmd);
             break;
     }
-
-    console.log('');
-    showPrompt();
 };
 
 //////////////////////////////////////////
-keyin.on('line', (cmd: string) => {
-    handleCmd(cmd);
-})
 
-initArgs();
-initChainClient(SYSINFO);
-showPrompt();
+async function main(){
 
+    let ret = await initArgs();
+    initChainClient(SYSINFO);
 
+    while(1) {
+        const onCancel = (prompt:any) => {
+            console.log('exit rfccli');
+            process.exit(1);
+        }
+        const response = await prompt({
+            type: 'text',
+            name: 'cmd',
+            message: '>'
+        }, { onCancel });
 
+        if (response.cmd) {
+            await handleCmd(response.cmd);
+        }
+    }
+}
+
+main();

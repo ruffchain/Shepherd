@@ -75,6 +75,11 @@ export class RPCClient {
 
     // getNonce
     async getNonce(params: { address: string }): Promise<{ err: ErrorCode, nonce?: number }> {
+
+        if (!params.address) {
+            console.log('unlock first');
+            return { err: ErrorCode.RESULT_FAILED };
+        }
         let cr = await this.callAsync('getNonce', params);
         if (cr.ret !== 200) {
             return { err: ErrorCode.RESULT_FAILED };

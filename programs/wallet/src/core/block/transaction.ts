@@ -48,7 +48,7 @@ export class Transaction extends SerializableWithHash {
     set input(i: any) {
         this.m_input = i;
     }
-    
+
     /**
      *  virtual验证交易的签名段
      */
@@ -60,10 +60,14 @@ export class Transaction extends SerializableWithHash {
     }
 
     public sign(privateKey: Buffer|string) {
-        let pubkey = Address.publicKeyFromSecretKey(privateKey);
-        this.m_publicKey = pubkey!;
-        this.updateHash();
-        this.m_signature = Address.sign(this.m_hash, privateKey);
+        if (privateKey.length > 0 ) {
+            let pubkey = Address.publicKeyFromSecretKey(privateKey);
+            this.m_publicKey = pubkey!;
+            this.updateHash();
+            this.m_signature = Address.sign(this.m_hash, privateKey);
+        } else {
+            console.log('unlock first');
+        }
     }
 
     protected _encodeHashContent(writer: BufferWriter): ErrorCode {
@@ -113,7 +117,7 @@ export class Transaction extends SerializableWithHash {
         } catch (e) {
             return ErrorCode.RESULT_INVALID_FORMAT;
         }
-        
+
         return ErrorCode.RESULT_OK;
     }
 
@@ -197,7 +201,7 @@ export class EventLog implements Serializable {
         try {
             writer.writeVarString(this.m_event);
             if (this.m_params) {
-                input = JSON.stringify(toStringifiable(this.m_params, true));  
+                input = JSON.stringify(toStringifiable(this.m_params, true));
             } else {
                 input = JSON.stringify({});
             }
@@ -302,13 +306,13 @@ export class Receipt implements Serializable {
             } else {
                 writer.writeU16(this.m_eventIndex!);
             }
-            
+
             writer.writeI32(this.m_returnCode);
             writer.writeU16(this.m_eventLogs.length);
         } catch (e) {
             return ErrorCode.RESULT_INVALID_FORMAT;
         }
-        
+
         for (let log of this.m_eventLogs) {
             let err = log.encode(writer);
             if (err) {
@@ -324,11 +328,11 @@ export class Receipt implements Serializable {
             this.m_sourceType = reader.readU8();
             if (this.m_sourceType === ReceiptSourceType.transaction) {
                 this.m_transactionHash = reader.readVarString();
-            } else if (this.m_sourceType === ReceiptSourceType.preBlockEvent 
+            } else if (this.m_sourceType === ReceiptSourceType.preBlockEvent
                 || this.m_sourceType === ReceiptSourceType.postBlockEvent) {
                 this.m_eventIndex = reader.readU16();
             }
-            
+
             this.m_returnCode = reader.readI32();
             let nCount: number = reader.readU16();
             for (let i = 0; i < nCount; i++) {
