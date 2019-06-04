@@ -34,7 +34,7 @@ import { vote, prnVote } from './lib/vote';
 import { getVote, prnGetVote } from './lib/getvote';
 
 import { getUserTable, prnGetUserTable } from './lib/getusertable';
-const prompt = require('prompts');
+const prompt = require('prompts-ex');
 const keyStore = require('../js/key-store');
 import { createLockBancorToken, prnCreateLockBancorToken } from './lib/createLockBancorToken';
 
@@ -708,7 +708,7 @@ let createKey = function () {
     console.log('');
 }
 
-async function genKeyStore(keyFile: string, secretKey:string | null) {
+async function genKeyStore(keyFile: string, secretKey: string | null) {
     const response = await prompt({
         type: 'password',
         name: 'secret',
@@ -1145,11 +1145,11 @@ async function main() {
             console.log('exit rfccli');
             process.exit(1);
         }
-        const response = await prompt({
-            type: 'text',
+        const response = await prompt([{
+            type: 'textex',
             name: 'cmd',
             message: '>'
-        }, { onCancel });
+        }], { onCancel });
 
         if (response.cmd) {
             await handleCmd(response.cmd);
