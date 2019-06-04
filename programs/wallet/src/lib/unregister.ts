@@ -1,53 +1,49 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt, checkAmount, checkFee, sendAndCheckTx } from './common';
+import { IfResult, IfContext, checkReceipt, checkFee, checkAmount, sendAndCheckTx } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
-const FUNC_NAME = 'unmortgage';
+const FUNC_NAME = 'unregister';
 
-// tokenid: string, preBalances: { address: string, amount: string }[], cost: string, fee: string
-
-export async function unmortgage(ctx: IfContext, args: string[]): Promise<IfResult> {
+export async function unregister(ctx: IfContext, args: string[]): Promise<IfResult> {
     return new Promise<IfResult>(async (resolve) => {
 
         // check args
-        if (args.length !== 2) {
+        if (args.length < 2) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong args"
             });
             return;
         }
-        if (!checkAmount(args[0])) {
+
+
+        if (args[0] !== ctx.sysinfo.address) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
-                resp: "Wrong amount"
+                resp: "Wrong input " + args[0]
             });
             return;
         }
-
-        // check fee
+        // 
         if (!checkFee(args[1])) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
-                resp: "Wrong fee value"
+                resp: "Wrong fee"
             });
             return;
         }
 
-        let amount = args[0];
-
         let tx = new ValueTransaction();
         tx.method = FUNC_NAME;
+        tx.input = args[0];
         tx.fee = new BigNumber(args[1]);
-        tx.input = amount;
 
         let rtn = await sendAndCheckTx(ctx, tx);
-
         resolve(rtn);
     });
 }
-export function prnUnmortgage(ctx: IfContext, obj: IfResult) {
+export function prnUnregister(ctx: IfContext, obj: IfResult) {
     console.log(obj.resp);
 }

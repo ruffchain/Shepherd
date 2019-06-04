@@ -56,10 +56,12 @@ export function prnGetStake(ctx: IfContext, obj: IfResult) {
         objJson = JSON.parse(obj.resp);
         console.log(colors.green('On stake:'));
 
-        if (objJson.value) {
-            console.log(`${sysTokenSym}:`, objJson.value.replace(/n/g, ''))
+        // if (objJson.value) {
+        //     console.log(`${sysTokenSym}:`, objJson.value.replace(/n/g, ''))
+        // }
+        if (!objJson.err) {
+            console.log(objJson.value);
         }
-
     } catch (e) {
         console.log(e);
     }

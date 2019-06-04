@@ -1,6 +1,6 @@
 import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt, checkFee } from './common';
+import { IfResult, IfContext, checkReceipt, checkFee, MAX_VOTE_CANDIDATES, sendAndCheckTx } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
@@ -19,56 +19,41 @@ export async function vote(ctx: IfContext, args: string[]): Promise<IfResult> {
             });
             return;
         }
+
+        let candidates;
+        try {
+            candidates = JSON.parse(args[0]);
+        } catch (e) {
+            console.log();
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong candidates"
+            });
+        }
+
+        if (candidates.length > MAX_VOTE_CANDIDATES) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong candidates num"
+            });
+        }
+
+        // check fee
         if (!checkFee(args[1])) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
-                resp: "Wrong fee"
+                resp: "Wrong fee value"
             });
             return;
         }
-        let candidates = JSON.parse(args[0]);
-        let fee = args[1];
 
         let tx = new ValueTransaction();
-        tx.method = 'vote';
-        tx.fee = new BigNumber(fee);
-        // tx.value = new BigNumber(amount);
+        tx.method = FUNC_NAME;
+        tx.fee = new BigNumber(args[1]);
         tx.input = candidates;
 
-
-        let { err, nonce } = await ctx.client.getNonce({ address: ctx.sysinfo.address });
-
-        if (err) {
-            console.error(`${tx.method} getNonce failed for ${err}`);
-            resolve({
-                ret: ErrorCode.RESULT_FAILED,
-                resp: `${tx.method} getNonce failed for ${err}`
-            });
-            return;
-        }
-
-        tx.nonce = nonce! + 1;
-        if (ctx.sysinfo.verbose) {
-            console.log('nonce is:', tx.nonce);
-        }
-
-        tx.sign(ctx.sysinfo.secret);
-
-        let sendRet = await ctx.client.sendTransaction({ tx });
-        if (sendRet.err) {
-            console.error(`${tx.method} failed for ${sendRet.err}`);
-            resolve({
-                ret: ErrorCode.RESULT_FAILED,
-                resp: `${tx.method} failed for ${sendRet.err}`
-            });
-            return;
-        }
-        console.log(`Send ${tx.method} tx: ${tx.hash}`);
-
-        // 需要查找receipt若干次，直到收到回执若干次，才确认发送成功, 否则是失败
-        let receiptResult = await checkReceipt(ctx, tx.hash);
-
-        resolve(receiptResult); // {resp, ret}
+        let rtn = await sendAndCheckTx(ctx, tx);
+        resolve(rtn);
     });
 }
 export function prnVote(ctx: IfContext, obj: IfResult) {

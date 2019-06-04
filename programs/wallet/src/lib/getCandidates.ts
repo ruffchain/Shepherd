@@ -8,8 +8,6 @@ const FUNC_NAME = 'view';
 export async function getCandidates(ctx: IfContext, args: string[]): Promise<IfResult> {
     return new Promise<IfResult>(async (resolve) => {
 
-        // check args
-
         let params =
         {
             method: 'getCandidates',
@@ -36,12 +34,15 @@ export function prnGetCandidates(ctx: IfContext, obj: IfResult) {
         return;
     }
     let objJson: any;
+
     try {
         objJson = JSON.parse(obj.resp);
         if (objJson.err === 0) {
-            objJson.value.forEach((element: string) => {
-                console.log(element.slice(1));
-            });
+            // objJson.value.forEach((element: string) => {
+            //     console.log(element.slice(1));
+            // });
+            console.log('curMiner:', objJson.value.curMiner);
+            console.log(objJson.value.candidates);
         }
     } catch (e) {
         console.log(e);

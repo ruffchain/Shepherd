@@ -1,17 +1,16 @@
+import { RPCClient } from '../client/client/rfc_client';
 import { ErrorCode } from "../core/error_code";
-import { IfResult, IfContext, checkReceipt, checkTokenid, checkAddress, checkAmount, checkFee, checkCost, sendAndCheckTx } from './common';
+import { IfResult, IfContext, checkTokenid, checkAddress, checkAmount, checkFee, sendAndCheckTx } from './common';
 import { BigNumber } from 'bignumber.js';
 import { ValueTransaction } from '../core/value_chain/transaction'
 
 // tokenid: string, preBalances: { address: string, amount: string }[], cost: string, fee: string
 
-const FUNC_NAME = 'buyBancorToken';
-
-export async function buyBancorToken(ctx: IfContext, args: string[]): Promise<IfResult> {
+export async function transferLockBancorTokenTo(ctx: IfContext, args: string[]): Promise<IfResult> {
     return new Promise<IfResult>(async (resolve) => {
 
         // check args
-        if (args.length < 3) {
+        if (args.length < 4) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong args"
@@ -26,14 +25,21 @@ export async function buyBancorToken(ctx: IfContext, args: string[]): Promise<If
             });
             return;
         }
-        if (!checkCost(args[1])) {
+        if (!checkAddress(args[1])) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
-                resp: "Wrong cost"
+                resp: "Wrong address"
             });
             return;
         }
-        if (!checkFee(args[2])) {
+        if (!checkAmount(args[2])) {
+            resolve({
+                ret: ErrorCode.RESULT_WRONG_ARG,
+                resp: "Wrong amount"
+            });
+            return;
+        }
+        if (!checkFee(args[3])) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
                 resp: "Wrong fee"
@@ -41,21 +47,23 @@ export async function buyBancorToken(ctx: IfContext, args: string[]): Promise<If
             return;
         }
         let tokenid = args[0];
-        let cost = args[1];
-        let fee = args[2];
+        let address = args[1];
+        let amount = args[2];
+        let fee = args[3];
 
         let tx = new ValueTransaction();
-        tx.method = 'buyBancorToken';
+        tx.method = 'transferBancorTokenTo';
         tx.fee = new BigNumber(fee);
-        tx.value = new BigNumber(cost);
         tx.input = {
-            tokenid: tokenid.toUpperCase()
+            tokenid: tokenid.toUpperCase(),
+            to: address,
+            amount: amount
         };
 
         let rtn = await sendAndCheckTx(ctx, tx);
         resolve(rtn);
     });
 }
-export function prnBuyBancorToken(ctx: IfContext, obj: IfResult) {
+export function prnTransferLockBancorTokenTo(ctx: IfContext, obj: IfResult) {
     console.log(obj.resp);
 }

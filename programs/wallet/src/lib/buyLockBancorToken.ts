@@ -7,7 +7,7 @@ import { ValueTransaction } from '../core/value_chain/transaction'
 
 const FUNC_NAME = 'buyBancorToken';
 
-export async function buyBancorToken(ctx: IfContext, args: string[]): Promise<IfResult> {
+export async function buyLockBancorToken(ctx: IfContext, args: string[]): Promise<IfResult> {
     return new Promise<IfResult>(async (resolve) => {
 
         // check args
@@ -45,7 +45,7 @@ export async function buyBancorToken(ctx: IfContext, args: string[]): Promise<If
         let fee = args[2];
 
         let tx = new ValueTransaction();
-        tx.method = 'buyBancorToken';
+        tx.method = FUNC_NAME;
         tx.fee = new BigNumber(fee);
         tx.value = new BigNumber(cost);
         tx.input = {
@@ -56,6 +56,6 @@ export async function buyBancorToken(ctx: IfContext, args: string[]): Promise<If
         resolve(rtn);
     });
 }
-export function prnBuyBancorToken(ctx: IfContext, obj: IfResult) {
+export function prnBuyLockBancorToken(ctx: IfContext, obj: IfResult) {
     console.log(obj.resp);
 }

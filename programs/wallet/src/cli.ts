@@ -32,10 +32,12 @@ import { mortgage, prnMortgage } from './lib/mortgage';
 import { unmortgage, prnUnmortgage } from './lib/unmortgage';
 import { vote, prnVote } from './lib/vote';
 import { getVote, prnGetVote } from './lib/getvote';
-import { getUserTable, prnGetUserTable} from './lib/getusertable';
-import { createBancorToken, prnCreateBancorToken } from './lib/createBancorToken';
+
+import { getUserTable, prnGetUserTable } from './lib/getusertable';
 const prompt = require('prompts');
 const keyStore = require('../js/key-store');
+import { createLockBancorToken, prnCreateLockBancorToken } from './lib/createLockBancorToken';
+
 
 const { randomBytes } = require('crypto');
 const secp256k1 = require('secp256k1');
@@ -44,8 +46,8 @@ const fs = require('fs');
 import { parseTesterJson } from './lib/parsetesterjson';
 var pjson = require('../package.json');
 import { IfContext } from './lib/common';
-import { transferBancorTokenTo, prnTransferBancorTokenTo } from './lib/transferBancorTokenTo';
-import { getBancorTokenBalance, prnGetBancorTokenBalance } from './lib/getBancorTokenBalance';
+import { prnTransferLockBancorTokenTo, transferLockBancorTokenTo } from './lib/transferLockBancorTokenTo';
+import { prnGetLockBancorTokenBalance, getLockBancorTokenBalance } from './lib/getLockBancorTokenBalance';
 import { buyBancorToken, prnBuyBancorToken } from './lib/buyBancorToken';
 import { sellBancorToken, prnSellBancorToken } from './lib/sellBancorToken';
 import { getBancorTokenFactor, prnGetBancorTokenFactor } from './lib/getBancorTokenFactor';
@@ -58,6 +60,16 @@ import { getTokenBalances, prnGetTokenBalances } from './lib/getTokenBalances';
 import { getBancorTokenBalances, prnGetBancorTokenBalances } from './lib/getBancorTokenBalances';
 import { getBancorTokenParams, prnGetBancorTokenParams } from './lib/getBancorTokenParams';
 import { getBlocks, prnGetBlocks } from './lib/getblocks';
+import { unregister, prnUnregister } from './lib/unregister';
+import { getTicket, prnGetTicket } from './lib/getticket';
+import { prnGetBancorTokenBalance, getBancorTokenBalance } from './lib/getBancorTokenBalance';
+import { prnTransferBancorTokenTo, transferBancorTokenTo } from './lib/transferBancorTokenTo';
+import { createBancorToken, prnCreateBancorToken } from './lib/createBancorToken';
+import { buyLockBancorToken, prnBuyLockBancorToken } from './lib/buyLockBancorToken';
+import { sellLockBancorToken, prnSellLockBancorToken } from './lib/sellLockBancorToken';
+import { getCandidateInfo, prnGetCandidateInfo } from './lib/getCandidateInfo';
+import { transferLockBancorTokenToMulti, prnTransferLockBancorTokenToMulti } from './lib/transferLockBancorTokenToMulti';
+import { getLockBancorTokenBalances, prnGetLockBancorTokenBalances } from './lib/getLockBancorTokenBalances';
 
 import * as program from 'commander';
 
@@ -197,6 +209,12 @@ const CMDS: ifCMD[] = [
             + '\n\nExample:\n$ getCandidates'
     },
     {
+        name: 'getCandidateInfo',
+        content: 'get a candidate info ',
+        example: '\n'
+            + '\n\nExample:\n$ getCandidateInfo 1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J'
+    },
+    {
         name: 'getMiners',
         content: 'get miners ',
         example: '\n'
@@ -247,26 +265,26 @@ const CMDS: ifCMD[] = [
             + '\targ3  -  fee\n'
             + '\n\nExample:\n$ transferTo 16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg 1000 1'
     },
-    {
-        name: 'transferTokenTo',
-        content: 'Transfer Token to some address',
-        example:
-            '\n\targ1  -  tokenid\n'
-            + '\targ2  -  address\n'
-            + '\targ3  -  amount\n'
-            + '\targ3  -  fee\n'
-            + '\n\nExample:\n$ transferTokenTo tokenid 16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg 1000 1'
-    },
-    {
-        name: 'createToken',
-        content: 'create a token',
-        example:
-            '\n\targ1  -  token-name\n'
-            + '\targ2  -  preBalance\n'
-            + '\targ3  -  precision\n'
-            + '\targ4  -  fee\n'
-            + '\n\ncreatetoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 9 0.1'
-    },
+    // {
+    //     name: 'transferTokenTo',
+    //     content: 'Transfer Token to some address',
+    //     example:
+    //         '\n\targ1  -  tokenid\n'
+    //         + '\targ2  -  address\n'
+    //         + '\targ3  -  amount\n'
+    //         + '\targ3  -  fee\n'
+    //         + '\n\nExample:\n$ transferTokenTo tokenid 16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg 1000 1'
+    // },
+    // {
+    //     name: 'createToken',
+    //     content: 'create a token',
+    //     example:
+    //         '\n\targ1  -  token-name\n'
+    //         + '\targ2  -  preBalance\n'
+    //         + '\targ3  -  precision\n'
+    //         + '\targ4  -  fee\n'
+    //         + '\n\ncreatetoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 9 0.001'
+    // },
     {
         name: 'setUserCode',
         content: 'set user code (!!Experiment)',
@@ -290,9 +308,40 @@ const CMDS: ifCMD[] = [
             + '\targs4 - action to run\n'
             + '\targs5 - params\n'
     },
+    // {
+    //     name: 'createBancorToken',
+    //     content: 'create a BancorToken',
+    //     example:
+    //         '\n\targ1  -  token-name\n'
+    //         + '\targ2  -  preBalance\n'
+    //         + '\targ3  -  factor (0,1)\n'
+    //         + '\targ4  -  nonliquidity\n'
+    //         + '\targ5  -  cost\n'
+    //         + '\targ6  -  fee\n'
+    //         + '\n\ncreatebancortoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 0.5 10000000000 100 0.1'
+    // },
+    {
+        name: 'transferBancorTokenTo',
+        content: 'transfer BancorToken to address',
+        example:
+            '\n\targ1  -  token-name\n'
+            + '\targ2  -  address\n'
+            + '\targ3  -  amount\n'
+            + '\targ4  -  fee\n'
+            + '\n\ntransferBancorTokenTo token2 1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79 1000 0.1'
+    },
+    // {
+    //     name: 'getBancorTokenBalance',
+    //     content: 'get BancorToken balance under address',
+    //     example: '\ngetBancorTokenbalance\n'
+    //         + '\targ1  -  tokenid:string\n'
+    //         + '\targ2  -  address:string\n'
+    //         + 'Example:\n'
+    //         + '\t$ getBancorTokenBalance tokenid 1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J'
+    // },
     {
         name: 'createBancorToken',
-        content: 'create a BancorToken',
+        content: 'create a BancorToken; time_expiration minutes after which lock_amount will be freed',
         example:
             '\n\targ1  -  token-name\n'
             + '\targ2  -  preBalance\n'
@@ -300,7 +349,7 @@ const CMDS: ifCMD[] = [
             + '\targ4  -  nonliquidity\n'
             + '\targ5  -  cost\n'
             + '\targ6  -  fee\n'
-            + '\n\ncreatebancortoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 0.5 10000000000 100 0.1'
+            + '\n\ncreatebancortoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000", "lock_amount":"1000","time_expiration":"240"},{"address":"16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg","amount":"10000", "lock_amount":"0","time_expiration":"0"}]  0.5 0 100 0.001'
     },
     {
         name: 'transferBancorTokenTo',
@@ -313,6 +362,15 @@ const CMDS: ifCMD[] = [
             + '\n\ntransferBancorTokenTo token2 1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79 1000 0.1'
     },
     {
+        name: 'transferBancorTokenToMulti',
+        content: 'transfer BancorToken to multi address',
+        example:
+            '\n\targ1  -  token-name\n'
+            + '\targ2  -  preBalances | airdrop.json\n'
+            + '\targ3  -  fee\n'
+            + '\n\ntransferBancorTokenToMulti token2 [{"address":"16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg","amount":"10000"},{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"100"}] 0.001'
+    },
+    {
         name: 'getBancorTokenBalance',
         content: 'get BancorToken balance under address',
         example: '\ngetBancorTokenbalance\n'
@@ -320,15 +378,6 @@ const CMDS: ifCMD[] = [
             + '\targ2  -  address:string\n'
             + 'Example:\n'
             + '\t$ getBancorTokenBalance tokenid 1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J'
-    },
-    {
-        name: 'getBancorTokenBalances',
-        content: 'get BancorToken balances under address',
-        example: '\ngetBancorTokenbalances\n'
-            + '\targ1  -  tokenid:string\n'
-            + '\targ2  -  [address]:string[]\n'
-            + 'Example:\n'
-            + '\t$ getBancorTokenBalances tokenid ["1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J"]'
     },
     {
         name: 'buyBancorToken',
@@ -342,7 +391,7 @@ const CMDS: ifCMD[] = [
     },
     {
         name: 'sellBancorToken',
-        content: 'sell BancorToken',
+        content: 'sell LockBancorToken',
         example: '\nsellBancorToken\n'
             + '\targ1  -  tokenid\n'
             + '\targ2  -  amount\n'
@@ -350,6 +399,44 @@ const CMDS: ifCMD[] = [
             + 'Example:\n'
             + '\t$ sellBancorToken tokenid amount fee'
     },
+    {
+        name: 'getBancorTokenBalances',
+        content: 'get BancorToken balances under address',
+        example: '\ngetBancorTokenbalances\n'
+            + '\targ1  -  tokenid:string\n'
+            + '\targ2  -  [address]:string[]\n'
+            + 'Example:\n'
+            + '\t$ getBancorTokenBalances tokenid ["1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J"]'
+    },
+    // {
+    //     name: 'getBancorTokenBalances',
+    //     content: 'get BancorToken balances under address',
+    //     example: '\ngetBancorTokenbalances\n'
+    //         + '\targ1  -  tokenid:string\n'
+    //         + '\targ2  -  [address]:string[]\n'
+    //         + 'Example:\n'
+    //         + '\t$ getBancorTokenBalances tokenid ["1Bbruv7E4nP62ZD4cJqxiGrUD43psK5E2J"]'
+    // },
+    // {
+    //     name: 'buyBancorToken',
+    //     content: 'buy BancorToken',
+    //     example: '\nbuyBancorToken\n'
+    //         + '\targ1  -  tokenid\n'
+    //         + '\targ2  -  cost\n'
+    //         + '\targ3  -  fee\n'
+    //         + 'Example:\n'
+    //         + '\t$ buyBancorToken tokenid cost fee'
+    // },
+    // {
+    //     name: 'sellBancorToken',
+    //     content: 'sell BancorToken',
+    //     example: '\nsellBancorToken\n'
+    //         + '\targ1  -  tokenid\n'
+    //         + '\targ2  -  amount\n'
+    //         + '\targ3  -  fee\n'
+    //         + 'Example:\n'
+    //         + '\t$ sellBancorToken tokenid amount fee'
+    // },
     {
         name: 'getBancorTokenFactor',
         content: 'get BancorToken factor',
@@ -403,34 +490,63 @@ const CMDS: ifCMD[] = [
     },
     {
         name: 'register',
-        content: 'register to be a candidate with caller\'s address',
+        content: 'register to be a candidate with caller\'s address, you should have at least 300000 SYS',
         example: '\n' +
-            '\targ1  -  fee\n'
-            + '\n\nExample:\n$ register 0.1'
+            '\targ1  -  amount\n' +
+            '\targ2  -  name\n' +
+            '\targ3  -  ip\n' +
+            '\targ4  -  url\n' +
+            '\targ5  -  location\n' +
+            '\targ6  -  fee\n'
+            + '\n\nExample:\n$ register 3000000 node-test 10.23.23.103 http://bigboss.com Shanghai 0.001'
+    },
+    {
+        name: 'unegister',
+        content: 'unregister, not to be a candidate any more, with caller\'s own address. Can not unregister other address',
+        example: '\n' +
+            '\targ1  -  address\n' +
+            '\targ2  -  fee\n'
+            + '\n\nExample:\n$ register 154bdF5WH3FXGo4v24F4dYwXnR8br8rc2r'
+    },
+    {
+        name: 'freeze',
+        content: 'freeze some balance, so you can vote for candidates',
+        example: '\n' +
+            '\targ1  -  amount\n' +
+            '\targ2  -  fee\n'
+            + '\n\nExample:\n$ freeze 1000 0.001'
     },
     {
         name: 'mortgage',
         content: 'mortgage some balance, so you can vote for candidates',
         example: '\n' +
-            '\targ1  -  amount\n'
-            + '\targ2 -  fee\n'
-            + '\n\nExample:\n$ mortgage 1000 0.1'
+            '\targ1  -  amount\n' +
+            '\targ2  -  fee\n'
+            + '\n\nExample:\n$ freeze 1000 0.001'
+    },
+    {
+        name: 'unfreeze',
+        content: 'unfreeze back to balance',
+        example: '\n' +
+            '\targ1  -  amount\n' +
+            '\targ2  -  fee\n'
+            + '\n\nExample:\n$ unfreeze 1000 0.001'
     },
     {
         name: 'unmortgage',
         content: 'unmortgage back to balance',
         example: '\n' +
-            '\targ1  -  amount\n'
-            + '\targ2 -  fee\n'
-            + '\n\nExample:\n$ unmortgage 1000 5'
+            '\targ1  -  amount\n' +
+            '\targ2  -  fee\n'
+            + '\n\nExample:\n$ unmortgage 1000 0.001'
     },
     {
         name: 'vote',
         content: 'vote to candidates',
         example: '\n' +
-            '\targ1  -  [candidate1, candidate2]\n'
-            + '\targ2 -  fee\n'
-            + '\n\nExample:\n$ vote ["13dhmGDEuaoV7QvwbTm4gC6fx7CCRM7VkY","xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"] 0.1'
+            '\targ1  -  [candidate1, candidate2]\n' +
+            '\targ2  -  fee\n'
+            + '\n\nExample:\n$ vote ["13dhmGDEuaoV7QvwbTm4gC6fx7CCRM7VkY","xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"] 0.001'
     },
     {
         name: 'getVote',
@@ -439,12 +555,19 @@ const CMDS: ifCMD[] = [
             + '\n\nExample:\n$ getVote'
     },
     {
+        name: 'getTicket',
+        content: 'getTicket',
+        example: '\n'
+            + '\targ1 - [address]\n'
+            + '\n\nExample:\n$ getTicket xxxxxxxxxxxxxx'
+    },
+    {
         name: 'getUserTable',
         content: 'get value from user table',
         example: '\n' +
             '\targ1 - contractName\n'
-          + '\targ2 - table name\n'
-          + '\targ3 - key name\n'
+            + '\targ2 - table name\n'
+            + '\targ3 - key name\n'
     },
     {
         name: 'sendToTesters',
@@ -596,7 +719,7 @@ async function genKeyStore(keyFile: string) {
         type: 'password',
         name: 'secret',
         message: 'password',
-        validate: (value:string) =>  value.length < 8 ? 'password length must >= 8': true
+        validate: (value: string) => value.length < 8 ? 'password length must >= 8' : true
     });
 
     let privateKey;
@@ -788,6 +911,10 @@ let handleCmd = async (cmd: string) => {
             result = await getCandidates(ctx, args);
             handleResult(prnGetCandidates, ctx, result);
             break;
+        case 'getcandidateinfo':
+            result = await getCandidateInfo(ctx, args);
+            handleResult(prnGetCandidateInfo, ctx, result);
+            break;
         case 'getpeers':
             result = await getPeers(ctx, args);
             handleResult(prnGetPeers, ctx, result);
@@ -812,29 +939,57 @@ let handleCmd = async (cmd: string) => {
             result = await createToken(ctx, args);
             handleResult(prnCreateToken, ctx, result);
             break;
+        // case 'createbancortoken':
+        //     result = await createBancorToken(ctx, args);
+        //     handleResult(prnCreateBancorToken, ctx, result);
+        //     break;
         case 'createbancortoken':
-            result = await createBancorToken(ctx, args);
-            handleResult(prnCreateBancorToken, ctx, result);
+            result = await createLockBancorToken(ctx, args);
+            handleResult(prnCreateLockBancorToken, ctx, result);
             break;
+        // case 'transferbancortokento':
+        //     result = await transferBancorTokenTo(ctx, args);
+        //     handleResult(prnTransferBancorTokenTo, ctx, result);
+        //     break;
         case 'transferbancortokento':
-            result = await transferBancorTokenTo(ctx, args);
-            handleResult(prnTransferBancorTokenTo, ctx, result);
+            result = await transferLockBancorTokenTo(ctx, args);
+            handleResult(prnTransferLockBancorTokenTo, ctx, result);
             break;
+        case 'transferbancortokentomulti':
+            result = await transferLockBancorTokenToMulti(ctx, args);
+            handleResult(prnTransferLockBancorTokenToMulti, ctx, result);
+            break;
+        // case 'getbancortokenbalance':
+        //     result = await getBancorTokenBalance(ctx, args);
+        //     handleResult(prnGetBancorTokenBalance, ctx, result);
+        //     break;
         case 'getbancortokenbalance':
-            result = await getBancorTokenBalance(ctx, args);
-            handleResult(prnGetBancorTokenBalance, ctx, result);
+            result = await getLockBancorTokenBalance(ctx, args);
+            handleResult(prnGetLockBancorTokenBalance, ctx, result);
             break;
         case 'getbancortokenbalances':
-            result = await getBancorTokenBalances(ctx, args);
-            handleResult(prnGetBancorTokenBalances, ctx, result);
+            result = await getLockBancorTokenBalances(ctx, args);
+            handleResult(prnGetLockBancorTokenBalances, ctx, result);
             break;
+        // case 'getbancortokenbalances':
+        //     result = await getBancorTokenBalances(ctx, args);
+        //     handleResult(prnGetBancorTokenBalances, ctx, result);
+        //     break;
+        // case 'buybancortoken':
+        //     result = await buyBancorToken(ctx, args);
+        //     handleResult(prnBuyBancorToken, ctx, result);
+        //     break;
         case 'buybancortoken':
-            result = await buyBancorToken(ctx, args);
-            handleResult(prnBuyBancorToken, ctx, result);
+            result = await buyLockBancorToken(ctx, args);
+            handleResult(prnBuyLockBancorToken, ctx, result);
             break;
+        // case 'sellbancortoken':
+        //     result = await sellBancorToken(ctx, args);
+        //     handleResult(prnSellBancorToken, ctx, result);
+        //     break;
         case 'sellbancortoken':
-            result = await sellBancorToken(ctx, args);
-            handleResult(prnSellBancorToken, ctx, result);
+            result = await sellLockBancorToken(ctx, args);
+            handleResult(prnSellLockBancorToken, ctx, result);
             break;
         case 'getbancortokenfactor':
             result = await getBancorTokenFactor(ctx, args);
@@ -865,6 +1020,17 @@ let handleCmd = async (cmd: string) => {
             result = await register(ctx, args);
             handleResult(prnRegister, ctx, result);
             break;
+        case 'unregister':
+            handleResult(prnUnregister, ctx, await unregister(ctx, args));
+            break;
+        case 'freeze':
+            result = await mortgage(ctx, args);
+            handleResult(prnMortgage, ctx, result);
+            break;
+        case 'unfreeze':
+            result = await unmortgage(ctx, args);
+            handleResult(prnUnmortgage, ctx, result);
+            break;
         case 'mortgage':
             result = await mortgage(ctx, args);
             handleResult(prnMortgage, ctx, result);
@@ -880,6 +1046,10 @@ let handleCmd = async (cmd: string) => {
         case 'getvote':
             result = await getVote(ctx, args);
             handleResult(prnGetVote, ctx, result);
+            break;
+        case 'getticket':
+            result = await getTicket(ctx, args);
+            handleResult(prnGetTicket, ctx, result);
             break;
         case 'getusertable':
             result = await getUserTable(ctx, args);
@@ -941,7 +1111,7 @@ let handleCmd = async (cmd: string) => {
                     type: 'password',
                     name: 'secret',
                     message: 'password',
-                    validate: (value:string) =>  value.length < 8 ? 'password length must >= 8': true
+                    validate: (value: string) => value.length < 8 ? 'password length must >= 8' : true
                 });
 
                 try {
@@ -968,13 +1138,13 @@ let handleCmd = async (cmd: string) => {
 
 //////////////////////////////////////////
 
-async function main(){
+async function main() {
 
     let ret = await initArgs();
     initChainClient(SYSINFO);
 
-    while(1) {
-        const onCancel = (prompt:any) => {
+    while (1) {
+        const onCancel = (prompt: any) => {
             console.log('exit rfccli');
             process.exit(1);
         }
