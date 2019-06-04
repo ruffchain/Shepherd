@@ -109,7 +109,7 @@ process.on('warning', (warning) => {
 
 
 let checkArgs = (SYSINFO: any) => {
-    if (SYSINFO.secret === "" && SYSINFO.keystore === "") {
+    if (SYSINFO.keystore === "") {
         console.log(colors.red("No secret\n"));
 
         console.log('\tPlease create your own secret with command:\n')
@@ -117,21 +117,15 @@ let checkArgs = (SYSINFO: any) => {
 
         process.exit(1);
     }
+
     if (SYSINFO.host === "") {
         console.log(colors.red("No host\n"));
         process.exit(1);
     }
+
     if (SYSINFO.port === "") {
         console.log(colors.red("No port\n"));
         process.exit(1);
-    }
-
-    if (SYSINFO.verbose === "1") {
-        // open log print
-    }
-
-    if (SYSINFO.secret) {
-        SYSINFO.address = addressFromSecretKey(SYSINFO.secret);
     }
 }
 
@@ -632,7 +626,7 @@ let printHelpHeader = () => {
     console.log('USAGE:');
     // console.log('\trfccli [options] command [command options] [arguments ...]');
     // console.log('\trfccli [options] ');
-    console.log('\t$rfccli --secret xxxxxxxx --host 10.0.0.1 --port 18089 [--v|--verbose]')
+    console.log('\t$rfccli --keyStore xxxxxxxx --host 10.0.0.1 --port 18089 [-v|--verbose]')
     console.log('');
     console.log('VERSION:')
     console.log('\t', VERSION);
@@ -714,7 +708,7 @@ let createKey = function () {
     console.log('');
 }
 
-async function genKeyStore(keyFile: string) {
+async function genKeyStore(keyFile: string, secretKey:string | null) {
     const response = await prompt({
         type: 'password',
         name: 'secret',
@@ -724,9 +718,13 @@ async function genKeyStore(keyFile: string) {
 
     let privateKey;
 
-    do {
-        privateKey = randomBytes(32);
-    } while (!secp256k1.privateKeyVerify(privateKey));
+    if (secretKey) {
+        privateKey = Buffer.from(secretKey, 'hex');
+    } else {
+        do {
+            privateKey = randomBytes(32);
+        } while (!secp256k1.privateKeyVerify(privateKey));
+    }
 
     const pkey = secp256k1.publicKeyCreate(privateKey, true);
 
@@ -782,7 +780,7 @@ const initArgs = async () => {
 
     const outKeyFile = program.createKeyStore;
     if (outKeyFile) {
-        await genKeyStore(outKeyFile);
+        await genKeyStore(outKeyFile, program.secret);
         process.exit(0);
     }
 
@@ -798,8 +796,6 @@ const initArgs = async () => {
         }
         SYSINFO['keystore'] = fs.readFileSync(keyPath).toString();
     }
-
-    SYSINFO['secret'] = program.secret;
 
     if (program.host) {
         SYSINFO['host'] = program.host;
@@ -817,6 +813,7 @@ const initArgs = async () => {
 
     console.log('');
 }
+
 let initChainClient = (sysinfo: any) => {
     // chainClient = new NewChainClient({
     //     host: sysinfo.host,
