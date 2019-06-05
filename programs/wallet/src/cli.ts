@@ -495,12 +495,12 @@ const CMDS: ifCMD[] = [
             + '\n\nExample:\n$ register 3000000 node-test 10.23.23.103 http://bigboss.com Shanghai 0.001'
     },
     {
-        name: 'unegister',
+        name: 'unregister',
         content: 'unregister, not to be a candidate any more, with caller\'s own address. Can not unregister other address',
         example: '\n' +
             '\targ1  -  address\n' +
             '\targ2  -  fee\n'
-            + '\n\nExample:\n$ register 154bdF5WH3FXGo4v24F4dYwXnR8br8rc2r'
+            + '\n\nExample:\n$ unregister 154bdF5WH3FXGo4v24F4dYwXnR8br8rc2r 0.001'
     },
     {
         name: 'freeze',
