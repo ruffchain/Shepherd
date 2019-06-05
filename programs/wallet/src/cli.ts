@@ -74,7 +74,7 @@ import { getLockBancorTokenBalances, prnGetLockBancorTokenBalances } from './lib
 import * as program from 'commander';
 
 const VERSION = pjson.version;
-const SECRET_TIMEOUT = 5 * 60 * 10000;
+const SECRET_TIMEOUT = 5 * 60 * 1000;
 const PROMPT = '> ';
 
 let SYSINFO: any = {};
@@ -113,7 +113,7 @@ let checkArgs = (SYSINFO: any) => {
         console.log(colors.red("No secret\n"));
 
         console.log('\tPlease create your own secret with command:\n')
-        console.log('\t$rfccli createkey\n')
+        console.log('\t$rfccli --createKeyStore <keyStore_path> \n')
 
         process.exit(1);
     }
@@ -596,8 +596,9 @@ const CMDS: ifCMD[] = [
     },
     {
         name: 'unlock',
-        content: 'unlock',
-        example: ''
+        content: 'unlock the keyStore',
+        example: '\n' +
+            '\t[arg1] - timeout (0 to disable)'
     },
     {
         name: 'q',
@@ -624,8 +625,6 @@ let printHelpHeader = () => {
     console.log('\tCopyright 2019');
     console.log('');
     console.log('USAGE:');
-    // console.log('\trfccli [options] command [command options] [arguments ...]');
-    // console.log('\trfccli [options] ');
     console.log('\t$rfccli --keyStore xxxxxxxx --host 10.0.0.1 --port 18089 [-v|--verbose]')
     console.log('');
     console.log('VERSION:')
@@ -1103,6 +1102,14 @@ let handleCmd = async (cmd: string) => {
             process.exit(0);
             break;
         case 'unlock':
+            let ts;
+            if (args.length >= 1) {
+                ts = parseInt(args[0]) * 1000;
+            }
+
+            if (!ts) {
+                ts = SECRET_TIMEOUT;
+            }
             if (SYSINFO['keystore'].length > 0) {
                 const response = await prompt({
                     type: 'password',
@@ -1115,9 +1122,11 @@ let handleCmd = async (cmd: string) => {
                     if (response.secret) {
                         SYSINFO['secret'] = keyStore.fromV3Keystore(SYSINFO['keystore'], response.secret);
                         SYSINFO['address'] = addressFromSecretKey(SYSINFO['secret']);
-                        setTimeout(() => {
-                            SYSINFO['secret'] = null;
-                        }, SECRET_TIMEOUT);
+                        if (ts > 0) {
+                            setTimeout(() => {
+                                SYSINFO['secret'] = null;
+                            }, ts);
+                        }
                     }
                 } catch (err) {
                     console.log('invalid passwd');
