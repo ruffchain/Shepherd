@@ -257,18 +257,18 @@ const CMDS: ifCMD[] = [
             '\targ1  -  address\n'
             + '\targ2  -  amount\n'
             + '\targ3  -  fee\n'
-            + '\n\nExample:\n$ transferTo 16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg 1000 1'
+            + '\n\nExample:\n$ transferTo 16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg 1000 0.001'
     },
-    // {
-    //     name: 'transferTokenTo',
-    //     content: 'Transfer Token to some address',
-    //     example:
-    //         '\n\targ1  -  tokenid\n'
-    //         + '\targ2  -  address\n'
-    //         + '\targ3  -  amount\n'
-    //         + '\targ3  -  fee\n'
-    //         + '\n\nExample:\n$ transferTokenTo tokenid 16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg 1000 1'
-    // },
+    {
+        name: 'transferTokenTo',
+        content: 'Transfer Token to some address',
+        example:
+            '\n\targ1  -  tokenid\n'
+            + '\targ2  -  address\n'
+            + '\targ3  -  amount\n'
+            + '\targ3  -  fee\n'
+            + '\n\nExample:\n$ transferTokenTo tokenid 16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg 1000 0.001'
+    },
     {
         name: 'createToken',
         content: 'create a token',

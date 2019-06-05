@@ -18,7 +18,6 @@ export async function unregister(ctx: IfContext, args: string[]): Promise<IfResu
             return;
         }
 
-
         if (args[0] !== ctx.sysinfo.address) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
