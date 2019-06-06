@@ -66,7 +66,7 @@ export class Transaction extends SerializableWithHash {
             this.updateHash();
             this.m_signature = Address.sign(this.m_hash, privateKey);
         } else {
-            console.log('unlock first');
+            console.log('!!!! unlock first !!!!');
         }
     }
 
