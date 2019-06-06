@@ -59,8 +59,8 @@ export class Transaction extends SerializableWithHash {
         return Address.verify(this.m_hash, this.m_signature, this.m_publicKey);
     }
 
-    public sign(privateKey: Buffer|string) {
-        if (privateKey.length > 0 ) {
+    public sign(privateKey: Buffer|string|null) {
+        if (privateKey) {
             let pubkey = Address.publicKeyFromSecretKey(privateKey);
             this.m_publicKey = pubkey!;
             this.updateHash();
