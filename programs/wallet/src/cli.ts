@@ -1107,7 +1107,7 @@ let handleCmd = async (cmd: string) => {
                 ts = parseInt(args[0]) * 1000;
             }
 
-            if (!ts) {
+            if (ts === null) {
                 ts = SECRET_TIMEOUT;
             }
             if (SYSINFO['keystore'].length > 0) {
@@ -1122,7 +1122,10 @@ let handleCmd = async (cmd: string) => {
                     if (response.secret) {
                         SYSINFO['secret'] = keyStore.fromV3Keystore(SYSINFO['keystore'], response.secret);
                         SYSINFO['address'] = addressFromSecretKey(SYSINFO['secret']);
-                        if (ts > 0) {
+                        if (ts && ts > 0) {
+                            if (SYSINFO.verbose) {
+                                console.log(`in set timeout ts is ${ts} ms`);
+                            }
                             setTimeout(() => {
                                 SYSINFO['secret'] = null;
                             }, ts);
