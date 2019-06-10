@@ -794,6 +794,13 @@ const initArgs = async () => {
             process.exit(1);
         }
         SYSINFO['keystore'] = fs.readFileSync(keyPath).toString();
+        try {
+            let info = JSON.parse(SYSINFO['keystore']);
+            SYSINFO['address'] = info.address;
+        } catch(err) {
+            console.log('invalid keystore file');
+            process.exit(1);
+        }
     }
 
     if (program.host) {
