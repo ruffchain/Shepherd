@@ -820,6 +820,8 @@ const initArgs = async () => {
     console.log('');
 }
 
+let unlockTimer: NodeJS.Timer | any;
+
 let initChainClient = (sysinfo: any) => {
     // chainClient = new NewChainClient({
     //     host: sysinfo.host,
@@ -1133,9 +1135,23 @@ let handleCmd = async (cmd: string) => {
                             if (SYSINFO.verbose) {
                                 console.log(`in set timeout ts is ${ts} ms`);
                             }
-                            setTimeout(() => {
-                                SYSINFO['secret'] = null;
+                            if (unlockTimer) {
+                                clearTimeout(unlockTimer);
+                            }
+                            unlockTimer = setTimeout(() => {
+                                    if (SYSINFO.verbose) {
+                                        console.log('unlock timer tiggered');
+                                    }
+                                    SYSINFO['secret'] = null;
                             }, ts);
+                        } else {
+                            if (unlockTimer) {
+                                if (SYSINFO.verbose) {
+                                    console.log('clear unlock timer');
+                                }
+                                clearTimeout(unlockTimer);
+                                unlockTimer = null;
+                            }
                         }
                     }
                 } catch (err) {
