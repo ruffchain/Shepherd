@@ -101,8 +101,13 @@ export function verify(md: Buffer | string, signature: Buffer, publicKey: Buffer
 }
 
 export function isValidAddress(address: string): boolean {
-    let buf = base58.decode(address);
-    if (buf.length !== 25) {
+    let buf;
+    try {
+        buf = base58.decode(address);
+        if (buf.length !== 25) {
+            return false;
+        }
+    } catch (e) {
         return false;
     }
     let br = new BufferReader(buf);
