@@ -70,7 +70,7 @@ module.exports.toV3Keystore = (privateKey, address, password, options) => {
   return {
     version: 3,
     id: uuid.v4({ random: options.uuid || randomBytes(16) }),
-    address: address.toLowerCase().replace('0x', ''),
+    address: address.replace('0x', ''),
     crypto: {
       ciphertext: ciphertext.toString('hex'),
       cipherparams: {
