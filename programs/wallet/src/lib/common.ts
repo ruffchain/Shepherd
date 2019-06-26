@@ -26,6 +26,13 @@ export const sysTokenSym = 'SYS';
 
 const REGIP = /^[1-9]{1}\d{0,2}\.[1-9]{1}\d{0,2}\.[1-9]{1}\d{0,2}\.[1-9]{1}\d{0,2}(:\d{5,9})?$/g;
 
+export const SYS_TOKEN = 'SYS';
+export const SVT_TOKEN = 'SVT';
+const TOKEN_MIN_LEN = 3;
+const TOKEN_MAX_LEN = 12;
+
+const REGPAT = /^[A-Z]{1}[0-9A-Z]{2,11}$/g;
+
 /**
  *
  * @param amount: amount of token
@@ -50,9 +57,44 @@ export function checkDepositAmount(amount: string): boolean {
         return true;
     }
 }
-export function checkTokenid(token: string): boolean {
-    return token.length >= TOKEN_MIN_LENGTH && token.length <= TOKEN_MAX_LENGTH;
+
+function numNumbers(str: string) {
+    let lst = str.split('');
+    let counter = 0;
+
+    for (let i = 0; i < lst.length; i++) {
+        if (isNaN(parseInt(lst[i]))) {
+            counter++;
+        }
+    }
+    return str.length - counter;
+
 }
+export function checkTokenid(tokenid: string) {
+    let str = tokenid.toUpperCase();
+
+    // 3~12位
+    if (str.length < TOKEN_MIN_LEN || str.length > TOKEN_MAX_LEN) {
+        return false;
+    }
+
+    if (str === SYS_TOKEN || str === SVT_TOKEN) {
+        return false;
+    }
+    // 1st not number,
+    if (str.match(REGPAT) === null) {
+        return false;
+    }
+
+    if (numNumbers(str) > 3) {
+        return false;
+    }
+
+    return true;
+}
+// export function checkTokenid(token: string): boolean {
+//     return token.length >= TOKEN_MIN_LENGTH && token.length <= TOKEN_MAX_LENGTH;
+// }
 export function checkFee(fee: string): boolean {
     let bn = new BigNumber(fee);
 
