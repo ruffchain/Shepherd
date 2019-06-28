@@ -5,4 +5,5 @@ dist/
 package-lock.json
 data/tester.json
 data/test.json
+boss.json
 
