@@ -66,9 +66,12 @@ createToken test [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000
 
 ```
 // start cli
-./dist/cli.js --secret xxxxxxxxxxxxxxxx --host 40.73.4.194 --port 18089
+// create your keystore file with your secret
+./rfccli --secret xxxxxxxxxxxxxxxxxxxx --createKeyStore user.json
 
-./dist/cli.js --secret xxxxxxxxxxxxxxxx --host 139.219.184.44 --port 18089
+// login with your keystore file, with sever host and port
+./rfccli --keyStore xxx.json --host xx.xx.xx.xx  --port xxxxx
+
 
 // get balance for default account
 getBalance
