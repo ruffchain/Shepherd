@@ -285,22 +285,25 @@ const CMDS: ifCMD[] = [
         example:
             '\n\targs1 - user code path\n'
             + '\targs2 - fee\n'
+            + '\n\n $ setUserCode path 0.01'
     },
     {
         name: 'getUserCode',
         content: 'get user code(!!Experiment)',
         example: '\n'
-            + '\n\nExample:\n$ getUserCode'
+            + '\targ1 - address (user address)\n'
+            + '\n\n$ getUserCode 1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79'
     },
     {
         name: 'runUserMethod',
         content: ' run user method (!!Experiment)',
         example:
             '\n\targs1 - to account address\n'
-            + '\targs2 - amount systoken to send to account address\n'
+            + '\targs2 - amount sys token to send to account address\n'
             + '\targs3 - fee\n'
             + '\targs4 - action to run\n'
             + '\targs5 - params\n'
+            + '\n\n$ runUserMethod address fee action params'
     },
     // {
     //     name: 'createBancorToken',
@@ -553,15 +556,16 @@ const CMDS: ifCMD[] = [
         content: 'getTicket',
         example: '\n'
             + '\targ1 - [address]\n'
-            + '\n\nExample:\n$ getTicket xxxxxxxxxxxxxx'
+            + '\n\nExample:\n$ getTicket 13dhmGDEuaoV7QvwbTm4gC6fx7CCRM7VkY'
     },
     {
         name: 'getUserTable',
         content: 'get value from user table',
         example: '\n' +
-            '\targ1 - contractName\n'
+            '\targ1 - contractAddress\n'
             + '\targ2 - table name\n'
             + '\targ3 - key name\n'
+            + '\n\n$ getUserTable contractaddress table key'
     },
     {
         name: 'sendToTesters',
@@ -797,7 +801,7 @@ const initArgs = async () => {
         try {
             let info = JSON.parse(SYSINFO['keystore']);
             SYSINFO['address'] = info.address;
-        } catch(err) {
+        } catch (err) {
             console.log('invalid keystore file');
             process.exit(1);
         }
@@ -1139,10 +1143,10 @@ let handleCmd = async (cmd: string) => {
                                 clearTimeout(unlockTimer);
                             }
                             unlockTimer = setTimeout(() => {
-                                    if (SYSINFO.verbose) {
-                                        console.log('unlock timer tiggered');
-                                    }
-                                    SYSINFO['secret'] = null;
+                                if (SYSINFO.verbose) {
+                                    console.log('unlock timer tiggered');
+                                }
+                                SYSINFO['secret'] = null;
                             }, ts);
                         } else {
                             if (unlockTimer) {
