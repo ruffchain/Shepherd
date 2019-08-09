@@ -22,7 +22,9 @@ export async function getBlocks(ctx: IfContext, args: string[]): Promise<IfResul
     {
       min: (args[0].length < 64) ? parseInt(args[0]) : args[0],
       max: (args[1].length < 64) ? parseInt(args[1]) : args[1],
-      transactions: (args[2] === undefined) ? false : ((args[2].toLowerCase() === 'true') ? true : false)
+      transactions: (args[2] === undefined) ? false : ((args[2].toLowerCase() === 'true') ? true : false),
+      eventLog: (args[3] === undefined) ? false : ((args[3].toLowerCase() === 'true') ? true : false),
+      receipts: (args[4] === undefined) ? false : ((args[4].toLowerCase() === 'true') ? true : false)
     }
 
     let cr = await ctx.client.callAsync(FUNC_NAME, params);

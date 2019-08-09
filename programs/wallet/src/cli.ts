@@ -232,6 +232,8 @@ const CMDS: ifCMD[] = [
         example: '\n' +
             '\targ1  -  block number | hash value | \'latest\'\n'
             + '\targ2  -  contain transactions?'
+            + '\targ3  -  contain eventlogs?'
+            + '\targ4  -  contain receipts?'
             + '\n\nExample:\n$ getblock 1 false'
     },
     {
@@ -241,6 +243,8 @@ const CMDS: ifCMD[] = [
             '\targ1  -  block  min number\n'
             + '\targ2  -  block max number\n'
             + '\targ3  -  contain transactions?'
+            + '\targ4  -  contain eventlogs?'
+            + '\targ5  -  contain receipts?'
             + '\n\nExample:\n$ getblocks 1 10 false'
     },
     {
