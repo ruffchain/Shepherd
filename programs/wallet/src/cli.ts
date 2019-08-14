@@ -72,6 +72,10 @@ import { transferLockBancorTokenToMulti, prnTransferLockBancorTokenToMulti } fro
 import { getLockBancorTokenBalances, prnGetLockBancorTokenBalances } from './lib/getLockBancorTokenBalances';
 
 import * as program from 'commander';
+import { getNodeInfo, prnGetNodeInfo } from './lib/getNodeInfo';
+import { getConnInfo, prnGetConnInfo } from './lib/getConnInfo';
+import { getProcessInfo, prnGetProcessInfo } from './lib/getProcessInfo';
+import { getContribInfo, prnGetContribInfo } from './lib/getContribInfo';
 
 const VERSION = pjson.version;
 const SECRET_TIMEOUT = 5 * 60 * 1000;
@@ -588,6 +592,30 @@ const CMDS: ifCMD[] = [
         example: ''
     },
     {
+        name: 'getNodeInfo',
+        content: 'getNodeInfo',
+        example: ''
+    },
+    {
+        name: 'getConnInfo',
+        content: 'getConnInfo',
+        example: ''
+    },
+    {
+        name: 'getProcessInfo',
+        content: 'getProcessInfo',
+        example: '\n'
+            + '\targ1 - [index, 0~23] \n'
+            + '\n\nExample:\n$ getProcessInfo 0'
+    },
+    {
+        name: 'getContribInfo',
+        content: 'getContribInfo',
+        example: '\n'
+            + '\targ1 - [index, 0~23] \n'
+            + '\n\nExample:\n$ getContribInfo 0'
+    },
+    {
         name: '----',
         content: '',
         example: ''
@@ -1099,7 +1127,23 @@ let handleCmd = async (cmd: string) => {
             result = await getUserCode(ctx, args);
             handleResult(prnGetUserCode, ctx, result);
             break;
-        case 'runusermethod':
+        case 'getnodeinfo':
+            result = await getNodeInfo(ctx, args);
+            handleResult(prnGetNodeInfo, ctx, result);
+            break;
+        case 'getconninfo':
+            result = await getConnInfo(ctx, args);
+            handleResult(prnGetConnInfo, ctx, result);
+            break;
+        case 'getprocessinfo':
+            result = await getProcessInfo(ctx, args);
+            handleResult(prnGetProcessInfo, ctx, result);
+            break;
+        case 'getcontribinfo':
+            result = await getContribInfo(ctx, args);
+            handleResult(prnGetContribInfo, ctx, result);
+            break;
+        case 'get':
             result = await runUserMethod(ctx, args);
             handleResult(prnRunUserMethod, ctx, result);
             break;
