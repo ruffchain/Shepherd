@@ -1,17 +1,27 @@
 
 import { IfResult, IfContext } from './common';
 import { BigNumber } from 'bignumber.js';
-import { MapFromObject } from '../core/serializable';
+import { MapFromObject, ErrorCode } from '../core/serializable';
 import * as colors from 'colors';
+import { createCipher } from 'crypto';
 
-const FUNC_NAME = 'view';
+const FUNC_NAME = 'getConnInfo';
 
 export async function getConnInfo(ctx: IfContext, args: string[]): Promise<IfResult> {
     return new Promise<IfResult>(async (resolve) => {
 
-        let params = {
-            method: 'getConnInfo',
-            params: {}
+        let params = { index: 0 }
+
+        if (args[0] !== undefined) {
+            try {
+                let mInd = parseInt(args[0]);
+                params.index = mInd;
+            } catch (e) {
+                resolve({
+                    ret: ErrorCode.RESULT_WRONG_ARG,
+                    resp: "Wrong arg , should be integer"
+                })
+            }
         }
         // check args
         let cr = await ctx.client.callAsync(FUNC_NAME, params);
