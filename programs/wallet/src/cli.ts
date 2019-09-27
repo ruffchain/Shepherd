@@ -265,7 +265,7 @@ const CMDS: ifCMD[] = [
             '\targ1  -  address\n'
             + '\targ2  -  amount\n'
             + '\targ3  -  fee\n'
-            + '\n\nExample:\n$ transferTo 16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg 1000 0.001'
+            + '\n\nExample:\n$ transferTo 16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg 1000 0.1'
     },
     {
         name: 'transferTokenTo',
@@ -275,7 +275,7 @@ const CMDS: ifCMD[] = [
             + '\targ2  -  address\n'
             + '\targ3  -  amount\n'
             + '\targ3  -  fee\n'
-            + '\n\nExample:\n$ transferTokenTo tokenid 16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg 1000 0.001'
+            + '\n\nExample:\n$ transferTokenTo tokenid 16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg 1000 0.1'
     },
     {
         name: 'createToken',
@@ -285,7 +285,7 @@ const CMDS: ifCMD[] = [
             + '\targ2  -  preBalance\n'
             + '\targ3  -  precision\n'
             + '\targ4  -  fee\n'
-            + '\n\ncreatetoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 9 0.001'
+            + '\n\ncreatetoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000"}] 9 0.1'
     },
     {
         name: 'setUserCode',
@@ -354,7 +354,7 @@ const CMDS: ifCMD[] = [
             + '\targ4  -  nonliquidity\n'
             + '\targ5  -  cost\n'
             + '\targ6  -  fee\n'
-            + '\n\ncreatebancortoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000", "lock_amount":"1000","time_expiration":"240"},{"address":"16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg","amount":"10000", "lock_amount":"0","time_expiration":"0"}]  0.5 0 100 0.001'
+            + '\n\ncreatebancortoken token2 [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000", "lock_amount":"1000","time_expiration":"240"},{"address":"16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg","amount":"10000", "lock_amount":"0","time_expiration":"0"}]  0.5 0 100 0.1'
     },
     {
         name: 'transferBancorTokenTo',
@@ -373,7 +373,7 @@ const CMDS: ifCMD[] = [
             '\n\targ1  -  token-name\n'
             + '\targ2  -  preBalances | airdrop.json\n'
             + '\targ3  -  fee\n'
-            + '\n\ntransferBancorTokenToMulti token2 [{"address":"16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg","amount":"10000"},{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"100"}] 0.001'
+            + '\n\ntransferBancorTokenToMulti token2 [{"address":"16ZJ7mRgkWf4bMmQFoyLkqW8eUCA5JqTHg","amount":"10000"},{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"100"}] 0.1'
     },
     {
         name: 'getBancorTokenBalance',
@@ -503,7 +503,7 @@ const CMDS: ifCMD[] = [
             '\targ4  -  url\n' +
             '\targ5  -  location\n' +
             '\targ6  -  fee\n'
-            + '\n\nExample:\n$ register 3000000 node-test 10.23.23.103 http://bigboss.com Shanghai 0.001'
+            + '\n\nExample:\n$ register 3000000 node-test 10.23.23.103 http://bigboss.com Shanghai 0.1'
     },
     {
         name: 'unregister',
@@ -511,7 +511,7 @@ const CMDS: ifCMD[] = [
         example: '\n' +
             '\targ1  -  address\n' +
             '\targ2  -  fee\n'
-            + '\n\nExample:\n$ unregister 154bdF5WH3FXGo4v24F4dYwXnR8br8rc2r 0.001'
+            + '\n\nExample:\n$ unregister 154bdF5WH3FXGo4v24F4dYwXnR8br8rc2r 0.1'
     },
     {
         name: 'freeze',
@@ -519,7 +519,7 @@ const CMDS: ifCMD[] = [
         example: '\n' +
             '\targ1  -  amount\n' +
             '\targ2  -  fee\n'
-            + '\n\nExample:\n$ freeze 1000 0.001'
+            + '\n\nExample:\n$ freeze 1000 0.1'
     },
     {
         name: 'mortgage',
@@ -527,7 +527,7 @@ const CMDS: ifCMD[] = [
         example: '\n' +
             '\targ1  -  amount\n' +
             '\targ2  -  fee\n'
-            + '\n\nExample:\n$ freeze 1000 0.001'
+            + '\n\nExample:\n$ freeze 1000 0.1'
     },
     {
         name: 'unfreeze',
@@ -535,7 +535,7 @@ const CMDS: ifCMD[] = [
         example: '\n' +
             '\targ1  -  amount\n' +
             '\targ2  -  fee\n'
-            + '\n\nExample:\n$ unfreeze 1000 0.001'
+            + '\n\nExample:\n$ unfreeze 1000 0.1'
     },
     {
         name: 'unmortgage',
@@ -543,7 +543,7 @@ const CMDS: ifCMD[] = [
         example: '\n' +
             '\targ1  -  amount\n' +
             '\targ2  -  fee\n'
-            + '\n\nExample:\n$ unmortgage 1000 0.001'
+            + '\n\nExample:\n$ unmortgage 1000 0.1'
     },
     {
         name: 'vote',
@@ -551,7 +551,7 @@ const CMDS: ifCMD[] = [
         example: '\n' +
             '\targ1  -  [candidate1, candidate2]\n' +
             '\targ2  -  fee\n'
-            + '\n\nExample:\n$ vote ["13dhmGDEuaoV7QvwbTm4gC6fx7CCRM7VkY","xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"] 0.001'
+            + '\n\nExample:\n$ vote ["13dhmGDEuaoV7QvwbTm4gC6fx7CCRM7VkY","xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"] 0.1'
     },
     {
         name: 'getVote',

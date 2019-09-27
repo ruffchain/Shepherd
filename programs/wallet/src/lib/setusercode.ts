@@ -27,7 +27,7 @@ export async function setUserCode(ctx: IfContext, args: string[]): Promise<IfRes
         if (!checkFee(args[1])) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
-                resp: "Wrong fee min 0.001"
+                resp: "Wrong fee min 0.1"
             });
             return;
         }

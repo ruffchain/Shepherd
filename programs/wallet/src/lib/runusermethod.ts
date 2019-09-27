@@ -23,7 +23,7 @@ export async function runUserMethod(ctx: IfContext, args: string[]): Promise<IfR
         if (!checkFee(fee)) {
             resolve({
                 ret: ErrorCode.RESULT_WRONG_ARG,
-                resp: "Wrong fee min 0.001"
+                resp: "Wrong fee min 0.1"
             });
             return;
         }
