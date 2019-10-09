@@ -40,7 +40,7 @@ export function prnGetZeroBalance(ctx: IfContext, obj: IfResult) {
     try {
         objJson = JSON.parse(obj.resp);
         if (objJson.err === 0) {
-            console.log('SYS: ', formatNumber(objJson.value));
+            console.log('RUFF: ', formatNumber(objJson.value));
         } else {
             console.log('Error:', objJson.err);
         }
