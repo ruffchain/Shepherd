@@ -21,13 +21,18 @@ const NUM_DIGITS = 12;
 const MAX_NORMAL_TOKEN_PRECISION = 9;
 const MAX_QUERY_NUM = 21;
 
-export const sysTokenSym = 'SYS';
-
+// export const sysTokenSym = 'SYS';
+export const sysTokenSym = 'RUFF';
 
 const REGIP = /^[1-9]{1}\d{0,2}\.[1-9]{1}\d{0,2}\.[1-9]{1}\d{0,2}\.[1-9]{1}\d{0,2}(:\d{5,9})?$/g;
 
+// export const SYS_TOKEN = 'SYS';
+// export const SVT_TOKEN = 'SVT';
+
 export const SYS_TOKEN = 'SYS';
-export const SVT_TOKEN = 'SVT';
+export const SVT_TOKEN = 'RVT';
+export const RUFF_TOKEN = 'RUFF';
+
 const TOKEN_MIN_LEN = 3;
 const TOKEN_MAX_LEN = 12;
 
@@ -78,7 +83,7 @@ export function checkTokenid(tokenid: string) {
         return false;
     }
 
-    if (str === SYS_TOKEN || str === SVT_TOKEN) {
+    if (str === SYS_TOKEN || str === SVT_TOKEN || str === RUFF_TOKEN) {
         return false;
     }
     // 1st not number,

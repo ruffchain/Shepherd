@@ -1,5 +1,5 @@
 import { ErrorCode } from "../core";
-import { IfResult, IfContext, formatNumber } from './common';
+import { IfResult, IfContext, formatNumber, RUFF_TOKEN } from './common';
 
 const METHOD_NAME = 'view';
 const FUNC_NAME = 'getZeroBalance';
@@ -40,7 +40,7 @@ export function prnGetZeroBalance(ctx: IfContext, obj: IfResult) {
     try {
         objJson = JSON.parse(obj.resp);
         if (objJson.err === 0) {
-            console.log('RUFF: ', formatNumber(objJson.value));
+            console.log(RUFF_TOKEN + ': ', formatNumber(objJson.value));
         } else {
             console.log('Error:', objJson.err);
         }
