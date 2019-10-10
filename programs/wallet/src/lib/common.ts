@@ -26,9 +26,6 @@ export const sysTokenSym = 'RUFF';
 
 const REGIP = /^[1-9]{1}\d{0,2}\.[1-9]{1}\d{0,2}\.[1-9]{1}\d{0,2}\.[1-9]{1}\d{0,2}(:\d{5,9})?$/g;
 
-// export const SYS_TOKEN = 'SYS';
-// export const SVT_TOKEN = 'SVT';
-
 export const SYS_TOKEN = 'SYS';
 export const SVT_TOKEN = 'RVT';
 export const RUFF_TOKEN = 'RUFF';
