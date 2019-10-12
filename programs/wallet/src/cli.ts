@@ -307,7 +307,7 @@ const CMDS: ifCMD[] = [
         content: ' run user method (!!Experiment)',
         example:
             '\n\targs1 - to account address\n'
-            + '\targs2 - amount sys token to send to account address\n'
+            + '\targs2 - amount ruff token to send to account address\n'
             + '\targs3 - fee\n'
             + '\targs4 - action to run\n'
             + '\targs5 - params\n'
