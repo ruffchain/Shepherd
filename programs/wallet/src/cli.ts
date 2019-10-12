@@ -1168,7 +1168,7 @@ let handleCmd = async (cmd: string) => {
                 ts = parseInt(args[0]) * 1000;
             }
 
-            if (ts === null) {
+            if (ts === undefined) {
                 ts = SECRET_TIMEOUT;
             }
             if (SYSINFO['keystore'].length > 0) {
