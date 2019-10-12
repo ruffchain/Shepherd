@@ -1143,7 +1143,7 @@ let handleCmd = async (cmd: string) => {
             result = await getContribInfo(ctx, args);
             handleResult(prnGetContribInfo, ctx, result);
             break;
-        case 'get':
+        case 'runusermethod':
             result = await runUserMethod(ctx, args);
             handleResult(prnRunUserMethod, ctx, result);
             break;
