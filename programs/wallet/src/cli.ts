@@ -307,11 +307,11 @@ const CMDS: ifCMD[] = [
         content: ' run user method (!!Experiment)',
         example:
             '\n\targs1 - to account address\n'
-            + '\targs2 - amount sys token to send to account address\n'
-            + '\targs3 - fee\n'
+            + '\targs2 - DApp address\n'
+            + '\targs3 - amount the amount send to DApp Address\n'
             + '\targs4 - action to run\n'
             + '\targs5 - params\n'
-            + '\n\n$ runUserMethod address fee action params'
+            + '\n\n$ runUserMethod DAppAddress amount fee action params'
     },
     // {
     //     name: 'createBancorToken',
@@ -1143,7 +1143,7 @@ let handleCmd = async (cmd: string) => {
             result = await getContribInfo(ctx, args);
             handleResult(prnGetContribInfo, ctx, result);
             break;
-        case 'get':
+        case 'runusermethod':
             result = await runUserMethod(ctx, args);
             handleResult(prnRunUserMethod, ctx, result);
             break;
@@ -1168,7 +1168,7 @@ let handleCmd = async (cmd: string) => {
                 ts = parseInt(args[0]) * 1000;
             }
 
-            if (ts === null) {
+            if (ts === undefined) {
                 ts = SECRET_TIMEOUT;
             }
             if (SYSINFO['keystore'].length > 0) {
