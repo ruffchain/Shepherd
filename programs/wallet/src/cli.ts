@@ -293,7 +293,7 @@ const CMDS: ifCMD[] = [
         example:
             '\n\targs1 - user code path\n'
             + '\targs2 - fee\n'
-            + '\n\n $ setUserCode path 0.01'
+            + '\n\n $ setUserCode path 0.1'
     },
     {
         name: 'getUserCode',
