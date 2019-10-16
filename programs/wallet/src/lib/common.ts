@@ -311,7 +311,7 @@ export function checkCost(cost: string): boolean {
 export function formatNumber(num: string): string {
     // console.log(num);
     try {
-        let out = parseFloat(num.replace(/n/g, ''));
+        let out = num.replace(/n/g, '');
         let outString = out.toString(); //.toFixed(NUM_DIGITS);
         return outString;
     } catch (e) {
