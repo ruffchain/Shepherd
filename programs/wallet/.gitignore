@@ -5,9 +5,7 @@ dist/
 package-lock.json
 data/tester.json
 data/test.json
-boss.json
-user*.json
-nuser*.json
-waterdragon.json
-tom.json
-jack.json
+*.json
+!package.json
+!tsconfig.json
+
