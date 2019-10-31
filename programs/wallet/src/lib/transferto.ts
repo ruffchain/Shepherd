@@ -53,6 +53,12 @@ export async function transferTo(ctx: IfContext, args: string[]): Promise<IfResu
         tx.fee = new BigNumber(fee);
         tx.input = { to: address };
 
+        if (ctx.sysinfo.verbose) {
+            console.log('tx:');
+            console.log(tx);
+        }
+
+
         let rtn = await sendAndCheckTx(ctx, tx);
         resolve(rtn);
     });

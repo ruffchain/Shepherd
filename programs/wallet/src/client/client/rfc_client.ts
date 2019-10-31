@@ -3,6 +3,7 @@ import { ErrorCode } from "../../core/error_code";
 import { ValueTransaction } from '../../core/value_chain/transaction'
 import { BufferWriter } from '../../core/lib/writer';
 import { IfSysinfo } from '../../lib/common';
+import { ctx } from '../../test/test_common';
 
 let XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 
@@ -102,6 +103,12 @@ export class RPCClient {
             return { err };
         }
         let cr = await this.callAsync('sendTransaction', { tx: writer.render() });
+
+        // if (ctx.sysinfo.verbose) {
+        //     console.log('cr:');
+        //     console.log(cr);
+        // }
+
         if (cr.ret !== 200) {
             console.log(`send tx failed ret `, cr.ret);
             return { err: ErrorCode.RESULT_FAILED };
