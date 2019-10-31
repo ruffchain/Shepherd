@@ -16,8 +16,14 @@ npm run compile
 
 # Demo代码
 
+* demo_status.ts
+* demo_address.ts
+* demo_transfer.ts
+
+示例代码中的地址等参数，为测试网上测试用途，特此声明。
+
 ## 1 状态查询
-需提供节点接口调用详细说明文档，包含查询当前块高度、查询块消息和交易详情等。
+需求: 需提供节点接口调用详细说明文档，包含查询当前块高度、查询块消息和交易详情等。
 
 使用http post和节点交互，端口为 18089
 
@@ -39,7 +45,7 @@ xmlhttp.send(JSON.stringify(sendObj));
 
 ```
 
-所有的命令都是以sendObj的格式发送的，不同的命令的funName和args有所不同。
+所有的命令都是以sendObj的json格式发送的，不同的命令的funName和args有所不同。命令分为'view'和交易两种。
 
 ### 1.1 查询账户余额
 
@@ -102,6 +108,7 @@ funcArgs={
 ```
 
 ### 1.3 查询块消息
+查询块消息与查询高度的区别在于which, 可以设置为block height或者block hash。可以选择是否返回交易列表，是否返回event日志列表，是否返回receipts列表。列表中的各项在transactions[],eventLog[],receipts[]中是按排列顺序一一对应的。
 
 输入参数:
 
@@ -226,7 +233,7 @@ funcArgs={
 ```
 
 ## 2 地址生成
-需提供生成公私钥对，生成地址，地址合法性校验方法，激活地址的文档和 Java/JavaScript Demo
+需求: 需提供生成公私钥对，生成地址，地址合法性校验方法，激活地址的文档和 Java/JavaScript Demo
 
 ```
 // demo_address.ts
@@ -292,11 +299,11 @@ createChecksum(): number {
 
 
 ## 3 转账流程
- 需要提供详细的通过节点接口同步和分析处理地址成功转账的逻辑
+ 需求: 需要提供详细的通过节点接口同步和分析处理地址成功转账的逻辑
 
  流程为:
  
- - 获取账户nonce； nonce= nonce+1, 
+ - 获取账户nonce； 新的nonce= nonce+1, 
  - 生成新的交易，
  - 发送；
  - 查询交易是否成功；
@@ -311,7 +318,7 @@ createChecksum(): number {
 ```
 
 ### 3.1 获取账户地址的当前nonce值
-账户每发送一次交易，nonce值会加1。交易字段中的nonce值必须等于链上账户的nonce值+1，否则交易会被拒绝。保证交易的唯一性。
+账户每发送一次交易，nonce值会加1。交易字段中的nonce值必须等于链上账户的当前nonce值 + 1，否则交易会被拒绝。以此来保证交易的唯一性。
 
 输入参数:
 
@@ -439,12 +446,15 @@ funcArgs={
                             "from":"154bdF5WH3FXGo4v24F4dYwXnR8br8rc2r","to":"1CKTBdV7E8DfRPSknLLvLfgWqnrfeFWLGx","value":"10"
                         }}]
                     ,
-                    "cost":"0.1"}}',
-  ret: 200 }
+                    "cost":"0.1"
+                }
+    }',
+  ret: 200 
+}
 
 
 
-// 非正常返回, err==9, 交易未被查询到
+// 非正常返回, err==9, 交易未被查询到 || block.tx.receipt.returnCode ！= 0 交易执行失败
 { resp: '{"err":9}', ret: 200 }
 
 ```
@@ -458,7 +468,7 @@ funcArgs={
 
 ```
 
-// 参考 ## 3 交易转账
+// 参考 ## 3 交易转账及示例代码
 
 ```
 
