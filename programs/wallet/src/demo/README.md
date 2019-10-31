@@ -23,7 +23,7 @@ npm run compile
 
 ```
 // demo_status.ts
-// node dist/demo/demo_status.js
+// 测试运行: node dist/demo/demo_status.js
 
 // http post
 let url = 'http://' + ipaddr + ':' + port + '/rpc'
@@ -226,7 +226,7 @@ funcArgs={
 ```
 
 ## 2 地址生成
-需提供生成公司钥对，生成地址，地址合法性校验方法，激活地址的文档和 Java/JavaScript Demo
+需提供生成公私钥对，生成地址，地址合法性校验方法，激活地址的文档和 Java/JavaScript Demo
 
 ```
 // demo_address.ts
@@ -294,11 +294,19 @@ createChecksum(): number {
 ## 3 转账流程
  需要提供详细的通过节点接口同步和分析处理地址成功转账的逻辑
 
- 流程为获取账户nonce； nonce= nonce+1, 生成新的交易，发送；查询交易是否成功；结束
+ 流程为:
+ 
+ - 获取账户nonce； nonce= nonce+1, 
+ - 生成新的交易，
+ - 发送；
+ - 查询交易是否成功；
+ - 结束
+
+
 
 ```
 // demo_transfer.ts
-node dist/demo/demo_transfer.js
+// 测试运行: node dist/demo/demo_transfer.js
 
 ```
 
@@ -450,7 +458,6 @@ funcArgs={
 
 ```
 
-// demo_sign.ts
 // 参考 ## 3 交易转账
 
 ```
