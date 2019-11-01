@@ -24,7 +24,8 @@ const MAX_QUERY_NUM = 21;
 // export const sysTokenSym = 'SYS';
 export const sysTokenSym = 'RUFF';
 
-const REGIP = /^[1-9]{1}\d{0,2}\.[1-9]{1}\d{0,2}\.[1-9]{1}\d{0,2}\.[1-9]{1}\d{0,2}(:\d{5,9})?$/g;
+// const REGIP = /^[1-9]{1}\d{0,2}\.[1-9]{1}\d{0,2}\.[1-9]{1}\d{0,2}\.[1-9]{1}\d{0,2}(:\d{5,9})?$/g;
+const REGIP = /^[1-9]{1}\d{0,2}\.([1-9]{1}\d{0,2}|0)\.([1-9]{1}\d{0,2}|0)\.([1-9]{1}\d{0,2}|0)(:\d{5,9})?$/g;
 
 export const SYS_TOKEN = 'SYS';
 export const SVT_TOKEN = 'RVT';
