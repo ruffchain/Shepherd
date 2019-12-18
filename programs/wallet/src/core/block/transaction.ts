@@ -59,7 +59,7 @@ export class Transaction extends SerializableWithHash {
         return Address.verify(this.m_hash, this.m_signature, this.m_publicKey);
     }
 
-    public sign(privateKey: Buffer|string|null) {
+    public sign(privateKey: Buffer | string | null) {
         if (privateKey) {
             let pubkey = Address.publicKeyFromSecretKey(privateKey);
             this.m_publicKey = pubkey!;
@@ -146,7 +146,7 @@ export class Transaction extends SerializableWithHash {
         return obj;
     }
 
-    static fromRaw(raw: string|Buffer, T: new () => Transaction): Transaction|undefined {
+    static fromRaw(raw: string | Buffer, T: new () => Transaction): Transaction | undefined {
         let buffer: Buffer;
         if (isString(raw)) {
             buffer = Buffer.from(raw, 'hex');
@@ -179,11 +179,11 @@ export class EventLog implements Serializable {
         return this.m_event;
     }
 
-    set index(o: object|undefined) {
+    set index(o: object | undefined) {
 
     }
 
-    get index(): object|undefined {
+    get index(): object | undefined {
         return undefined;
     }
 
