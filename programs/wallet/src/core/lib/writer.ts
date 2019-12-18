@@ -8,9 +8,9 @@
 'use strict';
 
 import * as assert from 'assert';
-import {Encoding, EncodingError} from './encoding';
+import { Encoding, EncodingError } from './encoding';
 import * as digest from './digest';
-import {BigNumber} from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 
 /*
  * Constants
@@ -405,7 +405,7 @@ export class BufferWriter {
     writeBytes(value: Buffer) {
         if (value.length === 0) {
             return;
-        }   
+        }
 
         this.offset += value.length;
         this.ops.push(new WriteOp(BYTES, value));
@@ -423,7 +423,7 @@ export class BufferWriter {
         if (value.length === 0) {
             return;
         }
-            
+
         this.offset += value.length;
         this.ops.push(new WriteOp(BYTES, value));
     }
@@ -451,11 +451,11 @@ export class BufferWriter {
      * @param {String?} enc - Any buffer-supported Encoding.
      */
 
-    writeString(value: string|Buffer, enc?: string) {
+    writeString(value: string | Buffer, enc?: string) {
         if (value.length === 0) {
             return;
         }
-            
+
         this.offset += Buffer.byteLength(value, enc);
         this.ops.push(new WriteOp(STR, value, enc));
     }
@@ -465,7 +465,7 @@ export class BufferWriter {
      * @param {Hash} value
      */
 
-    writeHash(value: string|Buffer) {
+    writeHash(value: string | Buffer) {
         if (typeof value !== 'string') {
             assert(value.length === 32);
             this.writeBytes(value);
@@ -504,7 +504,7 @@ export class BufferWriter {
      * @param {String?} enc - Any buffer-supported Encoding.
      */
 
-    writeNullString(value: string|Buffer, enc?: string) {
+    writeNullString(value: string | Buffer, enc?: string) {
         this.writeString(value, enc);
         this.writeU8(0);
     }
@@ -530,7 +530,7 @@ export class BufferWriter {
         if (size === 0) {
             return;
         }
-            
+
         this.offset += size;
         this.ops.push(new WriteOp(FILL, value, null, size));
     }

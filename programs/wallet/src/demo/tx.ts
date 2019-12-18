@@ -19,6 +19,7 @@ function main() {
     console.log(tx);
     console.log('hash length:', tx.hash.length);
     console.log("publickey length:");
+    console.log(tx.stringify());
 
     tx.sign(secret);
     console.log('\nAfter sign')
