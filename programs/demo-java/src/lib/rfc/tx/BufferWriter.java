@@ -486,8 +486,13 @@ public class BufferWriter {
     public void writeBigNumber(BigDecimal val) {
         val = val.setScale(Encoding.MAX_DECIMAL_LEN, BigDecimal.ROUND_HALF_UP);
         String str = val.stripTrailingZeros().toPlainString();
+        BigDecimal valTemp = new BigDecimal(str);
+        // System.out.println(valTemp);
+        String strTemp = valTemp + "";
+        strTemp = strTemp.replace('E', 'e');
+        // System.out.println(strTemp);
+        this.writeVarString(strTemp);
 
-        this.writeVarString(str);
     }
 
     private void copy(byte[] value, int start, int end) {

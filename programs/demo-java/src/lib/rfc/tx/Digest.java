@@ -97,10 +97,24 @@ public class Digest {
         Sha256Hash shahash = Sha256Hash.wrap(hash);
         ECDSASignature signature = secretKey.sign(shahash);
 
-        System.out.println(signature.r.toString(16));
-        System.out.println(signature.s.toString(16));
+        String strR = signature.r.toString(16);
+        String strS = signature.s.toString(16);
 
-        byte[] sign = textToBytes(signature.r.toString(16) + signature.s.toString(16));
+        System.out.println(strR);
+        System.out.println("len:" + strR.length());
+        if (strR.length() != 64) {
+            strR = "0" + strR;
+        }
+        System.out.println(strR);
+        System.out.println(strS);
+        System.out.println("len:" + strS.length());
+
+        if (strS.length() != 64) {
+            strS = "0" + strS;
+        }
+        System.out.println(strS);
+
+        byte[] sign = textToBytes(strR + strS);
 
         return sign;
     }

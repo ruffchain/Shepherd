@@ -188,8 +188,9 @@ public class DemoStatus {
         IfFeedback fb = new IfFeedback();
         System.out.println("\nCheck receipt for: " + hash);
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 12; i++) {
             try {
+                System.out.println("Wait for 10 s");
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
@@ -205,7 +206,7 @@ public class DemoStatus {
                     int err = resp.getInt("err");
                     if (err != 0) {
                         fb.ret = err;
-                        break;
+                        continue;
                     }
                     JSONObject receipt = resp.getJSONObject("receipt");
                     int returnCode = receipt.getInt("returnCode");
