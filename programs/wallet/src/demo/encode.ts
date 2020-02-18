@@ -27,4 +27,8 @@ function main() {
 
 }
 
+function testMethod(writer: BufferWriter, method: String) {
+
+}
+
 main();
