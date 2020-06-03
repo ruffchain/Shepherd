@@ -527,7 +527,7 @@ const CMDS: ifCMD[] = [
         example: '\n' +
             '\targ1  -  amount\n' +
             '\targ2  -  fee\n'
-            + '\n\nExample:\n$ freeze 1000 0.1'
+            + '\n\nExample:\n$ mortgage 1000 0.1'
     },
     {
         name: 'unfreeze',
