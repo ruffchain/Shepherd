@@ -102,14 +102,14 @@ public class Digest {
 
         System.out.println(strR);
         System.out.println("len:" + strR.length());
-        if (strR.length() != 64) {
+        while (strR.length() != 64) {
             strR = "0" + strR;
         }
         System.out.println(strR);
         System.out.println(strS);
         System.out.println("len:" + strS.length());
 
-        if (strS.length() != 64) {
+        while (strS.length() != 64) {
             strS = "0" + strS;
         }
         System.out.println(strS);
