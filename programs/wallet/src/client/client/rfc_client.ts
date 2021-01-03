@@ -64,6 +64,8 @@ export class RPCClient {
         xmlhttp.open('POST', this.m_url, true);
         xmlhttp.setRequestHeader('Content-Type', 'application/json');
 
+        console.log(sendObj)
+
         xmlhttp.send(JSON.stringify(sendObj));
     }
     async callAsync(funcName: string, funcArgs: any): Promise<{ resp: string | null, ret: number }> {

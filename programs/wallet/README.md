@@ -65,13 +65,17 @@ createToken test [{"address":"1EYLLvMtXGeiBJ7AZ6KJRP2BdAQ2Bof79","amount":"10000
 ### Example
 
 ```
+
+// generate secret key
+./rfccli --createKey
+
 // start cli
 // create your keystore file with your secret
 ./rfccli --secret xxxxxxxxxxxxxxxxxxxx --createKeyStore user.json
 
 // login with your keystore file, with sever host and port
 ./rfccli --keyStore xxx.json --host xx.xx.xx.xx  --port xxxxx
-
+ 
 
 // get balance for default account
 getBalance

@@ -41,6 +41,7 @@ export function prnGetCandidates(ctx: IfContext, obj: IfResult) {
             // objJson.value.forEach((element: string) => {
             //     console.log(element.slice(1));
             // });
+            console.log(objJson.value);
             console.log('curMiner:', objJson.value.curMiner);
             console.log(objJson.value.candidates);
         }
