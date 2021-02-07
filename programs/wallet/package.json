@@ -25,7 +25,7 @@
   "dependencies": {
     "@types/fs-extra": "^5.0.4",
     "@types/mocha": "^5.2.5",
-    "@types/node": "^10.12.18",
+    "@types/node": "10.12.18",
     "@types/pbkdf2": "^3.0.0",
     "@types/randombytes": "^2.0.0",
     "@types/scrypt": "^6.0.0",
